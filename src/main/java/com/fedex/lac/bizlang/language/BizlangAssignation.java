@@ -29,5 +29,10 @@ public class BizlangAssignation extends BizlangExpression {
 		this.rValue = rValue;
 		return rValue;
 	}
+	
+	@Override
+	public String toString() {
+		return getName() + " = " + rValue;
+	}
 
 }

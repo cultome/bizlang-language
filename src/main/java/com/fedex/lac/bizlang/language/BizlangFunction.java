@@ -55,5 +55,10 @@ public class BizlangFunction extends BizlangExpression {
 		}
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		return getName() + "()";
+	}
 
 }

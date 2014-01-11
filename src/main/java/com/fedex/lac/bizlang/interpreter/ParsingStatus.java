@@ -9,5 +9,5 @@ package com.fedex.lac.bizlang.interpreter;
  * @creation	10/01/2014
  */
 public enum ParsingStatus {
-	PARSING_FNCT, WAITING, ASSIGNING_VAL, PARSING_MATH_EXPR
+	PARSING_FNCT, WAITING, ASSIGNING_VAL, PARSING_MATH_EXPR, GETTING_VALUE
 }

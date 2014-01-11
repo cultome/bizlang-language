@@ -275,6 +275,9 @@ public class BizlangParser extends Parser {
 	}
 
 	public static class Fnct_callContext extends ParserRuleContext {
+		public ExpressionContext expression() {
+			return getRuleContext(ExpressionContext.class,0);
+		}
 		public Param_lstContext param_lst() {
 			return getRuleContext(Param_lstContext.class,0);
 		}
@@ -299,23 +302,31 @@ public class BizlangParser extends Parser {
 		Fnct_callContext _localctx = new Fnct_callContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_fnct_call);
 		try {
-			setState(51);
+			setState(54);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(43); fnct();
-				setState(44); match(5);
-				setState(45); param_lst();
-				setState(46); match(2);
+				setState(44); expression();
 				}
 				break;
 
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(48); fnct();
-				setState(49); param_lst();
+				setState(46); fnct();
+				setState(47); match(5);
+				setState(48); param_lst();
+				setState(49); match(2);
+				}
+				break;
+
+			case 3:
+				enterOuterAlt(_localctx, 3);
+				{
+				setState(51); fnct();
+				setState(52); param_lst();
 				}
 				break;
 			}
@@ -353,7 +364,7 @@ public class BizlangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(53);
+			setState(56);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 1) | (1L << 3) | (1L << 6))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -397,9 +408,9 @@ public class BizlangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(55); match(ID);
-			setState(56); match(7);
-			setState(57); expression();
+			setState(58); match(ID);
+			setState(59); match(7);
+			setState(60); expression();
 			}
 		}
 		catch (RecognitionException re) {
@@ -438,21 +449,21 @@ public class BizlangParser extends Parser {
 		Param_lstContext _localctx = new Param_lstContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_param_lst);
 		try {
-			setState(64);
+			setState(67);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(59); value();
+				setState(62); value();
 				}
 				break;
 
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(60); value();
-				setState(61); match(4);
-				setState(62); param_lst();
+				setState(63); value();
+				setState(64); match(4);
+				setState(65); param_lst();
 				}
 				break;
 			}
@@ -494,7 +505,7 @@ public class BizlangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(66);
+			setState(69);
 			_la = _input.LA(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ID) | (1L << STR) | (1L << NBR) | (1L << OBJ_PROP))) != 0)) ) {
 			_errHandler.recoverInline(this);
@@ -514,24 +525,24 @@ public class BizlangParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\20G\4\2\t\2\4\3\t"+
+		"\3\uacf5\uee8c\u4f5d\u8b0d\u4a45\u78bd\u1b2f\u3378\3\20J\4\2\t\2\4\3\t"+
 		"\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\3\2\3\2\3\3"+
 		"\3\3\3\3\3\3\3\3\5\3\34\n\3\3\4\3\4\3\4\3\4\5\4\"\n\4\3\5\3\5\3\5\3\5"+
-		"\3\5\3\5\3\5\3\5\5\5,\n\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\5\6\66\n\6\3"+
-		"\7\3\7\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\5\tC\n\t\3\n\3\n\3\n\2\13\2"+
-		"\4\6\b\n\f\16\20\22\2\4\5\2\3\3\5\5\b\b\3\2\n\rD\2\24\3\2\2\2\4\33\3\2"+
-		"\2\2\6!\3\2\2\2\b+\3\2\2\2\n\65\3\2\2\2\f\67\3\2\2\2\169\3\2\2\2\20B\3"+
-		"\2\2\2\22D\3\2\2\2\24\25\5\4\3\2\25\3\3\2\2\2\26\34\5\6\4\2\27\30\5\6"+
-		"\4\2\30\31\7\17\2\2\31\32\5\4\3\2\32\34\3\2\2\2\33\26\3\2\2\2\33\27\3"+
-		"\2\2\2\34\5\3\2\2\2\35\"\5\n\6\2\36\"\5\16\b\2\37\"\5\b\5\2 \"\5\22\n"+
-		"\2!\35\3\2\2\2!\36\3\2\2\2!\37\3\2\2\2! \3\2\2\2\"\7\3\2\2\2#$\5\22\n"+
-		"\2$%\7\16\2\2%&\5\22\n\2&,\3\2\2\2\'(\5\22\n\2()\7\16\2\2)*\5\b\5\2*,"+
-		"\3\2\2\2+#\3\2\2\2+\'\3\2\2\2,\t\3\2\2\2-.\5\f\7\2./\7\7\2\2/\60\5\20"+
-		"\t\2\60\61\7\4\2\2\61\66\3\2\2\2\62\63\5\f\7\2\63\64\5\20\t\2\64\66\3"+
-		"\2\2\2\65-\3\2\2\2\65\62\3\2\2\2\66\13\3\2\2\2\678\t\2\2\28\r\3\2\2\2"+
-		"9:\7\n\2\2:;\7\t\2\2;<\5\6\4\2<\17\3\2\2\2=C\5\22\n\2>?\5\22\n\2?@\7\6"+
-		"\2\2@A\5\20\t\2AC\3\2\2\2B=\3\2\2\2B>\3\2\2\2C\21\3\2\2\2DE\t\3\2\2E\23"+
-		"\3\2\2\2\7\33!+\65B";
+		"\3\5\3\5\3\5\3\5\5\5,\n\5\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6\3\6"+
+		"\5\69\n\6\3\7\3\7\3\b\3\b\3\b\3\b\3\t\3\t\3\t\3\t\3\t\5\tF\n\t\3\n\3\n"+
+		"\3\n\2\13\2\4\6\b\n\f\16\20\22\2\4\5\2\3\3\5\5\b\b\3\2\n\rH\2\24\3\2\2"+
+		"\2\4\33\3\2\2\2\6!\3\2\2\2\b+\3\2\2\2\n8\3\2\2\2\f:\3\2\2\2\16<\3\2\2"+
+		"\2\20E\3\2\2\2\22G\3\2\2\2\24\25\5\4\3\2\25\3\3\2\2\2\26\34\5\6\4\2\27"+
+		"\30\5\6\4\2\30\31\7\17\2\2\31\32\5\4\3\2\32\34\3\2\2\2\33\26\3\2\2\2\33"+
+		"\27\3\2\2\2\34\5\3\2\2\2\35\"\5\n\6\2\36\"\5\16\b\2\37\"\5\b\5\2 \"\5"+
+		"\22\n\2!\35\3\2\2\2!\36\3\2\2\2!\37\3\2\2\2! \3\2\2\2\"\7\3\2\2\2#$\5"+
+		"\22\n\2$%\7\16\2\2%&\5\22\n\2&,\3\2\2\2\'(\5\22\n\2()\7\16\2\2)*\5\b\5"+
+		"\2*,\3\2\2\2+#\3\2\2\2+\'\3\2\2\2,\t\3\2\2\2-.\5\f\7\2./\5\6\4\2/9\3\2"+
+		"\2\2\60\61\5\f\7\2\61\62\7\7\2\2\62\63\5\20\t\2\63\64\7\4\2\2\649\3\2"+
+		"\2\2\65\66\5\f\7\2\66\67\5\20\t\2\679\3\2\2\28-\3\2\2\28\60\3\2\2\28\65"+
+		"\3\2\2\29\13\3\2\2\2:;\t\2\2\2;\r\3\2\2\2<=\7\n\2\2=>\7\t\2\2>?\5\6\4"+
+		"\2?\17\3\2\2\2@F\5\22\n\2AB\5\22\n\2BC\7\6\2\2CD\5\20\t\2DF\3\2\2\2E@"+
+		"\3\2\2\2EA\3\2\2\2F\21\3\2\2\2GH\t\3\2\2H\23\3\2\2\2\7\33!+8E";
 	public static final ATN _ATN =
 		ATNSimulator.deserialize(_serializedATN.toCharArray());
 	static {

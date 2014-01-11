@@ -1,5 +1,4 @@
 print("hola", "mundo")
 suma = 1 + 5
 print suma
-id = "myId" + idNbr
-print id
+print id = "myId" + idNbr

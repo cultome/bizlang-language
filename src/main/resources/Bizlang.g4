@@ -15,9 +15,9 @@ expression  : fnct_call
 math_expr	: value MATH_OP value
 			| value MATH_OP math_expr
 			;
-fnct_call   : fnct '(' param_lst ')'
+fnct_call   : fnct expression
+			| fnct '(' param_lst ')'
 			| fnct param_lst
-			| fnct expression
 			;
 fnct        : 'print'
 			| 'sum'
