@@ -1,0 +1,100 @@
+package com.fedex.lac.bizlang.interpreter;
+
+import java.util.Stack;
+
+import org.antlr.v4.runtime.tree.TerminalNode;
+
+import com.fedex.lac.bizlang.language.BizlangAssignation;
+import com.fedex.lac.bizlang.language.BizlangFunction;
+import com.fedex.lac.bizlang.language.BizlangMathOperation;
+import com.fedex.lac.bizlang.language.BizlangValue;
+import com.fedex.lac.bizlang.parser.BizlangBaseListener;
+import com.fedex.lac.bizlang.parser.BizlangLexer;
+import com.fedex.lac.bizlang.parser.BizlangParser.AssignationContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.FnctContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.Fnct_callContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.Math_exprContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
+
+/* 
+ * TreeListener.java
+ *
+ * Copyright (c) 2014 FedEx, All rights reserved.
+ *
+ * @author		Carlos Soria <carlos.soria.osv@fedex.com>
+ * @creation	09/01/2014
+ */
+public class TreeListener extends BizlangBaseListener {
+
+	private Stack<ParsingStatus> parsingStatus;
+	private Stack<Object> buffer;
+	private ExecutionFlow flow;
+
+	public TreeListener() {
+		flow = new ExecutionFlow();
+		parsingStatus = new Stack<ParsingStatus>();
+		buffer = new Stack<Object>();
+	}
+
+	public ExecutionFlow getExecutionFlow() {
+		return flow;
+	}
+
+	@Override
+	public void enterFnct(FnctContext ctx) {
+		BizlangFunction fnct = flow.addFnct(ctx.getText(), ctx.getStart().getLine());
+		buffer.push(fnct);
+		parsingStatus.push(ParsingStatus.PARSING_FNCT);
+	}
+
+	@Override
+	public void exitFnct_call(Fnct_callContext ctx) {
+		parsingStatus.pop();
+		buffer.pop();
+	}
+
+	@Override
+	public void enterAssignation(AssignationContext ctx) {
+		BizlangAssignation assign = flow.addAssignation(ctx.ID().getText(), ctx.getStart().getLine());
+		buffer.push(assign);
+		parsingStatus.push(ParsingStatus.ASSIGNING_VAL);
+	}
+
+	@Override
+	public void enterMath_expr(Math_exprContext ctx) {
+		String operator = ctx.getChild(TerminalNode.class, 0).getText();
+		if (parsingStatus.peek().equals(ParsingStatus.ASSIGNING_VAL)) {
+			BizlangMathOperation mathOperation = new BizlangMathOperation(operator, ctx.getStart().getLine());
+			((BizlangAssignation) buffer.peek()).addLValue(mathOperation);
+			// empujamos a los buffers
+			buffer.push(mathOperation);
+			parsingStatus.push(ParsingStatus.PARSING_MATH_EXPR);
+		}
+	}
+
+	@Override
+	public void enterValue(ValueContext ctx) {
+		BizlangValue value = getValue(ctx);
+		// T__6 = 1, T__5 = 2, T__4 = 3, T__3 = 4, T__2 = 5, T__1 = 6, T__0 = 7,
+		// ID = 8, STR = 9, NBR = 10, OBJ_PROP = 11, MATH_OP = 12, NEWLINE = 13, WS = 14;
+		if (parsingStatus.peek().equals(ParsingStatus.PARSING_MATH_EXPR)) {
+			((BizlangMathOperation) buffer.peek()).addParam(value);
+		} else if (parsingStatus.peek().equals(ParsingStatus.PARSING_FNCT)) {
+			((BizlangFunction) buffer.peek()).addParam(value);
+		}
+	}
+
+	private BizlangValue getValue(ValueContext ctx) {
+		TerminalNode valueNode = ctx.getChild(TerminalNode.class, 0);
+		switch (valueNode.getSymbol().getType()) {
+			case BizlangLexer.STR:
+				return new BizlangValue(BizlangLexer.STR, ctx.STR().getText(), ctx.getStart().getLine());
+			case BizlangLexer.ID:
+				return new BizlangValue(BizlangLexer.ID, ctx.ID().getText(), ctx.getStart().getLine());
+			case BizlangLexer.NBR:
+				return new BizlangValue(BizlangLexer.NBR, ctx.NBR().getText(), ctx.getStart().getLine());
+			default:
+				throw new RuntimeException("Symbol type uknown. [" + valueNode.getSymbol().getType() + "]");
+		}
+	}
+}
