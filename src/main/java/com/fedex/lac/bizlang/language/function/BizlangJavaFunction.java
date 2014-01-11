@@ -1,6 +1,8 @@
 package com.fedex.lac.bizlang.language.function;
 
+import com.fedex.lac.bizlang.interpreter.Bindings;
 import com.fedex.lac.bizlang.language.BizlangException;
+import com.fedex.lac.bizlang.language.BizlangExpression;
 
 /* 
  * BizlangJavaFunction.java
@@ -11,5 +13,5 @@ import com.fedex.lac.bizlang.language.BizlangException;
  * @creation	10/01/2014
  */
 public interface BizlangJavaFunction {
-	Object execute(Object... params) throws BizlangException;
+	Object execute(Bindings bindings, BizlangExpression... params) throws BizlangException;
 }

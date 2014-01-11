@@ -37,7 +37,6 @@ public class InterpreterTest {
 		ExecutionFlow flow = interpreter.interpret(input);
 		Bindings bindings = new Bindings();
 		bindings.addBinding("idNbr", "880475");
-		// no requiere bindings esta ejecucion
 		interpreter.execute(flow, bindings);
 	}
 

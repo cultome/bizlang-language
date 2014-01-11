@@ -17,7 +17,7 @@ import com.fedex.lac.bizlang.language.function.PrintJavaFunction;
  */
 public class BizlangFunction extends BizlangExpression {
 	
-	private List<BizlangValue> paramList;
+	private List<BizlangExpression> paramList;
 	
 	public BizlangFunction(String fnctName, int srcLineDefinedAt) {
 		super(fnctName, srcLineDefinedAt);
@@ -26,26 +26,34 @@ public class BizlangFunction extends BizlangExpression {
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
 		BizlangJavaFunction fnct = getJavaImplementation(name, paramList);
-		return fnct.execute(paramList.toArray());
+		return fnct.execute(bindings, paramList.toArray(new BizlangExpression[]{}));
 	}
 
-	private BizlangJavaFunction getJavaImplementation(String name, List<BizlangValue> paramList) {
-		if("print".equals(name)){
-			return new PrintJavaFunction();
+	protected List<Object> getFinalValues(Bindings bindings) throws BizlangException {
+		List<Object> values = new ArrayList<Object>();
+		for(BizlangExpression param : getParamList()){
+			values.add(param.execute(bindings));
 		}
-		return null;
+		return values;
 	}
 
-	public BizlangValue addParam(BizlangValue param) {
+	public BizlangExpression addParam(BizlangExpression param) {
 		getParamList().add(param);
 		return param;
 	}
 
-	public List<BizlangValue> getParamList() {
+	public List<BizlangExpression> getParamList() {
 		if(paramList == null){
-			paramList = new ArrayList<BizlangValue>();
+			paramList = new ArrayList<BizlangExpression>();
 		}
 		return paramList;
+	}
+
+	private BizlangJavaFunction getJavaImplementation(String name, List<BizlangExpression> paramList) {
+		if("print".equals(name)){
+			return new PrintJavaFunction();
+		}
+		return null;
 	}
 
 }

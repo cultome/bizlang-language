@@ -1,6 +1,9 @@
 package com.fedex.lac.bizlang.language;
 
+import java.math.BigDecimal;
+
 import com.fedex.lac.bizlang.interpreter.Bindings;
+import com.fedex.lac.bizlang.parser.BizlangLexer;
 
 /* 
  * BizlangValue.java
@@ -23,7 +26,17 @@ public class BizlangValue extends BizlangExpression {
 
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
-		return value;
+		switch(type){
+		case BizlangLexer.NBR:
+			return new BigDecimal(value);
+		case BizlangLexer.STR:
+			return value.replaceAll("\"", "");
+		case BizlangLexer.ID:
+		case BizlangLexer.OBJ_PROP:
+			return bindings.getBinding(value);
+		}
+		
+		return null;
 	}
 
 	public int getType() {
@@ -32,6 +45,11 @@ public class BizlangValue extends BizlangExpression {
 
 	public String getValue() {
 		return value;
+	}
+	
+	@Override
+	public String toString() {
+		return "[" + BizlangLexer.tokenNames[type] + "] " + value;
 	}
 
 }

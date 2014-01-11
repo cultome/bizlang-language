@@ -1,6 +1,8 @@
 package com.fedex.lac.bizlang.language.function;
 
+import com.fedex.lac.bizlang.interpreter.Bindings;
 import com.fedex.lac.bizlang.language.BizlangException;
+import com.fedex.lac.bizlang.language.BizlangExpression;
 
 /* 
  * PrintJavaFunction.java
@@ -13,10 +15,10 @@ import com.fedex.lac.bizlang.language.BizlangException;
 public class PrintJavaFunction implements BizlangJavaFunction {
 
 	@Override
-	public Object execute(Object... params) throws BizlangException {
+	public Object execute(Bindings bindings, BizlangExpression... params) throws BizlangException {
 		StringBuilder b = new StringBuilder();
-		for (Object obj : params) {
-			b.append(obj.toString() + " ");
+		for (BizlangExpression obj : params) {
+			b.append(obj.execute(bindings).toString() + " ");
 		}
 		
 		if(b.length() > 1){

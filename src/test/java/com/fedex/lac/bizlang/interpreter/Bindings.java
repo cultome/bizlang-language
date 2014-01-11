@@ -26,4 +26,12 @@ public class Bindings {
 		return bindings;
 	}
 
+	public Object getBinding(String id) {
+		Object value = bindings.get(id);
+		if(value == null){
+			throw new RuntimeException("Binding dont exist. [" + id + "]");
+		}
+		return value;
+	}
+
 }
