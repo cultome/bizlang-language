@@ -17,6 +17,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterMathExpr(@NotNull BizlangParser.MathExprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitMathExpr(@NotNull BizlangParser.MathExprContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterExpression(@NotNull BizlangParser.ExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -43,26 +56,13 @@ public class BizlangBaseListener implements BizlangListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterParam_lst(@NotNull BizlangParser.Param_lstContext ctx) { }
+	@Override public void enterParamLst(@NotNull BizlangParser.ParamLstContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void exitParam_lst(@NotNull BizlangParser.Param_lstContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterMath_expr(@NotNull BizlangParser.Math_exprContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitMath_expr(@NotNull BizlangParser.Math_exprContext ctx) { }
+	@Override public void exitParamLst(@NotNull BizlangParser.ParamLstContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -76,19 +76,6 @@ public class BizlangBaseListener implements BizlangListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitAssignation(@NotNull BizlangParser.AssignationContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterFnct_call(@NotNull BizlangParser.Fnct_callContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitFnct_call(@NotNull BizlangParser.Fnct_callContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -115,6 +102,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitScript(@NotNull BizlangParser.ScriptContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterFnctCall(@NotNull BizlangParser.FnctCallContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitFnctCall(@NotNull BizlangParser.FnctCallContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

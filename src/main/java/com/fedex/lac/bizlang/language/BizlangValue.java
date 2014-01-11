@@ -32,7 +32,7 @@ public class BizlangValue extends BizlangExpression {
 		case BizlangLexer.STR:
 			return value.replaceAll("\"", "");
 		case BizlangLexer.ID:
-		case BizlangLexer.OBJ_PROP:
+		case BizlangLexer.OBJPROP:
 			return bindings.getBinding(value);
 		}
 		

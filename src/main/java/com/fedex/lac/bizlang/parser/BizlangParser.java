@@ -16,18 +16,18 @@ public class BizlangParser extends Parser {
 		new PredictionContextCache();
 	public static final int
 		T__6=1, T__5=2, T__4=3, T__3=4, T__2=5, T__1=6, T__0=7, ID=8, STR=9, NBR=10, 
-		OBJ_PROP=11, MATH_OP=12, NEWLINE=13, WS=14;
+		OBJPROP=11, MATHOPTR=12, NEWLINE=13, WS=14;
 	public static final String[] tokenNames = {
 		"<INVALID>", "'sum'", "')'", "'getFromDb'", "','", "'('", "'print'", "'='", 
-		"ID", "STR", "NBR", "OBJ_PROP", "MATH_OP", "NEWLINE", "WS"
+		"ID", "STR", "NBR", "OBJPROP", "MATHOPTR", "NEWLINE", "WS"
 	};
 	public static final int
-		RULE_script = 0, RULE_expressions = 1, RULE_expression = 2, RULE_math_expr = 3, 
-		RULE_fnct_call = 4, RULE_fnct = 5, RULE_assignation = 6, RULE_param_lst = 7, 
+		RULE_script = 0, RULE_expressions = 1, RULE_expression = 2, RULE_mathExpr = 3, 
+		RULE_fnctCall = 4, RULE_fnct = 5, RULE_assignation = 6, RULE_paramLst = 7, 
 		RULE_value = 8;
 	public static final String[] ruleNames = {
-		"script", "expressions", "expression", "math_expr", "fnct_call", "fnct", 
-		"assignation", "param_lst", "value"
+		"script", "expressions", "expression", "mathExpr", "fnctCall", "fnct", 
+		"assignation", "paramLst", "value"
 	};
 
 	@Override
@@ -144,14 +144,14 @@ public class BizlangParser extends Parser {
 		public ValueContext value() {
 			return getRuleContext(ValueContext.class,0);
 		}
-		public Math_exprContext math_expr() {
-			return getRuleContext(Math_exprContext.class,0);
-		}
-		public Fnct_callContext fnct_call() {
-			return getRuleContext(Fnct_callContext.class,0);
+		public MathExprContext mathExpr() {
+			return getRuleContext(MathExprContext.class,0);
 		}
 		public AssignationContext assignation() {
 			return getRuleContext(AssignationContext.class,0);
+		}
+		public FnctCallContext fnctCall() {
+			return getRuleContext(FnctCallContext.class,0);
 		}
 		public ExpressionContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -176,7 +176,7 @@ public class BizlangParser extends Parser {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(27); fnct_call();
+				setState(27); fnctCall();
 				}
 				break;
 
@@ -190,7 +190,7 @@ public class BizlangParser extends Parser {
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(29); math_expr();
+				setState(29); mathExpr();
 				}
 				break;
 
@@ -213,34 +213,34 @@ public class BizlangParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Math_exprContext extends ParserRuleContext {
+	public static class MathExprContext extends ParserRuleContext {
 		public ValueContext value(int i) {
 			return getRuleContext(ValueContext.class,i);
 		}
+		public TerminalNode MATHOPTR() { return getToken(BizlangParser.MATHOPTR, 0); }
 		public List<ValueContext> value() {
 			return getRuleContexts(ValueContext.class);
 		}
-		public TerminalNode MATH_OP() { return getToken(BizlangParser.MATH_OP, 0); }
-		public Math_exprContext math_expr() {
-			return getRuleContext(Math_exprContext.class,0);
+		public MathExprContext mathExpr() {
+			return getRuleContext(MathExprContext.class,0);
 		}
-		public Math_exprContext(ParserRuleContext parent, int invokingState) {
+		public MathExprContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_math_expr; }
+		@Override public int getRuleIndex() { return RULE_mathExpr; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).enterMath_expr(this);
+			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).enterMathExpr(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).exitMath_expr(this);
+			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).exitMathExpr(this);
 		}
 	}
 
-	public final Math_exprContext math_expr() throws RecognitionException {
-		Math_exprContext _localctx = new Math_exprContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_math_expr);
+	public final MathExprContext mathExpr() throws RecognitionException {
+		MathExprContext _localctx = new MathExprContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_mathExpr);
 		try {
 			setState(41);
 			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
@@ -248,7 +248,7 @@ public class BizlangParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(33); value();
-				setState(34); match(MATH_OP);
+				setState(34); match(MATHOPTR);
 				setState(35); value();
 				}
 				break;
@@ -257,8 +257,8 @@ public class BizlangParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(37); value();
-				setState(38); match(MATH_OP);
-				setState(39); math_expr();
+				setState(38); match(MATHOPTR);
+				setState(39); mathExpr();
 				}
 				break;
 			}
@@ -274,33 +274,33 @@ public class BizlangParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Fnct_callContext extends ParserRuleContext {
+	public static class FnctCallContext extends ParserRuleContext {
 		public ExpressionContext expression() {
 			return getRuleContext(ExpressionContext.class,0);
 		}
-		public Param_lstContext param_lst() {
-			return getRuleContext(Param_lstContext.class,0);
+		public ParamLstContext paramLst() {
+			return getRuleContext(ParamLstContext.class,0);
 		}
 		public FnctContext fnct() {
 			return getRuleContext(FnctContext.class,0);
 		}
-		public Fnct_callContext(ParserRuleContext parent, int invokingState) {
+		public FnctCallContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_fnct_call; }
+		@Override public int getRuleIndex() { return RULE_fnctCall; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).enterFnct_call(this);
+			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).enterFnctCall(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).exitFnct_call(this);
+			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).exitFnctCall(this);
 		}
 	}
 
-	public final Fnct_callContext fnct_call() throws RecognitionException {
-		Fnct_callContext _localctx = new Fnct_callContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_fnct_call);
+	public final FnctCallContext fnctCall() throws RecognitionException {
+		FnctCallContext _localctx = new FnctCallContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_fnctCall);
 		try {
 			setState(54);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
@@ -317,7 +317,7 @@ public class BizlangParser extends Parser {
 				{
 				setState(46); fnct();
 				setState(47); match(5);
-				setState(48); param_lst();
+				setState(48); paramLst();
 				setState(49); match(2);
 				}
 				break;
@@ -326,7 +326,7 @@ public class BizlangParser extends Parser {
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(51); fnct();
-				setState(52); param_lst();
+				setState(52); paramLst();
 				}
 				break;
 			}
@@ -424,30 +424,30 @@ public class BizlangParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Param_lstContext extends ParserRuleContext {
+	public static class ParamLstContext extends ParserRuleContext {
 		public ValueContext value() {
 			return getRuleContext(ValueContext.class,0);
 		}
-		public Param_lstContext param_lst() {
-			return getRuleContext(Param_lstContext.class,0);
+		public ParamLstContext paramLst() {
+			return getRuleContext(ParamLstContext.class,0);
 		}
-		public Param_lstContext(ParserRuleContext parent, int invokingState) {
+		public ParamLstContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_param_lst; }
+		@Override public int getRuleIndex() { return RULE_paramLst; }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
-			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).enterParam_lst(this);
+			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).enterParamLst(this);
 		}
 		@Override
 		public void exitRule(ParseTreeListener listener) {
-			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).exitParam_lst(this);
+			if ( listener instanceof BizlangListener ) ((BizlangListener)listener).exitParamLst(this);
 		}
 	}
 
-	public final Param_lstContext param_lst() throws RecognitionException {
-		Param_lstContext _localctx = new Param_lstContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_param_lst);
+	public final ParamLstContext paramLst() throws RecognitionException {
+		ParamLstContext _localctx = new ParamLstContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_paramLst);
 		try {
 			setState(67);
 			switch ( getInterpreter().adaptivePredict(_input,4,_ctx) ) {
@@ -463,7 +463,7 @@ public class BizlangParser extends Parser {
 				{
 				setState(63); value();
 				setState(64); match(4);
-				setState(65); param_lst();
+				setState(65); paramLst();
 				}
 				break;
 			}
@@ -480,10 +480,10 @@ public class BizlangParser extends Parser {
 	}
 
 	public static class ValueContext extends ParserRuleContext {
-		public TerminalNode OBJ_PROP() { return getToken(BizlangParser.OBJ_PROP, 0); }
 		public TerminalNode ID() { return getToken(BizlangParser.ID, 0); }
 		public TerminalNode STR() { return getToken(BizlangParser.STR, 0); }
 		public TerminalNode NBR() { return getToken(BizlangParser.NBR, 0); }
+		public TerminalNode OBJPROP() { return getToken(BizlangParser.OBJPROP, 0); }
 		public ValueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -507,7 +507,7 @@ public class BizlangParser extends Parser {
 			{
 			setState(69);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ID) | (1L << STR) | (1L << NBR) | (1L << OBJ_PROP))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << ID) | (1L << STR) | (1L << NBR) | (1L << OBJPROP))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			consume();

@@ -16,7 +16,7 @@ public class BizlangLexer extends Lexer {
 		new PredictionContextCache();
 	public static final int
 		T__6=1, T__5=2, T__4=3, T__3=4, T__2=5, T__1=6, T__0=7, ID=8, STR=9, NBR=10, 
-		OBJ_PROP=11, MATH_OP=12, NEWLINE=13, WS=14;
+		OBJPROP=11, MATHOPTR=12, NEWLINE=13, WS=14;
 	public static String[] modeNames = {
 		"DEFAULT_MODE"
 	};
@@ -24,11 +24,11 @@ public class BizlangLexer extends Lexer {
 	public static final String[] tokenNames = {
 		"<INVALID>",
 		"'sum'", "')'", "'getFromDb'", "','", "'('", "'print'", "'='", "ID", "STR", 
-		"NBR", "OBJ_PROP", "MATH_OP", "NEWLINE", "WS"
+		"NBR", "OBJPROP", "MATHOPTR", "NEWLINE", "WS"
 	};
 	public static final String[] ruleNames = {
 		"T__6", "T__5", "T__4", "T__3", "T__2", "T__1", "T__0", "ID", "STR", "NBR", 
-		"OBJ_PROP", "MATH_OP", "NEWLINE", "WS"
+		"OBJPROP", "MATHOPTR", "NEWLINE", "WS"
 	};
 
 

@@ -12,9 +12,9 @@ import com.fedex.lac.bizlang.language.BizlangValue;
 import com.fedex.lac.bizlang.parser.BizlangBaseListener;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
 import com.fedex.lac.bizlang.parser.BizlangParser.AssignationContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.FnctContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.Fnct_callContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.Math_exprContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.MathExprContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
 
 /* 
@@ -56,7 +56,7 @@ public class TreeListener extends BizlangBaseListener {
 	}
 
 	@Override
-	public void enterMath_expr(Math_exprContext ctx) {
+	public void enterMathExpr(MathExprContext ctx) {
 		String operator = ctx.getChild(TerminalNode.class, 0).getText();
 		BizlangMathOperation mathOperation = new BizlangMathOperation(operator, ctx.getStart().getLine());
 		buffer.push(mathOperation);
@@ -71,7 +71,7 @@ public class TreeListener extends BizlangBaseListener {
 	}
 	
 	@Override
-	public void exitFnct_call(Fnct_callContext ctx) {
+	public void exitFnctCall(FnctCallContext ctx) {
 		exitExpression();
 	}
 	
@@ -81,7 +81,7 @@ public class TreeListener extends BizlangBaseListener {
 	}
 	
 	@Override
-	public void exitMath_expr(Math_exprContext ctx) {
+	public void exitMathExpr(MathExprContext ctx) {
 		exitExpression();
 	}
 	

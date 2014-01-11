@@ -7,37 +7,37 @@ script		: expressions ;
 expressions	: expression
 			| expression NEWLINE expressions
 			;
-expression  : fnct_call 
+expression  : fnctCall 
 			| assignation
-			| math_expr
+			| mathExpr
 			| value
 			;
-math_expr	: value MATH_OP value
-			| value MATH_OP math_expr
+mathExpr	: value MATHOPTR value
+			| value MATHOPTR mathExpr
 			;
-fnct_call   : fnct expression
-			| fnct '(' param_lst ')'
-			| fnct param_lst
+fnctCall    : fnct expression
+			| fnct '(' paramLst ')'
+			| fnct paramLst
 			;
 fnct        : 'print'
 			| 'sum'
 			| 'getFromDb'
 			;
 assignation	: ID '=' expression ;
-param_lst   : value
-			| value ',' param_lst
+paramLst   : value
+			| value ',' paramLst
 			;
 value		: NBR
 			| STR
 			| ID
-			| OBJ_PROP
+			| OBJPROP
 			;
 ID			: [a-zA-Z][a-zA-Z0-9_]+ ;
 STR         : '"' [a-zA-Z0-9 ]+ '"'
 			| '\'' [a-zA-Z0-9 ]+ '\''
 			;
 NBR			: [0-9]+ ;
-OBJ_PROP	: ID'.'ID ;
-MATH_OP		: [\+\-\*/] ;
+OBJPROP	: ID'.'ID ;
+MATHOPTR		: [\+\-\*/] ;
 NEWLINE		: '\r'? '\n' ;
 WS          : [ \t]+ -> skip ;

@@ -9,6 +9,17 @@ import org.antlr.v4.runtime.tree.ParseTreeListener;
  */
 public interface BizlangListener extends ParseTreeListener {
 	/**
+	 * Enter a parse tree produced by {@link BizlangParser#mathExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterMathExpr(@NotNull BizlangParser.MathExprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BizlangParser#mathExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitMathExpr(@NotNull BizlangParser.MathExprContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link BizlangParser#expression}.
 	 * @param ctx the parse tree
 	 */
@@ -31,26 +42,15 @@ public interface BizlangListener extends ParseTreeListener {
 	void exitFnct(@NotNull BizlangParser.FnctContext ctx);
 
 	/**
-	 * Enter a parse tree produced by {@link BizlangParser#param_lst}.
+	 * Enter a parse tree produced by {@link BizlangParser#paramLst}.
 	 * @param ctx the parse tree
 	 */
-	void enterParam_lst(@NotNull BizlangParser.Param_lstContext ctx);
+	void enterParamLst(@NotNull BizlangParser.ParamLstContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link BizlangParser#param_lst}.
+	 * Exit a parse tree produced by {@link BizlangParser#paramLst}.
 	 * @param ctx the parse tree
 	 */
-	void exitParam_lst(@NotNull BizlangParser.Param_lstContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link BizlangParser#math_expr}.
-	 * @param ctx the parse tree
-	 */
-	void enterMath_expr(@NotNull BizlangParser.Math_exprContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link BizlangParser#math_expr}.
-	 * @param ctx the parse tree
-	 */
-	void exitMath_expr(@NotNull BizlangParser.Math_exprContext ctx);
+	void exitParamLst(@NotNull BizlangParser.ParamLstContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link BizlangParser#assignation}.
@@ -62,17 +62,6 @@ public interface BizlangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssignation(@NotNull BizlangParser.AssignationContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link BizlangParser#fnct_call}.
-	 * @param ctx the parse tree
-	 */
-	void enterFnct_call(@NotNull BizlangParser.Fnct_callContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link BizlangParser#fnct_call}.
-	 * @param ctx the parse tree
-	 */
-	void exitFnct_call(@NotNull BizlangParser.Fnct_callContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link BizlangParser#value}.
@@ -95,6 +84,17 @@ public interface BizlangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitScript(@NotNull BizlangParser.ScriptContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link BizlangParser#fnctCall}.
+	 * @param ctx the parse tree
+	 */
+	void enterFnctCall(@NotNull BizlangParser.FnctCallContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BizlangParser#fnctCall}.
+	 * @param ctx the parse tree
+	 */
+	void exitFnctCall(@NotNull BizlangParser.FnctCallContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link BizlangParser#expressions}.
