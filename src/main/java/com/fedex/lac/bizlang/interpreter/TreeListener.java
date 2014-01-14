@@ -55,9 +55,7 @@ public class TreeListener extends BizlangBaseListener {
 	
 	@Override
 	public void enterFnctCall(FnctCallContext ctx) {
-		BizlangFunction fnct = new BizlangFunction(ctx.getChild(0).getText(), ctx.getStart().getLine());
-		// TODO CAMBIAR LA REGLA AL LEXER
-//		BizlangFunction fnct = flow.addFnct(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine());
+		BizlangFunction fnct = new BizlangFunction(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine());
 		buffer.push(fnct);
 		parsingStatus.push(ParsingStatus.PARSING_FNCT);
 	}

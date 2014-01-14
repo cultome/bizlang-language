@@ -12,9 +12,9 @@ expression  : fnctCall
 			| comment
 			| NEWLINE
 			;
-fnctCall    : fnct expression
-			| fnct '(' paramLst ')'
-			| fnct paramLst
+fnctCall    : FNCTNAME expression
+			| FNCTNAME '(' paramLst ')'
+			| FNCTNAME paramLst
 			;
 assignation	: ID '=' expression ;
 mathExpr	: value MATHOPTR value
@@ -30,10 +30,6 @@ comment		: SING_LN_CMM
 			| MULT_LN_CMM
 			;
 logicOp		: value LOGICOPRT value ;
-fnct        : 'print'
-			| 'sum'
-			| 'getFromDb'
-			;
 paramLst	: value
 			| value ',' paramLst
 			;
@@ -48,7 +44,10 @@ MATHOPTR	: [\+\-\*/] ;
 CONDOPRT	: 'if'
 			| 'unless'
 			; 
-
+FNCTNAME	: 'print'
+			| 'sum'
+			| 'getFromDb'
+			;
 NBR			: [0-9]+ ;
 STR         : '"' (~["])*? '"'
 			| '\'' (~['])*? '\''
