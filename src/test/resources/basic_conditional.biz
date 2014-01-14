@@ -1,9 +1,22 @@
+/*
 if 1 < 2 do
 	print("<1>")
 end
-/*
-if 1 < 2 do
+
+unless 1 > 2 do
 	print("<2>")
+end
+*/
+
+if 1 < 2 do
+	print("<3>")
+else
+	print("<error>")
+end
+
+/*
+unless 1 > 2 do
+	print("<4>")
 else
 	print("<error>")
 end
@@ -14,16 +27,6 @@ else
 	print("<3>")
 end
 
-
-unless 1 > 2 do
-	print("<4>")
-end
-
-unless 1 > 2 do
-	print("<5>")
-else
-	print("<error>")
-end
 
 unless 1 < 2 do
 	print("<error>")

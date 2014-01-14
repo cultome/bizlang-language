@@ -15,8 +15,12 @@ import com.fedex.lac.bizlang.language.BizlangValue;
 import com.fedex.lac.bizlang.parser.BizlangBaseListener;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
 import com.fedex.lac.bizlang.parser.BizlangParser.AssignationContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.BlockContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.CommentContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.ConditionalContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.ElseBlkContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.LogicOpContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.MathExprContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
 
@@ -72,35 +76,35 @@ public class TreeListener extends BizlangBaseListener {
 		parsingStatus.push(ParsingStatus.PARSING_MATH_EXPR);
 	}
 	
-//	@Override
-//	public void enterCondition(ConditionContext ctx) {
-//		String operator = ctx.getChild(TerminalNode.class, 0).getText();
-//		BizlangConditionalExpression condExpr = new BizlangConditionalExpression(operator, ctx.getStart().getLine());
-//		buffer.push(condExpr);
-//		parsingStatus.push(ParsingStatus.PARSING_CONDITION);
-//	}
-//	
-//	@Override
-//	public void enterLogicComp(LogicCompContext ctx) {
-//		String operator = ctx.getChild(TerminalNode.class, 0).getText();
-//		BizlangLogicOperation condExpr = new BizlangLogicOperation(operator, ctx.getStart().getLine());
-//		buffer.push(condExpr);
-//		parsingStatus.push(ParsingStatus.PARSING_LOGIC_COMP);
-//	}
-//
-//	@Override
-//	public void enterBlock(BlockContext ctx) {
-//		BizlangBlock block = new BizlangBlock("_block_", ctx.getStart().getLine());
-//		buffer.push(block);
-//		parsingStatus.push(ParsingStatus.PARSING_BLOCK);
-//	}
-//	
-//	@Override
-//	public void enterElseBlock(ElseBlockContext ctx) {
-//		BizlangBlock block = new BizlangBlock("_else_block_", ctx.getStart().getLine());
-//		buffer.push(block);
-//		parsingStatus.push(ParsingStatus.PARSING_ELSE_BLOCK);
-//	}
+	@Override
+	public void enterConditional(ConditionalContext ctx) {
+		String operator = ctx.getChild(TerminalNode.class, 0).getText();
+		BizlangConditionalExpression condExpr = new BizlangConditionalExpression(operator, ctx.getStart().getLine());
+		buffer.push(condExpr);
+		parsingStatus.push(ParsingStatus.PARSING_CONDITION);
+	}
+	
+	@Override
+	public void enterLogicOp(LogicOpContext ctx) {
+		String operator = ctx.getChild(TerminalNode.class, 0).getText();
+		BizlangLogicOperation condExpr = new BizlangLogicOperation(operator, ctx.getStart().getLine());
+		buffer.push(condExpr);
+		parsingStatus.push(ParsingStatus.PARSING_LOGIC_COMP);
+	}
+	
+	@Override
+	public void enterBlock(BlockContext ctx) {
+		BizlangBlock block = new BizlangBlock("_block_", ctx.getStart().getLine());
+		buffer.push(block);
+		parsingStatus.push(ParsingStatus.PARSING_BLOCK);
+	}
+	
+	@Override
+	public void enterElseBlk(ElseBlkContext ctx) {
+		BizlangBlock block = new BizlangBlock("_else_block_", ctx.getStart().getLine());
+		buffer.push(block);
+		parsingStatus.push(ParsingStatus.PARSING_ELSE_BLOCK);
+	}
 	
 	@Override
 	public void enterValue(ValueContext ctx) {
@@ -109,15 +113,25 @@ public class TreeListener extends BizlangBaseListener {
 		parsingStatus.push(ParsingStatus.GETTING_VALUE);
 	}
 	
-//	@Override
-//	public void exitBlock(BlockContext ctx) {
-//		exitExpression();
-//	}
-//	
-//	@Override
-//	public void exitElseBlock(ElseBlockContext ctx) {
-//		exitExpression();
-//	}
+	@Override
+	public void exitBlock(BlockContext ctx) {
+		exitExpression();
+	}
+	
+	@Override
+	public void exitElseBlk(ElseBlkContext ctx) {
+		exitExpression();
+	}
+	
+	@Override
+	public void exitLogicOp(LogicOpContext ctx) {
+		exitExpression();
+	}
+
+	@Override
+	public void exitConditional(ConditionalContext ctx) {
+		exitExpression();
+	}
 	
 	@Override
 	public void exitFnctCall(FnctCallContext ctx) {
@@ -143,31 +157,39 @@ public class TreeListener extends BizlangBaseListener {
 		ParsingStatus prevStatus = parsingStatus.pop();
 		BizlangExpression r = buffer.pop();
 		if(!parsingStatus.isEmpty()){
+			switch(parsingStatus.peek()){
 			// T__8 = 1, T__7 = 2, T__6 = 3, T__5 = 4, T__4 = 5, T__3 = 6, T__2 = 7, T__1 = 8, T__0 = 9, 
 			// FNCTNAME = 10, ID = 11, STR = 12, NBR = 13, OBJPROP = 14, MATHOPTR = 15, NEWLINE = 16, WS = 17;
-			if (parsingStatus.peek().equals(ParsingStatus.PARSING_MATH_EXPR)) {
+			case PARSING_MATH_EXPR:
 				((BizlangMathOperation) buffer.peek()).addParam(r);
-				
-			} else if (parsingStatus.peek().equals(ParsingStatus.PARSING_FNCT)) {
+				break;
+			case PARSING_FNCT:
 				((BizlangFunction) buffer.peek()).addParam(r);
-				
-			} else if (parsingStatus.peek().equals(ParsingStatus.ASSIGNING_VAL)) {
+				break;
+			case ASSIGNING_VAL:
 				((BizlangAssignation) buffer.peek()).addLValue(r);
-				
-			} else if (parsingStatus.peek().equals(ParsingStatus.PARSING_CONDITION)) {
+				break;
+			case PARSING_CONDITION:
 				if(prevStatus.equals(ParsingStatus.PARSING_LOGIC_COMP)){
 					((BizlangConditionalExpression) buffer.peek()).addCondition((BizlangLogicOperation) r);
 				} else if(prevStatus.equals(ParsingStatus.PARSING_BLOCK)){
 					((BizlangConditionalExpression) buffer.peek()).addBlock((BizlangBlock) r);
-				} else if(prevStatus.equals(ParsingStatus.PARSING_ELSE_BLOCK)){
-					((BizlangConditionalExpression) buffer.peek()).addElseBlock((BizlangBlock) r);
 				}
-			} else if (parsingStatus.peek().equals(ParsingStatus.PARSING_LOGIC_COMP)) {
+				break;
+			case PARSING_LOGIC_COMP:
 				((BizlangLogicOperation) buffer.peek()).addParam((BizlangValue) r);
-				
-			} else if (parsingStatus.peek().equals(ParsingStatus.PARSING_BLOCK) || parsingStatus.peek().equals(ParsingStatus.PARSING_ELSE_BLOCK)) {
-				((BizlangBlock) buffer.peek()).addExpression((BizlangExpression) r);
-				
+				break;
+			case PARSING_BLOCK:
+			case PARSING_ELSE_BLOCK:
+				if(prevStatus.equals(ParsingStatus.PARSING_ELSE_BLOCK)){
+					((BizlangConditionalExpression) buffer.elementAt(buffer.size() - 2)).addElseBlock((BizlangBlock) r);
+				} else {
+					((BizlangBlock) buffer.peek()).addExpression((BizlangExpression) r);
+				}
+				break;
+			case WAITING:
+			case GETTING_VALUE:
+				break;
 			}
 		}
 	}
