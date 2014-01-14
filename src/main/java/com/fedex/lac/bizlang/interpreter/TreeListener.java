@@ -5,15 +5,17 @@ import java.util.Stack;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import com.fedex.lac.bizlang.language.BizlangAssignation;
+import com.fedex.lac.bizlang.language.BizlangBlock;
+import com.fedex.lac.bizlang.language.BizlangConditionalExpression;
 import com.fedex.lac.bizlang.language.BizlangExpression;
 import com.fedex.lac.bizlang.language.BizlangFunction;
+import com.fedex.lac.bizlang.language.BizlangLogicOperation;
 import com.fedex.lac.bizlang.language.BizlangMathOperation;
 import com.fedex.lac.bizlang.language.BizlangValue;
 import com.fedex.lac.bizlang.parser.BizlangBaseListener;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
 import com.fedex.lac.bizlang.parser.BizlangParser.AssignationContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.FnctContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.MathExprContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
 
@@ -40,10 +42,16 @@ public class TreeListener extends BizlangBaseListener {
 	public ExecutionFlow getExecutionFlow() {
 		return flow;
 	}
-
+//	
+//	@Override
+//	public void enterComment(CommentContext ctx) {
+//		System.out.println(ctx.getChild(0));
+//	}
+	
 	@Override
-	public void enterFnct(FnctContext ctx) {
-		BizlangFunction fnct = flow.addFnct(ctx.getText(), ctx.getStart().getLine());
+	public void enterFnctCall(FnctCallContext ctx) {
+		BizlangFunction fnct = flow.addFnct(ctx.getChild(0).getText(), ctx.getStart().getLine());
+//		BizlangFunction fnct = flow.addFnct(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine());
 		buffer.push(fnct);
 		parsingStatus.push(ParsingStatus.PARSING_FNCT);
 	}
@@ -62,13 +70,53 @@ public class TreeListener extends BizlangBaseListener {
 		buffer.push(mathOperation);
 		parsingStatus.push(ParsingStatus.PARSING_MATH_EXPR);
 	}
-
+	
+//	@Override
+//	public void enterCondition(ConditionContext ctx) {
+//		String operator = ctx.getChild(TerminalNode.class, 0).getText();
+//		BizlangConditionalExpression condExpr = new BizlangConditionalExpression(operator, ctx.getStart().getLine());
+//		buffer.push(condExpr);
+//		parsingStatus.push(ParsingStatus.PARSING_CONDITION);
+//	}
+//	
+//	@Override
+//	public void enterLogicComp(LogicCompContext ctx) {
+//		String operator = ctx.getChild(TerminalNode.class, 0).getText();
+//		BizlangLogicOperation condExpr = new BizlangLogicOperation(operator, ctx.getStart().getLine());
+//		buffer.push(condExpr);
+//		parsingStatus.push(ParsingStatus.PARSING_LOGIC_COMP);
+//	}
+//
+//	@Override
+//	public void enterBlock(BlockContext ctx) {
+//		BizlangBlock block = new BizlangBlock("_block_", ctx.getStart().getLine());
+//		buffer.push(block);
+//		parsingStatus.push(ParsingStatus.PARSING_BLOCK);
+//	}
+//	
+//	@Override
+//	public void enterElseBlock(ElseBlockContext ctx) {
+//		BizlangBlock block = new BizlangBlock("_else_block_", ctx.getStart().getLine());
+//		buffer.push(block);
+//		parsingStatus.push(ParsingStatus.PARSING_ELSE_BLOCK);
+//	}
+	
 	@Override
 	public void enterValue(ValueContext ctx) {
 		BizlangValue value = getValue(ctx);
 		buffer.push(value);
 		parsingStatus.push(ParsingStatus.GETTING_VALUE);
 	}
+	
+//	@Override
+//	public void exitBlock(BlockContext ctx) {
+//		exitExpression();
+//	}
+//	
+//	@Override
+//	public void exitElseBlock(ElseBlockContext ctx) {
+//		exitExpression();
+//	}
 	
 	@Override
 	public void exitFnctCall(FnctCallContext ctx) {
@@ -91,11 +139,11 @@ public class TreeListener extends BizlangBaseListener {
 	}
 
 	private void exitExpression(){
-		parsingStatus.pop();
+		ParsingStatus prevStatus = parsingStatus.pop();
 		BizlangExpression r = buffer.pop();
 		if(!parsingStatus.isEmpty()){
-			// T__6 = 1, T__5 = 2, T__4 = 3, T__3 = 4, T__2 = 5, T__1 = 6, T__0 = 7,
-			// ID = 8, STR = 9, NBR = 10, OBJ_PROP = 11, MATH_OP = 12, NEWLINE = 13, WS = 14;
+			// T__8 = 1, T__7 = 2, T__6 = 3, T__5 = 4, T__4 = 5, T__3 = 6, T__2 = 7, T__1 = 8, T__0 = 9, 
+			// FNCTNAME = 10, ID = 11, STR = 12, NBR = 13, OBJPROP = 14, MATHOPTR = 15, NEWLINE = 16, WS = 17;
 			if (parsingStatus.peek().equals(ParsingStatus.PARSING_MATH_EXPR)) {
 				((BizlangMathOperation) buffer.peek()).addParam(r);
 				
@@ -104,6 +152,20 @@ public class TreeListener extends BizlangBaseListener {
 				
 			} else if (parsingStatus.peek().equals(ParsingStatus.ASSIGNING_VAL)) {
 				((BizlangAssignation) buffer.peek()).addLValue(r);
+				
+			} else if (parsingStatus.peek().equals(ParsingStatus.PARSING_CONDITION)) {
+				if(prevStatus.equals(ParsingStatus.PARSING_LOGIC_COMP)){
+					((BizlangConditionalExpression) buffer.peek()).addCondition((BizlangLogicOperation) r);
+				} else if(prevStatus.equals(ParsingStatus.PARSING_BLOCK)){
+					((BizlangConditionalExpression) buffer.peek()).addBlock((BizlangBlock) r);
+				} else if(prevStatus.equals(ParsingStatus.PARSING_ELSE_BLOCK)){
+					((BizlangConditionalExpression) buffer.peek()).addElseBlock((BizlangBlock) r);
+				}
+			} else if (parsingStatus.peek().equals(ParsingStatus.PARSING_LOGIC_COMP)) {
+				((BizlangLogicOperation) buffer.peek()).addParam((BizlangValue) r);
+				
+			} else if (parsingStatus.peek().equals(ParsingStatus.PARSING_BLOCK) || parsingStatus.peek().equals(ParsingStatus.PARSING_ELSE_BLOCK)) {
+				((BizlangBlock) buffer.peek()).addExpression((BizlangExpression) r);
 				
 			}
 		}

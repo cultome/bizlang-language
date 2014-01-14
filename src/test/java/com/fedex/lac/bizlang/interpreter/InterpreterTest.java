@@ -39,5 +39,13 @@ public class InterpreterTest {
 		bindings.addBinding("idNbr", "880475");
 		interpreter.execute(flow, bindings);
 	}
+	
+	@Test
+	public void testExecuteConditional() throws Exception {
+		InputStream input = new FileInputStream("src/test/resources/basic_conditional.biz");
+		ExecutionFlow flow = interpreter.interpret(input);
+		Bindings bindings = new Bindings();
+		interpreter.execute(flow, bindings);
+	}
 
 }

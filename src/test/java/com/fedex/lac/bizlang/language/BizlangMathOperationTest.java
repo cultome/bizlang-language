@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 import org.junit.Test;
 
 import com.fedex.lac.bizlang.interpreter.Bindings;
+import com.fedex.lac.bizlang.parser.BizlangLexer;
 
 /* 
  * BizlangMathOperationTest.java
@@ -21,8 +22,8 @@ public class BizlangMathOperationTest {
 	@Test
 	public void testExecuteIntegerSum() throws BizlangException {
 		BizlangMathOperation op = new BizlangMathOperation("+", 1);
-		op.addParam(new BizlangValue(10, "1", 1));
-		op.addParam(new BizlangValue(10, "5", 1));
+		op.addParam(new BizlangValue(BizlangLexer.NBR, "1", 1));
+		op.addParam(new BizlangValue(BizlangLexer.NBR, "5", 1));
 		Object r = op.execute(new Bindings());
 		assertEquals("java.math.BigDecimal", r.getClass().getName());
 		assertEquals("6", ((BigDecimal) r).toPlainString());
@@ -31,8 +32,8 @@ public class BizlangMathOperationTest {
 	@Test
 	public void testExecuteStringConcatenation() throws BizlangException {
 		BizlangMathOperation op = new BizlangMathOperation("+", 1);
-		op.addParam(new BizlangValue(9, "hola ", 1));
-		op.addParam(new BizlangValue(9, "mundo!", 1));
+		op.addParam(new BizlangValue(BizlangLexer.STR, "hola ", 1));
+		op.addParam(new BizlangValue(BizlangLexer.STR, "mundo!", 1));
 		Object r = op.execute(new Bindings());
 		assertEquals("java.lang.String", r.getClass().getName());
 		assertEquals("hola mundo!", (String) r);

@@ -1,0 +1,33 @@
+if 1 < 2 do
+	print("<1>")
+end
+/*
+if 1 < 2 do
+	print("<2>")
+else
+	print("<error>")
+end
+
+if 1 > 2 do
+	print("<error>")
+else
+	print("<3>")
+end
+
+
+unless 1 > 2 do
+	print("<4>")
+end
+
+unless 1 > 2 do
+	print("<5>")
+else
+	print("<error>")
+end
+
+unless 1 < 2 do
+	print("<error>")
+else
+	print("<6>")
+end
+*/
