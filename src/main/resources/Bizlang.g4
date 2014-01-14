@@ -7,6 +7,7 @@ script		: expression+ EOF ;
 expression  : fnctCall
 			| mathExpr
 			| conditional
+			| repetition
 			| assignation
 			| value
 			| comment
@@ -21,6 +22,7 @@ mathExpr	: value MATHOPTR value
 			| value MATHOPTR mathExpr
 			;
 conditional	: CONDOPRT logicOp block;
+repetition	: 'for' ID 'in' OBJPROP block;
 value		: NBR
 			| STR
 			| ID

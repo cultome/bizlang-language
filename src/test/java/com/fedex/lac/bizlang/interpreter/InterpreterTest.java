@@ -59,6 +59,12 @@ public class InterpreterTest {
 		interpreter.execute(flow, bindings);
 	}
 	
+	@Test
+	public void testExecuteRepetition() throws Exception {
+		ExecutionFlow flow = getExecutionFlow("src/test/resources/repetition.biz");
+		interpreter.execute(flow, bindings);
+	}
+	
 	private ExecutionFlow getExecutionFlow(String filepath) throws Exception{
 		InputStream input = new FileInputStream(filepath);
 		return interpreter.interpret(input);

@@ -11,6 +11,7 @@ import com.fedex.lac.bizlang.language.BizlangExpression;
 import com.fedex.lac.bizlang.language.BizlangFunction;
 import com.fedex.lac.bizlang.language.BizlangLogicOperation;
 import com.fedex.lac.bizlang.language.BizlangMathOperation;
+import com.fedex.lac.bizlang.language.BizlangRepetition;
 import com.fedex.lac.bizlang.language.BizlangValue;
 import com.fedex.lac.bizlang.parser.BizlangBaseListener;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
@@ -22,6 +23,7 @@ import com.fedex.lac.bizlang.parser.BizlangParser.ElseBlkContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.LogicOpContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.MathExprContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.RepetitionContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
 
 /* 
@@ -103,10 +105,24 @@ public class TreeListener extends BizlangBaseListener {
 	}
 	
 	@Override
+	public void enterRepetition(RepetitionContext ctx) {
+		BizlangRepetition repetition = new BizlangRepetition(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine());
+		repetition.setRepetitionVarName(ctx.getChild(TerminalNode.class, 1).getText());
+		repetition.setCollection(ctx.getChild(TerminalNode.class, 3).getText());
+		buffer.push(repetition);
+		parsingStatus.push(ParsingStatus.PARSING_REPETITION);
+	}
+	
+	@Override
 	public void enterValue(ValueContext ctx) {
 		BizlangValue value = getValue(ctx);
 		buffer.push(value);
 		parsingStatus.push(ParsingStatus.GETTING_VALUE);
+	}
+	
+	@Override
+	public void exitRepetition(RepetitionContext ctx) {
+		exitExpression();
 	}
 	
 	@Override
@@ -183,6 +199,11 @@ public class TreeListener extends BizlangBaseListener {
 					((BizlangConditionalExpression) buffer.elementAt(buffer.size() - 2)).addElseBlock((BizlangBlock) r);
 				} else {
 					((BizlangBlock) buffer.peek()).addExpression((BizlangExpression) r);
+				}
+				break;
+			case PARSING_REPETITION:
+				if(prevStatus.equals(ParsingStatus.PARSING_BLOCK)){
+					((BizlangRepetition) buffer.peek()).addBlock((BizlangBlock) r);
 				}
 				break;
 			case WAITING:

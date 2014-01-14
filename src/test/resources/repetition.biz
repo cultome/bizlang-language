@@ -1,0 +1,11 @@
+var = ""
+
+for idx in myObj.valueFour do
+	if var == "" do
+		var = idx
+	else
+		var = var + "," + idx
+	end
+end
+
+print var
