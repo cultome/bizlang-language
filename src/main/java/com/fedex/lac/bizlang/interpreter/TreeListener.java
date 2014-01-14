@@ -55,7 +55,8 @@ public class TreeListener extends BizlangBaseListener {
 	
 	@Override
 	public void enterFnctCall(FnctCallContext ctx) {
-		BizlangFunction fnct = flow.addFnct(ctx.getChild(0).getText(), ctx.getStart().getLine());
+		BizlangFunction fnct = new BizlangFunction(ctx.getChild(0).getText(), ctx.getStart().getLine());
+		// TODO CAMBIAR LA REGLA AL LEXER
 //		BizlangFunction fnct = flow.addFnct(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine());
 		buffer.push(fnct);
 		parsingStatus.push(ParsingStatus.PARSING_FNCT);
@@ -63,31 +64,28 @@ public class TreeListener extends BizlangBaseListener {
 
 	@Override
 	public void enterAssignation(AssignationContext ctx) {
-		BizlangAssignation assign = flow.addAssignation(ctx.ID().getText(), ctx.getStart().getLine());
+		BizlangAssignation assign = new BizlangAssignation(ctx.ID().getText(), ctx.getStart().getLine());
 		buffer.push(assign);
 		parsingStatus.push(ParsingStatus.ASSIGNING_VAL);
 	}
 
 	@Override
 	public void enterMathExpr(MathExprContext ctx) {
-		String operator = ctx.getChild(TerminalNode.class, 0).getText();
-		BizlangMathOperation mathOperation = new BizlangMathOperation(operator, ctx.getStart().getLine());
+		BizlangMathOperation mathOperation = new BizlangMathOperation(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine());
 		buffer.push(mathOperation);
 		parsingStatus.push(ParsingStatus.PARSING_MATH_EXPR);
 	}
 	
 	@Override
 	public void enterConditional(ConditionalContext ctx) {
-		String operator = ctx.getChild(TerminalNode.class, 0).getText();
-		BizlangConditionalExpression condExpr = new BizlangConditionalExpression(operator, ctx.getStart().getLine());
+		BizlangConditionalExpression condExpr = new BizlangConditionalExpression(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine());
 		buffer.push(condExpr);
 		parsingStatus.push(ParsingStatus.PARSING_CONDITION);
 	}
 	
 	@Override
 	public void enterLogicOp(LogicOpContext ctx) {
-		String operator = ctx.getChild(TerminalNode.class, 0).getText();
-		BizlangLogicOperation condExpr = new BizlangLogicOperation(operator, ctx.getStart().getLine());
+		BizlangLogicOperation condExpr = new BizlangLogicOperation(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine());
 		buffer.push(condExpr);
 		parsingStatus.push(ParsingStatus.PARSING_LOGIC_COMP);
 	}
@@ -156,7 +154,9 @@ public class TreeListener extends BizlangBaseListener {
 	private void exitExpression(){
 		ParsingStatus prevStatus = parsingStatus.pop();
 		BizlangExpression r = buffer.pop();
-		if(!parsingStatus.isEmpty()){
+		if(parsingStatus.isEmpty()){
+			flow.addToFlow(r);
+		} else {
 			switch(parsingStatus.peek()){
 			// T__8 = 1, T__7 = 2, T__6 = 3, T__5 = 4, T__4 = 5, T__3 = 6, T__2 = 7, T__1 = 8, T__0 = 9, 
 			// FNCTNAME = 10, ID = 11, STR = 12, NBR = 13, OBJPROP = 14, MATHOPTR = 15, NEWLINE = 16, WS = 17;

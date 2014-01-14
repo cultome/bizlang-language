@@ -23,10 +23,18 @@ public class BizlangConditionalExpression extends BizlangExpression {
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
 		Boolean r = (Boolean) condition.execute(bindings);
-		if(r.booleanValue()){
-			return mainBlock.execute(bindings);
-		} else if(alternativeBlock != null){
-			return alternativeBlock.execute(bindings);
+		if("if".equals(getName())){
+			if(r.booleanValue()){
+				return mainBlock.execute(bindings);
+			} else if(alternativeBlock != null){
+				return alternativeBlock.execute(bindings);
+			}
+		} else if("unless".equals(getName())){
+			if(!r.booleanValue()){
+				return mainBlock.execute(bindings);
+			} else if(alternativeBlock != null){
+				return alternativeBlock.execute(bindings);
+			}
 		}
 		
 		return null;
