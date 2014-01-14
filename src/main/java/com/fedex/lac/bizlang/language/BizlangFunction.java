@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fedex.lac.bizlang.interpreter.Bindings;
-import com.fedex.lac.bizlang.language.function.BizlangJavaFunction;
+import com.fedex.lac.bizlang.language.function.JavaFunction;
 import com.fedex.lac.bizlang.language.function.PrintJavaFunction;
 
 /* 
@@ -25,7 +25,7 @@ public class BizlangFunction extends BizlangExpression {
 
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
-		BizlangJavaFunction fnct = getJavaImplementation(name, paramList);
+		JavaFunction fnct = getJavaImplementation(name, paramList);
 		return fnct.execute(bindings, paramList.toArray(new BizlangExpression[]{}));
 	}
 
@@ -49,7 +49,7 @@ public class BizlangFunction extends BizlangExpression {
 		return paramList;
 	}
 
-	private BizlangJavaFunction getJavaImplementation(String name, List<BizlangExpression> paramList) {
+	private JavaFunction getJavaImplementation(String name, List<BizlangExpression> paramList) {
 		if("print".equals(name)){
 			return new PrintJavaFunction();
 		}

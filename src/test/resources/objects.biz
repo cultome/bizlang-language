@@ -1,0 +1,4 @@
+print myObj
+print myObj.valueOne + myObj.valueTwo.entero
+print myObj.valueThree[1]
+print myObj.valueFour[0] + myObj.valueFour[1] + myObj.valueFour[2]

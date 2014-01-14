@@ -1,9 +1,10 @@
 if 1 < 2 do
 	print("<1>")
+	myVar = 2
 end
 
 unless 1 > 2 do
-	print("<2>")
+	print "<"+myVar+">"
 end
 
 if 1 < 2 do

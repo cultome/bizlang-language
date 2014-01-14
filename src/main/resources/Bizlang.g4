@@ -48,13 +48,15 @@ FNCTNAME	: 'print'
 			| 'sum'
 			| 'getFromDb'
 			;
-NBR			: [0-9]+ ;
+NBR			: [0-9]+('.'[0-9]+)? ;
 STR         : '"' (~["])*? '"'
 			| '\'' (~['])*? '\''
 			;
 ID			: [a-zA-Z][a-zA-Z0-9_]+ ;
-OBJPROP		: ID'.'ID ;
-
+OBJPROP		: ID'.'ID
+			| ID'.'OBJPROP
+			| ID '[' NBR ']'
+			;
 NEWLINE		: '\r'? '\n'
 			| EOF
 			;

@@ -12,7 +12,7 @@ import com.fedex.lac.bizlang.language.BizlangExpression;
  * @author		Carlos Soria <carlos.soria.osv@fedex.com>
  * @creation	10/01/2014
  */
-public class PrintJavaFunction implements BizlangJavaFunction {
+public class PrintJavaFunction implements JavaFunction {
 
 	@Override
 	public Object execute(Bindings bindings, BizlangExpression... params) throws BizlangException {
