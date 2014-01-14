@@ -75,6 +75,17 @@ public interface BizlangListener extends ParseTreeListener {
 	void exitValue(@NotNull BizlangParser.ValueContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link BizlangParser#comment}.
+	 * @param ctx the parse tree
+	 */
+	void enterComment(@NotNull BizlangParser.CommentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BizlangParser#comment}.
+	 * @param ctx the parse tree
+	 */
+	void exitComment(@NotNull BizlangParser.CommentContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link BizlangParser#script}.
 	 * @param ctx the parse tree
 	 */
@@ -95,15 +106,4 @@ public interface BizlangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFnctCall(@NotNull BizlangParser.FnctCallContext ctx);
-
-	/**
-	 * Enter a parse tree produced by {@link BizlangParser#expressions}.
-	 * @param ctx the parse tree
-	 */
-	void enterExpressions(@NotNull BizlangParser.ExpressionsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link BizlangParser#expressions}.
-	 * @param ctx the parse tree
-	 */
-	void exitExpressions(@NotNull BizlangParser.ExpressionsContext ctx);
 }

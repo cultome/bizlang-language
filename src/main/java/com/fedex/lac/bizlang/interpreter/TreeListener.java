@@ -15,6 +15,7 @@ import com.fedex.lac.bizlang.language.BizlangValue;
 import com.fedex.lac.bizlang.parser.BizlangBaseListener;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
 import com.fedex.lac.bizlang.parser.BizlangParser.AssignationContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.CommentContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.MathExprContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
@@ -42,11 +43,11 @@ public class TreeListener extends BizlangBaseListener {
 	public ExecutionFlow getExecutionFlow() {
 		return flow;
 	}
-//	
-//	@Override
-//	public void enterComment(CommentContext ctx) {
-//		System.out.println(ctx.getChild(0));
-//	}
+
+	@Override
+	public void enterComment(CommentContext ctx) {
+		super.enterComment(ctx);
+	}
 	
 	@Override
 	public void enterFnctCall(FnctCallContext ctx) {

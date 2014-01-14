@@ -95,6 +95,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterComment(@NotNull BizlangParser.CommentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitComment(@NotNull BizlangParser.CommentContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterScript(@NotNull BizlangParser.ScriptContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -115,19 +128,6 @@ public class BizlangBaseListener implements BizlangListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitFnctCall(@NotNull BizlangParser.FnctCallContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void enterExpressions(@NotNull BizlangParser.ExpressionsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitExpressions(@NotNull BizlangParser.ExpressionsContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

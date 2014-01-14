@@ -1,4 +1,11 @@
 print("hola", "mundo")
+
 suma = 1 + 5
 print suma
-print id = "myId" + idNbr
+
+# print "no deberia aparecer 1"
+print id = "myId" + idNbr # este valor vienen en el binding
+
+/* 
+print "no deberia aparecer 2"
+*/

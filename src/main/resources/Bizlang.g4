@@ -3,14 +3,16 @@ options{
     language = Java;
 }
 
-script		: expressions ;
-expressions	: expression
-			| expression NEWLINE expressions
-			;
+script		: expression+ NEWLINE ;
 expression  : fnctCall 
 			| assignation
 			| mathExpr
 			| value
+			| comment
+			| NEWLINE
+			;
+comment		: SING_LN_CMM
+			| MULT_LN_CMM
 			;
 mathExpr	: value MATHOPTR value
 			| value MATHOPTR mathExpr
@@ -32,6 +34,8 @@ value		: NBR
 			| ID
 			| OBJPROP
 			;
+SING_LN_CMM	: '#' .+? NEWLINE -> skip ;
+MULT_LN_CMM	: '/*' (.|NEWLINE)*? '*/' -> skip ;
 ID			: [a-zA-Z][a-zA-Z0-9_]+ ;
 STR         : '"' [a-zA-Z0-9 ]+ '"'
 			| '\'' [a-zA-Z0-9 ]+ '\''
@@ -39,5 +43,5 @@ STR         : '"' [a-zA-Z0-9 ]+ '"'
 NBR			: [0-9]+ ;
 OBJPROP	: ID'.'ID ;
 MATHOPTR		: [\+\-\*/] ;
-NEWLINE		: '\r'? '\n' ;
+NEWLINE		: '\r'? '\n' | EOF ;
 WS          : [ \t]+ -> skip ;
