@@ -50,6 +50,11 @@ public class TreeListener extends BizlangBaseListener {
 	private Stack<ParsingStatus> parsingStatus;
 	private Stack<BizlangExpression> buffer;
 	private ExecutionFlow flow;
+	
+	@Override
+	public String toString() {
+		return parsingStatus.toString() + "\n";
+	}
 
 	public TreeListener() {
 		flow = new ExecutionFlow();
@@ -133,14 +138,19 @@ public class TreeListener extends BizlangBaseListener {
 
 	@Override
 	public void enterArray(ArrayContext ctx) {
-		BizlangArray array = new BizlangArray(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine()); 
+		BizlangArray array = new BizlangArray("_array_", ctx.getStart().getLine()); 
 		buffer.push(array);
 		parsingStatus.push(ParsingStatus.PARSING_ARRAY);
 	}
 
 	@Override
 	public void enterRange(RangeContext ctx) {
-		BizlangRange range = new BizlangRange(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine()); 
+		BizlangRange range;
+		if(!parsingStatus.peek().equals(ParsingStatus.GETTING_VALUE)){
+			range = getRange(ctx);
+		} else {
+			range = new BizlangRange("_range_", ctx.getStart().getLine()); 
+		}
 		buffer.push(range);
 		parsingStatus.push(ParsingStatus.PARSING_RANGE);
 	}
@@ -275,12 +285,16 @@ public class TreeListener extends BizlangBaseListener {
 				List<BizlangValue> values = extractValuesFromParamList((ParamLstContext) ctx.getChild(0).getChild(1));
 				return new BizlangArray(ctx.getChild(0).getText(), ctx.getStart().getLine(), values);
 			} else if(ctx.getChild(0).getClass().getName().endsWith("RangeContext")){
-				BizlangValue lowLimit = getPrimitiveValue((TerminalNode) ctx.getChild(0).getChild(1), ctx.getStart().getLine());
-				BizlangValue highLimit = getPrimitiveValue((TerminalNode) ctx.getChild(0).getChild(3), ctx.getStart().getLine());
-				return new BizlangRange(ctx.getChild(0).getText(), ctx.getStart().getLine(), lowLimit, highLimit);
+				return getRange((RangeContext) ctx.getChild(0));
 			}
 		}
 		throw new RuntimeException("Uknown type. [" + ctx.getText() + "]");
+	}
+
+	private BizlangRange getRange(RangeContext ctx) {
+		BizlangValue lowLimit = getPrimitiveValue((TerminalNode) ctx.getChild(1), ctx.getStart().getLine());
+		BizlangValue highLimit = getPrimitiveValue((TerminalNode) ctx.getChild(3), ctx.getStart().getLine());
+		return new BizlangRange("_range_", ctx.getStart().getLine(), lowLimit, highLimit);
 	}
 
 	private BizlangValue getPrimitiveValue(TerminalNode valueNode, int srcLineDefinedAt) {

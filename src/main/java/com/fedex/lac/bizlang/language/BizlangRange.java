@@ -49,14 +49,14 @@ public class BizlangRange extends BizlangValue {
 	}
 
 	private Object getIntegerRange(int low, int high) {
-		List<Integer> range = new ArrayList<Integer>();
+		List<BizlangValue> range = new ArrayList<BizlangValue>();
 		if(low < high){
 			for(int i = low; i <= high; i++){
-				range.add(i);
+				range.add(new BizlangValue(BizlangLexer.NBR, String.valueOf(i), -1));
 			}
 		} else {
 			for(int i = low; i >= high; i--){
-				range.add(i);
+				range.add(new BizlangValue(BizlangLexer.NBR, String.valueOf(i), -1));
 			}
 		}
 		return range;
