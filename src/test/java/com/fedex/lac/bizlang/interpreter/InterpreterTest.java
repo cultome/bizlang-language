@@ -48,7 +48,7 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testExecuteConditional() throws Exception {
+	public void testConditional() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/conditional.biz");
 		interpreter.execute(flow, bindings);
 	}
@@ -60,8 +60,14 @@ public class InterpreterTest {
 	}
 	
 	@Test
-	public void testExecuteRepetition() throws Exception {
+	public void testRepetition() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/repetition.biz");
+		interpreter.execute(flow, bindings);
+	}
+	
+	@Test
+	public void testArrays() throws Exception {
+		ExecutionFlow flow = getExecutionFlow("src/test/resources/arrays.biz");
 		interpreter.execute(flow, bindings);
 	}
 	

@@ -15,8 +15,8 @@ import com.fedex.lac.bizlang.parser.BizlangLexer;
  */
 public class BizlangValue extends BizlangExpression {
 	
-	private int type;
-	private String value;
+	protected int type;
+	protected String value;
 
 	public BizlangValue(int type, String value, int srcLineDefinedAt) {
 		super("[" + type +":" + srcLineDefinedAt + "]", srcLineDefinedAt);
@@ -46,10 +46,15 @@ public class BizlangValue extends BizlangExpression {
 	public String getValue() {
 		return value;
 	}
+
 	
+	public String inspect() {
+		return "BizlangValue [type=" + type + ", value=" + value + "]";
+	}
+
 	@Override
 	public String toString() {
-		return "[" + BizlangLexer.tokenNames[type] + "] " + value;
+		return value;
 	}
 
 }

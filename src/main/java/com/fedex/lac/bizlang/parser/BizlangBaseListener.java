@@ -134,19 +134,6 @@ public class BizlangBaseListener implements BizlangListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
-	@Override public void enterComment(@NotNull BizlangParser.CommentContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
-	@Override public void exitComment(@NotNull BizlangParser.CommentContext ctx) { }
-
-	/**
-	 * {@inheritDoc}
-	 * <p/>
-	 * The default implementation does nothing.
-	 */
 	@Override public void enterElseBlk(@NotNull BizlangParser.ElseBlkContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -154,6 +141,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitElseBlk(@NotNull BizlangParser.ElseBlkContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterComment(@NotNull BizlangParser.CommentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitComment(@NotNull BizlangParser.CommentContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
@@ -180,6 +180,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitRepetition(@NotNull BizlangParser.RepetitionContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterArray(@NotNull BizlangParser.ArrayContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitArray(@NotNull BizlangParser.ArrayContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

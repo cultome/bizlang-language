@@ -22,23 +22,32 @@ mathExpr	: value MATHOPTR value
 			| value MATHOPTR mathExpr
 			;
 conditional	: CONDOPRT logicOp block;
-repetition	: 'for' ID 'in' OBJPROP block;
+repetition	: 'for' ID 'in' OBJPROP block
+			| 'for' ID 'in' ID block
+			| 'for' ID 'in' array block
+			;
+paramLst	: value
+			| value ',' paramLst
+			;
+array		: '[' paramLst ']' ;
 value		: NBR
 			| STR
 			| ID
 			| OBJPROP
+			| array
 			;
 comment		: SING_LN_CMM
 			| MULT_LN_CMM
 			;
 logicOp		: value LOGICOPRT value ;
-paramLst	: value
-			| value ',' paramLst
-			;
 block		: 'do' expression+ 'end'
 			| 'do' expression+ elseBlk 'end'
 			;
 elseBlk		: 'else' expression+ ;
+
+
+
+
 SING_LN_CMM	: '#' .+? NEWLINE -> skip ;
 MULT_LN_CMM	: '/*' (.|NEWLINE)*? '*/' -> skip ;
 LOGICOPRT	: '<=' | '>=' | '<' | '>' | '==' | '!=' ;

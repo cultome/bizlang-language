@@ -1,11 +1,16 @@
 package com.fedex.lac.bizlang.interpreter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import com.fedex.lac.bizlang.language.BizlangArray;
 import com.fedex.lac.bizlang.language.BizlangAssignation;
 import com.fedex.lac.bizlang.language.BizlangBlock;
+import com.fedex.lac.bizlang.language.BizlangComplexValue;
 import com.fedex.lac.bizlang.language.BizlangConditionalExpression;
 import com.fedex.lac.bizlang.language.BizlangExpression;
 import com.fedex.lac.bizlang.language.BizlangFunction;
@@ -15,6 +20,7 @@ import com.fedex.lac.bizlang.language.BizlangRepetition;
 import com.fedex.lac.bizlang.language.BizlangValue;
 import com.fedex.lac.bizlang.parser.BizlangBaseListener;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
+import com.fedex.lac.bizlang.parser.BizlangParser.ArrayContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.AssignationContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.BlockContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.CommentContext;
@@ -23,6 +29,7 @@ import com.fedex.lac.bizlang.parser.BizlangParser.ElseBlkContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.LogicOpContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.MathExprContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.ParamLstContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.RepetitionContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
 
@@ -35,6 +42,8 @@ import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
  * @creation	09/01/2014
  */
 public class TreeListener extends BizlangBaseListener {
+	
+	public int COMPLEX_TYPE_ARRAY = 100;
 
 	private Stack<ParsingStatus> parsingStatus;
 	private Stack<BizlangExpression> buffer;
@@ -108,16 +117,35 @@ public class TreeListener extends BizlangBaseListener {
 	public void enterRepetition(RepetitionContext ctx) {
 		BizlangRepetition repetition = new BizlangRepetition(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine());
 		repetition.setRepetitionVarName(ctx.getChild(TerminalNode.class, 1).getText());
-		repetition.setCollection(ctx.getChild(TerminalNode.class, 3).getText());
+		TerminalNode collRefNameNode = ctx.getChild(TerminalNode.class, 3);
+		String collRefName = null;
+		if(collRefNameNode != null){
+			// el array NO esta inline
+			collRefName = collRefNameNode.getText();
+		}
+		
+		repetition.setCollectionName(collRefName);
 		buffer.push(repetition);
 		parsingStatus.push(ParsingStatus.PARSING_REPETITION);
+	}
+
+	@Override
+	public void enterArray(ArrayContext ctx) {
+		BizlangArray array = new BizlangArray(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine()); 
+		buffer.push(array);
+		parsingStatus.push(ParsingStatus.PARSING_ARRAY);
 	}
 	
 	@Override
 	public void enterValue(ValueContext ctx) {
-		BizlangValue value = getValue(ctx);
-		buffer.push(value);
-		parsingStatus.push(ParsingStatus.GETTING_VALUE);
+			BizlangValue value = getValue(ctx);
+			buffer.push(value);
+			parsingStatus.push(ParsingStatus.GETTING_VALUE);
+	}
+	
+	@Override
+	public void exitArray(ArrayContext ctx) {
+		exitExpression();
 	}
 	
 	@Override
@@ -204,8 +232,12 @@ public class TreeListener extends BizlangBaseListener {
 			case PARSING_REPETITION:
 				if(prevStatus.equals(ParsingStatus.PARSING_BLOCK)){
 					((BizlangRepetition) buffer.peek()).addBlock((BizlangBlock) r);
+				} else if(prevStatus.equals(ParsingStatus.PARSING_ARRAY)){
+					((BizlangRepetition) buffer.peek()).setCollection((BizlangArray) r);
 				}
 				break;
+			case PARSING_ARRAY:
+				((BizlangArray) buffer.peek()).addElement((BizlangValue) r);
 			case WAITING:
 			case GETTING_VALUE:
 				break;
@@ -215,7 +247,9 @@ public class TreeListener extends BizlangBaseListener {
 	
 	private BizlangValue getValue(ValueContext ctx) {
 		TerminalNode valueNode = ctx.getChild(TerminalNode.class, 0);
-		switch (valueNode.getSymbol().getType()) {
+		if(valueNode != null){
+			// es un tipo simple
+			switch (valueNode.getSymbol().getType()) {
 			case BizlangLexer.STR:
 				return new BizlangValue(BizlangLexer.STR, ctx.STR().getText(), ctx.getStart().getLine());
 			case BizlangLexer.ID:
@@ -226,6 +260,31 @@ public class TreeListener extends BizlangBaseListener {
 				return new BizlangValue(BizlangLexer.OBJPROP, ctx.OBJPROP().getText(), ctx.getStart().getLine());
 			default:
 				throw new RuntimeException("Symbol type uknown. [" + valueNode.getSymbol().getType() + "]");
+			}
+		} else {
+			// es un tipo complejo
+			if(ctx.getChild(0).getClass().getName().endsWith("ArrayContext")){
+				List<BizlangValue> values = extractValuesFromParamList((ParamLstContext) ctx.getChild(0).getChild(1));
+				return new BizlangComplexValue(COMPLEX_TYPE_ARRAY, ctx.getChild(0).getText(), ctx.getStart().getLine(), values);
+			}
 		}
+		throw new RuntimeException("Uknown type. [" + ctx.getText() + "]");
+	}
+
+	private List<BizlangValue> extractValuesFromParamList(ParamLstContext values) {
+		ArrayList<BizlangValue> arrayValues = new ArrayList<BizlangValue>();
+		for(int i = 0; i < values.getChildCount(); i++){
+			ParseTree child = values.getChild(i);
+			if(child.getClass().getName().endsWith("ValueContext")){
+				arrayValues.add(getValue((ValueContext) child));
+			} else if(child.getClass().getName().endsWith("ParamLstContext")){
+				arrayValues.addAll(extractValuesFromParamList((ParamLstContext) child));
+			} else if(child.getClass().getName().endsWith("TerminalNodeImpl")){
+				// ignore the colons
+			} else {
+				throw new RuntimeException("Unknown type in inner arrau value. [" + child.getClass().getName() + "]");
+			}
+		}
+		return arrayValues;
 	}
 }

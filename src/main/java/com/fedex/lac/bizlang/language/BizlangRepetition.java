@@ -17,6 +17,7 @@ public class BizlangRepetition extends BizlangExpression {
 	private BizlangBlock block;
 	private String varName;
 	private String collectionName;
+	private BizlangArray collection;
 
 	public BizlangRepetition(String fnctName, int srcLineDefinedAt) {
 		super(fnctName, srcLineDefinedAt);
@@ -24,15 +25,21 @@ public class BizlangRepetition extends BizlangExpression {
 
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
-		Object collection = bindings.getBinding(collectionName);
-		if(collection.getClass().getName().endsWith("List")){
-			for(Object obj : (List<?>) collection){
+		if(collectionName == null){
+			for(BizlangValue obj : collection.getElements()){
 				executeBlock(obj, bindings);
 			}
-		} else if(collection.getClass().getName().startsWith("[L")){
-			Object[] array = (Object[]) collection;
-			for(int i = 0; i < array.length; i++){
-				executeBlock(array[i], bindings);
+		} else {
+			Object collection = bindings.getBinding(collectionName);
+			if(collection.getClass().getName().endsWith("List")){
+				for(Object obj : (List<?>) collection){
+					executeBlock(obj, bindings);
+				}
+			} else if(collection.getClass().getName().startsWith("[L")){
+				Object[] array = (Object[]) collection;
+				for(int i = 0; i < array.length; i++){
+					executeBlock(array[i], bindings);
+				}
 			}
 		}
 		return null;
@@ -51,8 +58,12 @@ public class BizlangRepetition extends BizlangExpression {
 		this.varName = varName;
 	}
 
-	public void setCollection(String collectionName) {
+	public void setCollectionName(String collectionName) {
 		this.collectionName = collectionName;
+	}
+
+	public void setCollection(BizlangArray collection) {
+		this.collection = collection;
 	}
 
 }
