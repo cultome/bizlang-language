@@ -21,7 +21,9 @@ assignation	: ID '=' expression ;
 mathExpr	: value MATHOPTR value
 			| value MATHOPTR mathExpr
 			;
-conditional	: CONDOPRT logicOp block;
+conditional	: CONDOPRT logicOp block
+			| CONDOPRT cstmLogOp block
+			;
 repetition	: 'for' ID 'in' OBJPROP block
 			| 'for' ID 'in' ID block
 			| 'for' ID 'in' array block

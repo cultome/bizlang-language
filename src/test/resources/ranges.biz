@@ -6,3 +6,9 @@ end
 for val in [6...10] do
 	print val
 end
+
+if 2 >< [1,2,3,4] do
+	print "<1>"
+else
+	print "error 1"
+end

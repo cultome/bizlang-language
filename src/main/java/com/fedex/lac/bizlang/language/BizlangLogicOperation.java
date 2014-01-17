@@ -12,7 +12,7 @@ import com.fedex.lac.bizlang.interpreter.Bindings;
  * @author		Carlos Soria <carlos.soria.osv@fedex.com>
  * @creation	13/01/2014
  */
-public class BizlangLogicOperation extends BizlangExpression{
+public class BizlangLogicOperation extends BizlangExpression {
 	
 	private BizlangValue leftValue;
 	private BizlangValue rightValue;
@@ -66,6 +66,14 @@ public class BizlangLogicOperation extends BizlangExpression{
 		} else {
 			rightValue = value;
 		}
+	}
+
+	public BizlangValue getLeftValue() {
+		return leftValue;
+	}
+
+	public BizlangValue getRightValue() {
+		return rightValue;
 	}
 
 }

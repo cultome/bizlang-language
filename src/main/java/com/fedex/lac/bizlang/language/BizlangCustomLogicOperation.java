@@ -12,11 +12,8 @@ import com.fedex.lac.bizlang.interpreter.Bindings;
  * @author		Carlos Soria <carlos.soria.osv@fedex.com>
  * @creation	17/01/2014
  */
-public class BizlangCustomLogicOperation extends BizlangExpression {
+public class BizlangCustomLogicOperation extends BizlangLogicOperation {
 
-	private BizlangValue leftValue;
-	private BizlangValue rightValue;
-	
 	public BizlangCustomLogicOperation(String fnctName, int srcLineDefinedAt) {
 		super(fnctName, srcLineDefinedAt);
 	}
@@ -24,8 +21,8 @@ public class BizlangCustomLogicOperation extends BizlangExpression {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
-		Object lVal = leftValue.execute(bindings);
-		Object rVal = rightValue.execute(bindings);
+		Object lVal = getLeftValue().execute(bindings);
+		Object rVal = getRightValue().execute(bindings);
 		
 		if("><".equals(getName())){
 			if(!rVal.getClass().getName().endsWith("List")){
@@ -46,13 +43,4 @@ public class BizlangCustomLogicOperation extends BizlangExpression {
 		}
 		return null;
 	}
-
-	public void addParam(BizlangValue value) {
-		if(leftValue == null){
-			leftValue = value;
-		} else {
-			rightValue = value;
-		}		
-	}
-
 }

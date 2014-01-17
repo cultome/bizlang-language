@@ -172,6 +172,11 @@ public class TreeListener extends BizlangBaseListener {
 	}
 	
 	@Override
+	public void exitCstmLogOp(CstmLogOpContext ctx) {
+		exitExpression();
+	}
+	
+	@Override
 	public void exitRange(RangeContext ctx) {
 		exitExpression();
 	}
@@ -247,6 +252,8 @@ public class TreeListener extends BizlangBaseListener {
 			case PARSING_CONDITION:
 				if(prevStatus.equals(ParsingStatus.PARSING_LOGIC_COMP)){
 					((BizlangConditionalExpression) buffer.peek()).addCondition((BizlangLogicOperation) r);
+				} else if(prevStatus.equals(ParsingStatus.PARSING_CSTM_LOG_OP)){
+					((BizlangConditionalExpression) buffer.peek()).addCondition((BizlangCustomLogicOperation) r);
 				} else if(prevStatus.equals(ParsingStatus.PARSING_BLOCK)){
 					((BizlangConditionalExpression) buffer.peek()).addBlock((BizlangBlock) r);
 				}
@@ -255,12 +262,21 @@ public class TreeListener extends BizlangBaseListener {
 				((BizlangLogicOperation) buffer.peek()).addParam((BizlangValue) r);
 				break;
 			case PARSING_CSTM_LOG_OP:
-				((BizlangCustomLogicOperation) buffer.peek()).addParam((BizlangValue) r);
+				if(prevStatus.equals(ParsingStatus.PARSING_BLOCK)){
+					((BizlangConditionalExpression) buffer.elementAt(buffer.size() - 2)).addBlock((BizlangBlock) r);
+				} else {
+					((BizlangCustomLogicOperation) buffer.peek()).addParam((BizlangValue) r);
+				}
 				break;
 			case PARSING_BLOCK:
 			case PARSING_ELSE_BLOCK:
 				if(prevStatus.equals(ParsingStatus.PARSING_ELSE_BLOCK)){
-					((BizlangConditionalExpression) buffer.elementAt(buffer.size() - 2)).addElseBlock((BizlangBlock) r);
+					BizlangExpression elementAt = buffer.elementAt(buffer.size() - 2);
+					if(elementAt.getClass().getName().endsWith("BizlangConditionalExpression")){
+						((BizlangConditionalExpression) elementAt).addElseBlock((BizlangBlock) r);
+					} else {
+						((BizlangConditionalExpression) buffer.elementAt(buffer.size() - 3)).addElseBlock((BizlangBlock) r);
+					}
 				} else {
 					((BizlangBlock) buffer.peek()).addExpression((BizlangExpression) r);
 				}
