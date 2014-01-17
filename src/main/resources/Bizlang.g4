@@ -43,6 +43,7 @@ comment		: SING_LN_CMM
 			| MULT_LN_CMM
 			;
 logicOp		: value LOGICOPRT value ;
+cstmLogOp	: value CSTMOPRT value ;
 block		: 'do' expression+ 'end'
 			| 'do' expression+ elseBlk 'end'
 			;
@@ -53,6 +54,7 @@ elseBlk		: 'else' expression+ ;
 
 SING_LN_CMM	: '#' .+? NEWLINE -> skip ;
 MULT_LN_CMM	: '/*' (.|NEWLINE)*? '*/' -> skip ;
+CSTMOPRT	: '><' ;
 LOGICOPRT	: '<=' | '>=' | '<' | '>' | '==' | '!=' ;
 MATHOPTR	: [\+\-\*/] ;
 CONDOPRT	: 'if'

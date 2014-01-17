@@ -108,6 +108,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterCstmLogOp(@NotNull BizlangParser.CstmLogOpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitCstmLogOp(@NotNull BizlangParser.CstmLogOpContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterAssignation(@NotNull BizlangParser.AssignationContext ctx) { }
 	/**
 	 * {@inheritDoc}

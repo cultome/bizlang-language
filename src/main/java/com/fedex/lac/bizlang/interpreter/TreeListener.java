@@ -11,6 +11,7 @@ import com.fedex.lac.bizlang.language.BizlangArray;
 import com.fedex.lac.bizlang.language.BizlangAssignation;
 import com.fedex.lac.bizlang.language.BizlangBlock;
 import com.fedex.lac.bizlang.language.BizlangConditionalExpression;
+import com.fedex.lac.bizlang.language.BizlangCustomLogicOperation;
 import com.fedex.lac.bizlang.language.BizlangExpression;
 import com.fedex.lac.bizlang.language.BizlangFunction;
 import com.fedex.lac.bizlang.language.BizlangLogicOperation;
@@ -25,6 +26,7 @@ import com.fedex.lac.bizlang.parser.BizlangParser.AssignationContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.BlockContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.CommentContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ConditionalContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.CstmLogOpContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ElseBlkContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.LogicOpContext;
@@ -163,6 +165,13 @@ public class TreeListener extends BizlangBaseListener {
 	}
 	
 	@Override
+	public void enterCstmLogOp(CstmLogOpContext ctx) {
+		BizlangCustomLogicOperation cstmLogOp = new BizlangCustomLogicOperation(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine()); 
+		buffer.push(cstmLogOp);
+		parsingStatus.push(ParsingStatus.PARSING_CSTM_LOG_OP);
+	}
+	
+	@Override
 	public void exitRange(RangeContext ctx) {
 		exitExpression();
 	}
@@ -244,6 +253,9 @@ public class TreeListener extends BizlangBaseListener {
 				break;
 			case PARSING_LOGIC_COMP:
 				((BizlangLogicOperation) buffer.peek()).addParam((BizlangValue) r);
+				break;
+			case PARSING_CSTM_LOG_OP:
+				((BizlangCustomLogicOperation) buffer.peek()).addParam((BizlangValue) r);
 				break;
 			case PARSING_BLOCK:
 			case PARSING_ELSE_BLOCK:

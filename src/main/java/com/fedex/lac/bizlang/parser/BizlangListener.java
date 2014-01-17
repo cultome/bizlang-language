@@ -86,6 +86,17 @@ public interface BizlangListener extends ParseTreeListener {
 	void exitLogicOp(@NotNull BizlangParser.LogicOpContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link BizlangParser#cstmLogOp}.
+	 * @param ctx the parse tree
+	 */
+	void enterCstmLogOp(@NotNull BizlangParser.CstmLogOpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BizlangParser#cstmLogOp}.
+	 * @param ctx the parse tree
+	 */
+	void exitCstmLogOp(@NotNull BizlangParser.CstmLogOpContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link BizlangParser#assignation}.
 	 * @param ctx the parse tree
 	 */
