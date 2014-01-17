@@ -15,6 +15,9 @@ import com.fedex.lac.bizlang.parser.BizlangLexer;
  */
 public class BizlangValue extends BizlangExpression {
 	
+	public static final int COMPLEX_TYPE_ARRAY = 100;
+	public static final int COMPLEX_TYPE_RANGE = 101;
+	
 	protected int type;
 	protected String value;
 

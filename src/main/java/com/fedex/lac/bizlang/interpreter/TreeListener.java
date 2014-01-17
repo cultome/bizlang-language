@@ -10,12 +10,12 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import com.fedex.lac.bizlang.language.BizlangArray;
 import com.fedex.lac.bizlang.language.BizlangAssignation;
 import com.fedex.lac.bizlang.language.BizlangBlock;
-import com.fedex.lac.bizlang.language.BizlangComplexValue;
 import com.fedex.lac.bizlang.language.BizlangConditionalExpression;
 import com.fedex.lac.bizlang.language.BizlangExpression;
 import com.fedex.lac.bizlang.language.BizlangFunction;
 import com.fedex.lac.bizlang.language.BizlangLogicOperation;
 import com.fedex.lac.bizlang.language.BizlangMathOperation;
+import com.fedex.lac.bizlang.language.BizlangRange;
 import com.fedex.lac.bizlang.language.BizlangRepetition;
 import com.fedex.lac.bizlang.language.BizlangValue;
 import com.fedex.lac.bizlang.parser.BizlangBaseListener;
@@ -30,6 +30,7 @@ import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.LogicOpContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.MathExprContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ParamLstContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.RangeContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.RepetitionContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
 
@@ -42,8 +43,9 @@ import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
  * @creation	09/01/2014
  */
 public class TreeListener extends BizlangBaseListener {
-	
-	public int COMPLEX_TYPE_ARRAY = 100;
+
+	public static final int COMPLEX_TYPE_ARRAY = 100;
+	public static final int COMPLEX_TYPE_RANGE = 101;
 
 	private Stack<ParsingStatus> parsingStatus;
 	private Stack<BizlangExpression> buffer;
@@ -135,12 +137,24 @@ public class TreeListener extends BizlangBaseListener {
 		buffer.push(array);
 		parsingStatus.push(ParsingStatus.PARSING_ARRAY);
 	}
+
+	@Override
+	public void enterRange(RangeContext ctx) {
+		BizlangRange range = new BizlangRange(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine()); 
+		buffer.push(range);
+		parsingStatus.push(ParsingStatus.PARSING_RANGE);
+	}
 	
 	@Override
 	public void enterValue(ValueContext ctx) {
-			BizlangValue value = getValue(ctx);
-			buffer.push(value);
-			parsingStatus.push(ParsingStatus.GETTING_VALUE);
+		BizlangValue value = getValue(ctx);
+		buffer.push(value);
+		parsingStatus.push(ParsingStatus.GETTING_VALUE);
+	}
+	
+	@Override
+	public void exitRange(RangeContext ctx) {
+		exitExpression();
 	}
 	
 	@Override
@@ -234,10 +248,16 @@ public class TreeListener extends BizlangBaseListener {
 					((BizlangRepetition) buffer.peek()).addBlock((BizlangBlock) r);
 				} else if(prevStatus.equals(ParsingStatus.PARSING_ARRAY)){
 					((BizlangRepetition) buffer.peek()).setCollection((BizlangArray) r);
+				} else if(prevStatus.equals(ParsingStatus.PARSING_RANGE)){
+					((BizlangRepetition) buffer.peek()).setCollection((BizlangRange) r);
 				}
 				break;
 			case PARSING_ARRAY:
 				((BizlangArray) buffer.peek()).addElement((BizlangValue) r);
+				break;
+			case PARSING_RANGE:
+				((BizlangRange) buffer.peek()).addLimit((BizlangValue) r);
+				break;
 			case WAITING:
 			case GETTING_VALUE:
 				break;
@@ -248,27 +268,35 @@ public class TreeListener extends BizlangBaseListener {
 	private BizlangValue getValue(ValueContext ctx) {
 		TerminalNode valueNode = ctx.getChild(TerminalNode.class, 0);
 		if(valueNode != null){
-			// es un tipo simple
-			switch (valueNode.getSymbol().getType()) {
-			case BizlangLexer.STR:
-				return new BizlangValue(BizlangLexer.STR, ctx.STR().getText(), ctx.getStart().getLine());
-			case BizlangLexer.ID:
-				return new BizlangValue(BizlangLexer.ID, ctx.ID().getText(), ctx.getStart().getLine());
-			case BizlangLexer.NBR:
-				return new BizlangValue(BizlangLexer.NBR, ctx.NBR().getText(), ctx.getStart().getLine());
-			case BizlangLexer.OBJPROP:
-				return new BizlangValue(BizlangLexer.OBJPROP, ctx.OBJPROP().getText(), ctx.getStart().getLine());
-			default:
-				throw new RuntimeException("Symbol type uknown. [" + valueNode.getSymbol().getType() + "]");
-			}
+			return getPrimitiveValue(valueNode, ctx.getStart().getLine());
 		} else {
 			// es un tipo complejo
 			if(ctx.getChild(0).getClass().getName().endsWith("ArrayContext")){
 				List<BizlangValue> values = extractValuesFromParamList((ParamLstContext) ctx.getChild(0).getChild(1));
-				return new BizlangComplexValue(COMPLEX_TYPE_ARRAY, ctx.getChild(0).getText(), ctx.getStart().getLine(), values);
+				return new BizlangArray(ctx.getChild(0).getText(), ctx.getStart().getLine(), values);
+			} else if(ctx.getChild(0).getClass().getName().endsWith("RangeContext")){
+				BizlangValue lowLimit = getPrimitiveValue((TerminalNode) ctx.getChild(0).getChild(1), ctx.getStart().getLine());
+				BizlangValue highLimit = getPrimitiveValue((TerminalNode) ctx.getChild(0).getChild(3), ctx.getStart().getLine());
+				return new BizlangRange(ctx.getChild(0).getText(), ctx.getStart().getLine(), lowLimit, highLimit);
 			}
 		}
 		throw new RuntimeException("Uknown type. [" + ctx.getText() + "]");
+	}
+
+	private BizlangValue getPrimitiveValue(TerminalNode valueNode, int srcLineDefinedAt) {
+		// es un tipo simple
+		switch (valueNode.getSymbol().getType()) {
+		case BizlangLexer.STR:
+			return new BizlangValue(BizlangLexer.STR, valueNode.getText(), srcLineDefinedAt);
+		case BizlangLexer.ID:
+			return new BizlangValue(BizlangLexer.ID, valueNode.getText(), srcLineDefinedAt);
+		case BizlangLexer.NBR:
+			return new BizlangValue(BizlangLexer.NBR, valueNode.getText(), srcLineDefinedAt);
+		case BizlangLexer.OBJPROP:
+			return new BizlangValue(BizlangLexer.OBJPROP, valueNode.getText(), srcLineDefinedAt);
+		default:
+			throw new RuntimeException("Symbol type uknown in line " + srcLineDefinedAt + ". [" + valueNode.getSymbol().getType() + "]");
+		}
 	}
 
 	private List<BizlangValue> extractValuesFromParamList(ParamLstContext values) {

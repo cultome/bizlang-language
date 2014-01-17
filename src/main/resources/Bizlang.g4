@@ -25,16 +25,19 @@ conditional	: CONDOPRT logicOp block;
 repetition	: 'for' ID 'in' OBJPROP block
 			| 'for' ID 'in' ID block
 			| 'for' ID 'in' array block
+			| 'for' ID 'in' range block
 			;
 paramLst	: value
 			| value ',' paramLst
 			;
+range		: '[' NBR '...' NBR ']' ;
 array		: '[' paramLst ']' ;
 value		: NBR
 			| STR
 			| ID
 			| OBJPROP
 			| array
+			| range
 			;
 comment		: SING_LN_CMM
 			| MULT_LN_CMM

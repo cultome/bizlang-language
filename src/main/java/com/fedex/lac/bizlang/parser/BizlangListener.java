@@ -42,6 +42,17 @@ public interface BizlangListener extends ParseTreeListener {
 	void exitParamLst(@NotNull BizlangParser.ParamLstContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link BizlangParser#range}.
+	 * @param ctx the parse tree
+	 */
+	void enterRange(@NotNull BizlangParser.RangeContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BizlangParser#range}.
+	 * @param ctx the parse tree
+	 */
+	void exitRange(@NotNull BizlangParser.RangeContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link BizlangParser#block}.
 	 * @param ctx the parse tree
 	 */

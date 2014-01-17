@@ -17,16 +17,18 @@ public class BizlangRepetition extends BizlangExpression {
 	private BizlangBlock block;
 	private String varName;
 	private String collectionName;
-	private BizlangArray collection;
+	private BizlangExpression collection;
 
 	public BizlangRepetition(String fnctName, int srcLineDefinedAt) {
 		super(fnctName, srcLineDefinedAt);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
 		if(collectionName == null){
-			for(BizlangValue obj : collection.getElements()){
+			List<BizlangValue> execute = (List<BizlangValue>) collection.execute(bindings);
+			for(BizlangValue obj : execute){
 				executeBlock(obj, bindings);
 			}
 		} else {
@@ -62,7 +64,7 @@ public class BizlangRepetition extends BizlangExpression {
 		this.collectionName = collectionName;
 	}
 
-	public void setCollection(BizlangArray collection) {
+	public void setCollection(BizlangValue collection) {
 		this.collection = collection;
 	}
 

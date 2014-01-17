@@ -13,13 +13,17 @@ import com.fedex.lac.bizlang.interpreter.Bindings;
  * @author		Carlos Soria <carlos.soria.osv@fedex.com>
  * @creation	17/01/2014
  */
-public class BizlangArray extends BizlangExpression {
+public class BizlangArray extends BizlangValue {
 	
 	private List<BizlangValue> elements;
 
 	public BizlangArray(String fnctName, int srcLineDefinedAt) {
-		super(fnctName, srcLineDefinedAt);
-		elements = new ArrayList<BizlangValue>();
+		this(fnctName, srcLineDefinedAt, new ArrayList<BizlangValue>());
+	}
+	
+	public BizlangArray(String fnctName, int srcLineDefinedAt, List<BizlangValue> elements) {
+		super(COMPLEX_TYPE_ARRAY, fnctName, srcLineDefinedAt);
+		this.elements = elements;
 	}
 
 	@Override

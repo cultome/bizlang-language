@@ -56,6 +56,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterRange(@NotNull BizlangParser.RangeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitRange(@NotNull BizlangParser.RangeContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterBlock(@NotNull BizlangParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
