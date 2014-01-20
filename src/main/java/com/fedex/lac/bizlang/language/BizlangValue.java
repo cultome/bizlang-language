@@ -1,11 +1,10 @@
 package com.fedex.lac.bizlang.language;
 
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 import com.fedex.lac.bizlang.interpreter.Bindings;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
+import com.fedex.lac.bizlang.util.Utils;
 
 /* 
  * BizlangValue.java
@@ -40,19 +39,10 @@ public class BizlangValue extends BizlangExpression {
 		case BizlangLexer.OBJPROP:
 			return bindings.getBinding(value);
 		case BizlangLexer.DATE:
-			return parseDate(value);
+			return Utils.parseDate(value);
 		}
 		
 		return null;
-	}
-
-	private Object parseDate(String dateStr) throws BizlangException {
-		try {
-			SimpleDateFormat formatter = new SimpleDateFormat("d/M/yyyy");
-			return formatter.parse(dateStr);
-		} catch (ParseException e) {
-			throw new BizlangException("Date format invalid: " + dateStr + ". Try dd/mm/yyyy.");
-		}
 	}
 
 	public int getType() {

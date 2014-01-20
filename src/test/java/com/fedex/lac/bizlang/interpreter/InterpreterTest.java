@@ -90,6 +90,16 @@ public class InterpreterTest {
 		assertEquals("1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n10\r\n<1>\r\n", buffer.toString());
 	}
 	
+	@Test
+	public void testDates() throws Exception {
+		ExecutionFlow flow = getExecutionFlow("src/test/resources/dates.biz");
+		interpreter.execute(flow, bindings);
+		assertEquals("1\r\n2\r\n3\r\n", buffer.toString());
+	}
+	
+	/* *******************************
+	 * Backup functions and classes  *
+	 *********************************/
 	private ExecutionFlow getExecutionFlow(String filepath) throws Exception{
 		InputStream input = new FileInputStream(filepath);
 		return interpreter.interpret(input);

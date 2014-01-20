@@ -32,7 +32,9 @@ repetition	: 'for' ID 'in' OBJPROP block
 paramLst	: value
 			| value ',' paramLst
 			;
-range		: '[' NBR '...' NBR ']' ;
+range		: '[' NBR '...' NBR ']'
+			| '[' DATE '...' DATE ']'
+			;
 array		: '[' paramLst ']' ;
 value		: NBR
 			| STR

@@ -336,6 +336,8 @@ public class TreeListener extends BizlangBaseListener {
 			return new BizlangValue(BizlangLexer.NBR, valueNode.getText(), srcLineDefinedAt);
 		case BizlangLexer.OBJPROP:
 			return new BizlangValue(BizlangLexer.OBJPROP, valueNode.getText(), srcLineDefinedAt);
+		case BizlangLexer.DATE:
+			return new BizlangValue(BizlangLexer.DATE, valueNode.getText(), srcLineDefinedAt);
 		default:
 			throw new RuntimeException("Symbol type uknown in line " + srcLineDefinedAt + ". [" + valueNode.getSymbol().getType() + "]");
 		}

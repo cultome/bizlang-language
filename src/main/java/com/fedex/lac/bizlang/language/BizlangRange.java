@@ -1,10 +1,13 @@
 package com.fedex.lac.bizlang.language;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.fedex.lac.bizlang.interpreter.Bindings;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
+import com.fedex.lac.bizlang.util.Utils;
 
 /* 
  * BizlangRange.java
@@ -41,14 +44,39 @@ public class BizlangRange extends BizlangValue {
 			int low = Integer.parseInt(lowerLimit.getValue());
 			int high = Integer.parseInt(upperLimit.getValue());
 			return getIntegerRange(low, high);
-		case DECIMAL_RANGE:
+			
 		case DATE_RANGE:
+			Date lowDt = Utils.parseDate(lowerLimit.getValue());
+			Date uppDt = Utils.parseDate(upperLimit.getValue());
+			return getDateRange(lowDt, uppDt);
+			
+		case DECIMAL_RANGE:
 			break;
 		}
 		return null;
 	}
 
-	private Object getIntegerRange(int low, int high) {
+	private List<BizlangValue> getDateRange(Date lowDt, Date uppDt) {
+		List<BizlangValue> dateRange = new ArrayList<BizlangValue>();
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(lowDt);
+		Date currentDt;
+		int increment = 1;
+		
+		if(lowDt.compareTo(uppDt) > 0){
+			increment = -1;
+		}
+		
+		do {
+			cal.add(Calendar.DAY_OF_YEAR, increment);
+			currentDt = cal.getTime();
+			dateRange.add(new BizlangValue(BizlangLexer.DATE, Utils.formatDate(currentDt), -1));
+		} while(currentDt.compareTo(uppDt) != 0);
+		
+		return dateRange;
+	}
+
+	private List<BizlangValue> getIntegerRange(int low, int high) {
 		List<BizlangValue> range = new ArrayList<BizlangValue>();
 		if(low < high){
 			for(int i = low; i <= high; i++){
@@ -71,6 +99,8 @@ public class BizlangRange extends BizlangValue {
 				return DECIMAL_RANGE;
 			}
 			break;
+		case BizlangLexer.DATE:
+			return DATE_RANGE;
 		}
 		
 		throw new RuntimeException("Unknown rage type [" + lowerLimit.getType() + ", " + upperLimit.getType() + "]");
