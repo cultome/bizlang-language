@@ -1,5 +1,7 @@
 package com.fedex.lac.bizlang.language.function;
 
+import java.io.PrintStream;
+
 import com.fedex.lac.bizlang.interpreter.Bindings;
 import com.fedex.lac.bizlang.language.BizlangException;
 import com.fedex.lac.bizlang.language.BizlangExpression;
@@ -25,7 +27,14 @@ public class PrintJavaFunction implements JavaFunction {
 			b.deleteCharAt(b.length()-1);
 		}
 		
-		System.out.println(b.toString());
+		try{
+			PrintStream out = (PrintStream) bindings.getBinding("STDOUT");
+			out.println(b.toString());
+		} catch(Exception e){
+			e.printStackTrace();
+			System.err.println(b.toString());
+		}
+		
 		
 		return b.toString();
 	}
