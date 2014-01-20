@@ -97,5 +97,19 @@ public class BizlangCustomLogicOperationTest {
 		Object r = op.execute(new Bindings());
 		assertFalse(((Boolean) r).booleanValue());
 	}
-
+	
+	@Test
+	public void testExecuteWithDates() throws BizlangException {
+		op.addParam(new BizlangValue(BizlangLexer.DATE, "4/1/2014", 1));
+		BizlangArray array = new BizlangArray("_range_", 1);
+		array.addElement(new BizlangValue(BizlangLexer.DATE, "1/1/2014", 1));
+		array.addElement(new BizlangValue(BizlangLexer.DATE, "2/1/2014", 1));
+		array.addElement(new BizlangValue(BizlangLexer.DATE, "3/1/2014", 1));
+		array.addElement(new BizlangValue(BizlangLexer.DATE, "4/1/2014", 1));
+		array.addElement(new BizlangValue(BizlangLexer.DATE, "5/1/2014", 1));
+		
+		op.addParam(array); 
+		Object r = op.execute(new Bindings());
+		assertTrue(((Boolean) r).booleanValue());
+	}
 }

@@ -73,5 +73,16 @@ public class BizlangLogicOperationTest {
 		assertTrue(r.getClass().getName().endsWith("Boolean"));
 		assertTrue(((Boolean) r).booleanValue());
 	}
+	
+	@Test
+	public void testWithDates() throws BizlangException {
+		BizlangLogicOperation cond = new BizlangLogicOperation("<=", 1);
+		cond.addParam(new BizlangValue(BizlangLexer.DATE, "1/1/2014", 1));
+		cond.addParam(new BizlangValue(BizlangLexer.DATE, "3/1/2014", 1));
+		Object r = cond.execute(new Bindings());
+		assertNotNull(r);
+		assertTrue(r.getClass().getName().endsWith("Boolean"));
+		assertTrue(((Boolean) r).booleanValue());
+	}
 
 }
