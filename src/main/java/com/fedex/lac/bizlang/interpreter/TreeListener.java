@@ -18,13 +18,15 @@ import com.fedex.lac.bizlang.language.BizlangLogicOperation;
 import com.fedex.lac.bizlang.language.BizlangMathOperation;
 import com.fedex.lac.bizlang.language.BizlangRange;
 import com.fedex.lac.bizlang.language.BizlangRepetition;
+import com.fedex.lac.bizlang.language.BizlangSwitch;
+import com.fedex.lac.bizlang.language.BizlangSwitchBlock;
 import com.fedex.lac.bizlang.language.BizlangValue;
 import com.fedex.lac.bizlang.parser.BizlangBaseListener;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
 import com.fedex.lac.bizlang.parser.BizlangParser.ArrayContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.AssignationContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.BlockContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.CommentContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.CaseBlockContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ConditionalContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.CstmLogOpContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ElseBlkContext;
@@ -34,6 +36,7 @@ import com.fedex.lac.bizlang.parser.BizlangParser.MathExprContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ParamLstContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.RangeContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.RepetitionContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.SwtchContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
 
 /* 
@@ -66,11 +69,6 @@ public class TreeListener extends BizlangBaseListener {
 
 	public ExecutionFlow getExecutionFlow() {
 		return flow;
-	}
-
-	@Override
-	public void enterComment(CommentContext ctx) {
-		super.enterComment(ctx);
 	}
 	
 	@Override
@@ -169,6 +167,31 @@ public class TreeListener extends BizlangBaseListener {
 		BizlangCustomLogicOperation cstmLogOp = new BizlangCustomLogicOperation(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine()); 
 		buffer.push(cstmLogOp);
 		parsingStatus.push(ParsingStatus.PARSING_CSTM_LOG_OP);
+	}
+	
+	@Override
+	public void enterSwtch(SwtchContext ctx) {
+		BizlangSwitch swtch = new BizlangSwitch("_switch_", ctx.getStart().getLine());
+		swtch.addReference(getPrimitiveValue(ctx.getChild(TerminalNode.class, 1), ctx.getStart().getLine()));
+		buffer.push(swtch);
+		parsingStatus.push(ParsingStatus.PARSING_SWITCH);
+	}
+	
+	@Override
+	public void enterCaseBlock(CaseBlockContext ctx) {
+		BizlangSwitchBlock cstmLogOp = new BizlangSwitchBlock(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine()); 
+		buffer.push(cstmLogOp);
+		parsingStatus.push(ParsingStatus.PARSING_CASE_BLOCK);
+	}
+	
+	@Override
+	public void exitCaseBlock(CaseBlockContext ctx) {
+		exitExpression();
+	}
+
+	@Override
+	public void exitSwtch(SwtchContext ctx) {
+		exitExpression();
 	}
 	
 	@Override
@@ -295,6 +318,18 @@ public class TreeListener extends BizlangBaseListener {
 				break;
 			case PARSING_RANGE:
 				((BizlangRange) buffer.peek()).addLimit((BizlangValue) r);
+				break;
+			case PARSING_SWITCH:
+				if(prevStatus.equals(ParsingStatus.PARSING_CASE_BLOCK)){
+					((BizlangSwitch) buffer.peek()).addCase((BizlangSwitchBlock) r);
+				}
+				break;
+			case PARSING_CASE_BLOCK:
+				if(prevStatus.equals(ParsingStatus.GETTING_VALUE)){
+					((BizlangSwitchBlock) buffer.peek()).addCondition((BizlangValue) r);
+				} else { 
+					((BizlangSwitchBlock) buffer.peek()).addExpression((BizlangExpression) r);
+				}
 				break;
 			case WAITING:
 			case GETTING_VALUE:

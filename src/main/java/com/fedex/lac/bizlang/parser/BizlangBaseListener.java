@@ -43,6 +43,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterSwtch(@NotNull BizlangParser.SwtchContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitSwtch(@NotNull BizlangParser.SwtchContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterParamLst(@NotNull BizlangParser.ParamLstContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -128,6 +141,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * The default implementation does nothing.
 	 */
 	@Override public void exitAssignation(@NotNull BizlangParser.AssignationContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void enterCaseBlock(@NotNull BizlangParser.CaseBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitCaseBlock(@NotNull BizlangParser.CaseBlockContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

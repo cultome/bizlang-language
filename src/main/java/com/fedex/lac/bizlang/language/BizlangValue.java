@@ -63,4 +63,24 @@ public class BizlangValue extends BizlangExpression {
 		return value;
 	}
 
+	public boolean equals(BizlangValue obj) {
+		switch(getType()){
+			case BizlangLexer.NBR:
+				break;
+			case BizlangLexer.STR:
+				switch(obj.getType()){
+					case BizlangLexer.STR: return getValue().equalsIgnoreCase(obj.getValue());
+				}
+				break;
+			case BizlangLexer.DATE:
+				break;
+			case BizlangLexer.ID:
+			case BizlangLexer.OBJPROP:
+			case COMPLEX_TYPE_ARRAY:
+			case COMPLEX_TYPE_RANGE:
+				break;
+		}
+		
+		return true;
+	}
 }

@@ -1,0 +1,6 @@
+case idNbr
+	when "880474" then
+		print "error"
+	when "880475" then
+		print "1"
+end

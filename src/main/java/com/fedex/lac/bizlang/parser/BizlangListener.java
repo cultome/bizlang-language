@@ -31,6 +31,17 @@ public interface BizlangListener extends ParseTreeListener {
 	void exitMathExpr(@NotNull BizlangParser.MathExprContext ctx);
 
 	/**
+	 * Enter a parse tree produced by {@link BizlangParser#swtch}.
+	 * @param ctx the parse tree
+	 */
+	void enterSwtch(@NotNull BizlangParser.SwtchContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BizlangParser#swtch}.
+	 * @param ctx the parse tree
+	 */
+	void exitSwtch(@NotNull BizlangParser.SwtchContext ctx);
+
+	/**
 	 * Enter a parse tree produced by {@link BizlangParser#paramLst}.
 	 * @param ctx the parse tree
 	 */
@@ -106,6 +117,17 @@ public interface BizlangListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAssignation(@NotNull BizlangParser.AssignationContext ctx);
+
+	/**
+	 * Enter a parse tree produced by {@link BizlangParser#caseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterCaseBlock(@NotNull BizlangParser.CaseBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link BizlangParser#caseBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitCaseBlock(@NotNull BizlangParser.CaseBlockContext ctx);
 
 	/**
 	 * Enter a parse tree produced by {@link BizlangParser#value}.

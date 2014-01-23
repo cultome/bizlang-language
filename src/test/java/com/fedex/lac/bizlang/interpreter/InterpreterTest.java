@@ -97,6 +97,13 @@ public class InterpreterTest {
 		assertEquals("1\r\n2\r\n3\r\n", buffer.toString());
 	}
 	
+	@Test
+	public void testSwitch() throws Exception {
+		ExecutionFlow flow = getExecutionFlow("src/test/resources/switch.biz");
+		interpreter.execute(flow, bindings);
+		assertEquals("1\r\n", buffer.toString());
+	}
+	
 	/* *******************************
 	 * Backup functions and classes  *
 	 *********************************/
