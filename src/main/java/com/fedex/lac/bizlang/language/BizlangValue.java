@@ -167,14 +167,26 @@ public class BizlangValue extends BizlangExpression {
 		case BizlangLexer.OBJPROP:
 			switch (obj.getType()) {
 			case BizlangLexer.STR:
-				return thisValue.toString().equalsIgnoreCase(obj.getValue());
+				if(thisValue instanceof String){
+					return ((String) thisValue).equalsIgnoreCase((String) otherValue);
+				} else {
+					return thisValue.toString().equalsIgnoreCase((String) otherValue);
+				}
 			case BizlangLexer.DATE:
-				return Utils.formatDate((Date) otherValue).equalsIgnoreCase(getValue());
+				if(thisValue instanceof Date){
+					return Utils.formatDate((Date) otherValue).equalsIgnoreCase(Utils.formatDate((Date) thisValue));
+				} else {
+					return Utils.formatDate((Date) otherValue).equalsIgnoreCase(thisValue.toString());
+				}
 			case BizlangLexer.NBR:
-				return ((BigDecimal) otherValue).toPlainString().equals(getValue());
+				if(thisValue instanceof BigDecimal){
+					return Utils.areEquivalentNumbers(((BigDecimal) otherValue).toPlainString(), ((BigDecimal) thisValue).toPlainString());
+				} else {
+					return ((BigDecimal) otherValue).toPlainString().equals(thisValue.toString());
+				}
 			case COMPLEX_TYPE_ARRAY:
 			case COMPLEX_TYPE_RANGE:
-				return ((List<BizlangValue>) otherValue).contains(this);
+				return ((List<BizlangValue>) otherValue).contains(thisValue);
 			}
 			break;
 		case COMPLEX_TYPE_ARRAY:

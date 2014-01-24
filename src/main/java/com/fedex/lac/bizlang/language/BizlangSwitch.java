@@ -24,13 +24,8 @@ public class BizlangSwitch extends BizlangExpression {
 
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
-		Object refValue = reference.execute(bindings);
-		Object condValue;
-		
 		for(BizlangSwitchBlock block : getBlocks()){
-			condValue = block.getCondition().execute(bindings);
-			
-			if(refValue.equals(condValue)){
+			if(reference.equals(block.getCondition(), bindings)){
 				return block.execute(bindings);
 			}
 		}

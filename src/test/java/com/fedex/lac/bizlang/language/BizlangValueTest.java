@@ -1,6 +1,11 @@
 package com.fedex.lac.bizlang.language;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -11,11 +16,6 @@ import com.fedex.lac.bizlang.parser.BizlangLexer;
 public class BizlangValueTest {
 	
 	private Bindings bindings;
-
-	@Before
-	public void setUp() throws Exception {
-		bindings = new Bindings();
-	}
 	
 	/*
 	 * 
@@ -190,7 +190,7 @@ public class BizlangValueTest {
 
 	/*
 	 * 
-	 * Range VS
+	 * Range/Arrays VS
 	 * 
 	 * 
 	 */
@@ -233,5 +233,91 @@ public class BizlangValueTest {
 		assertTrue(v1.equals(arrayTrue, bindings));
 		assertFalse(v1.equals(arrayFalse, bindings));
 	}
+
+	/*
+	 * 
+	 * ID's VS
+	 * 
+	 * 
+	 */
+
+	private BizlangValue v1;
+	private BizlangValue v2;
+	private BizlangValue v3;
+	private BizlangValue v4;
 	
+	@Before
+	public void setUp() throws Exception {
+		Calendar cal = Calendar.getInstance();
+		cal.set(2010, 2, 1);
+		
+		bindings = new Bindings();
+		bindings.addBinding("id_str", "myValue");
+		bindings.addBinding("id_nbr", new BigDecimal("12.34"));
+		bindings.addBinding("id_date", cal.getTime());
+		bindings.addBinding("id_obj", new ArrayList<Object>());
+		
+		v1 = new BizlangValue(BizlangLexer.ID, "id_str", 1);
+		v2 = new BizlangValue(BizlangLexer.ID, "id_nbr", 1);
+		v3 = new BizlangValue(BizlangLexer.ID, "id_date", 1);
+		v4 = new BizlangValue(BizlangLexer.ID, "id_obj", 1);
+	}
+	
+	@Test
+	public void testEqualsIdVsString() throws BizlangException {
+		BizlangValue ref1 = new BizlangValue(BizlangLexer.STR, "myValue", 1);
+		BizlangValue ref2 = new BizlangValue(BizlangLexer.STR, "anotherValue", 1);
+		assertTrue(v1.equals(ref1, bindings));
+		assertFalse(v2.equals(ref1, bindings));
+		assertFalse(v3.equals(ref1, bindings));
+		assertFalse(v4.equals(ref1, bindings));
+		
+		assertFalse(v1.equals(ref2, bindings));
+		assertFalse(v2.equals(ref2, bindings));
+		assertFalse(v3.equals(ref2, bindings));
+		assertFalse(v4.equals(ref2, bindings));
+		
+	}
+	
+	@Test
+	public void testEqualsIdVsNumber() throws BizlangException {
+		BizlangValue ref1 = new BizlangValue(BizlangLexer.NBR, "12.34", 1);
+		BizlangValue ref2 = new BizlangValue(BizlangLexer.NBR, "1234", 1);
+		assertFalse(v1.equals(ref1, bindings));
+		assertTrue(v2.equals(ref1, bindings));
+		assertFalse(v3.equals(ref1, bindings));
+		assertFalse(v4.equals(ref1, bindings));
+		
+		assertFalse(v1.equals(ref2, bindings));
+		assertFalse(v2.equals(ref2, bindings));
+		assertFalse(v3.equals(ref2, bindings));
+		assertFalse(v4.equals(ref2, bindings));
+	}
+	
+	@Test
+	public void testEqualsIdVsDate() throws BizlangException {
+		BizlangValue ref1 = new BizlangValue(BizlangLexer.DATE, "01/03/2010", 1);
+		BizlangValue ref2 = new BizlangValue(BizlangLexer.DATE, "2/10/1983", 1);
+		assertFalse(v1.equals(ref1, bindings));
+		assertFalse(v2.equals(ref1, bindings));
+		assertTrue(v3.equals(ref1, bindings));
+		assertFalse(v4.equals(ref1, bindings));
+		
+		assertFalse(v1.equals(ref2, bindings));
+		assertFalse(v2.equals(ref2, bindings));
+		assertFalse(v3.equals(ref2, bindings));
+		assertFalse(v4.equals(ref2, bindings));
+	}
+	
+	@Test
+	public void testEqualsIdVsArray() throws BizlangException {
+	}
+	
+	@Test
+	public void testEqualsIdVsRange() throws BizlangException {
+	}
+	
+	@Test
+	public void testEqualsIdVsId() throws BizlangException {
+	}
 }
