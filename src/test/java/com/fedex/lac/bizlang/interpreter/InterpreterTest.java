@@ -107,6 +107,13 @@ public class InterpreterTest {
 		assertEquals("1" + NL + "2" + NL + "3" + NL + "4" + NL, buffer.toString());
 	}
 	
+	@Test
+	public void testRule() throws Exception {
+		ExecutionFlow flow = getExecutionFlow("src/test/resources/rules.biz");
+		interpreter.execute(flow, bindings);
+		assertEquals("1" + NL + "2" + NL + "3" + NL, buffer.toString());
+	}
+	
 	/* *******************************
 	 * Backup functions and classes  *
 	 *********************************/

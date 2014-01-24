@@ -82,6 +82,19 @@ public class BizlangBaseListener implements BizlangListener {
 	 * <p/>
 	 * The default implementation does nothing.
 	 */
+	@Override public void enterDefRule(@NotNull BizlangParser.DefRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
+	@Override public void exitDefRule(@NotNull BizlangParser.DefRuleContext ctx) { }
+
+	/**
+	 * {@inheritDoc}
+	 * <p/>
+	 * The default implementation does nothing.
+	 */
 	@Override public void enterBlock(@NotNull BizlangParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}

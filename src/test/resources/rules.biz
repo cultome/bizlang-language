@@ -1,0 +1,15 @@
+rule "primera ley" do
+	print "1"
+end
+
+rule "segunda_ley" do
+	callRule("primera ley")
+	print "2"
+end
+
+rule "ley_ignorada" do
+	print "error"
+end
+
+callRule("segunda_ley")
+print "3"

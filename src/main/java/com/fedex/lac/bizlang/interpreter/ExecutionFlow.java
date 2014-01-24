@@ -1,9 +1,12 @@
 package com.fedex.lac.bizlang.interpreter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fedex.lac.bizlang.language.BizlangExpression;
+import com.fedex.lac.bizlang.language.BizlangRule;
 
 /* 
  * ExecutionFlow.java
@@ -15,7 +18,8 @@ import com.fedex.lac.bizlang.language.BizlangExpression;
  */
 public class ExecutionFlow {
 	
-	List<BizlangExpression> flow;
+	private Map<String, BizlangRule> rules;	
+	private List<BizlangExpression> flow;
 
 	public List<BizlangExpression> getFlow() {
 		if(flow == null){
@@ -26,5 +30,16 @@ public class ExecutionFlow {
 	
 	public void addToFlow(BizlangExpression expression){
 		getFlow().add(expression);
+	}
+
+	public Map<String, BizlangRule> getRules() {
+		if(rules == null){
+			rules = new HashMap<String, BizlangRule>();
+		}
+		return rules;
+	}
+
+	public void addRule(BizlangRule rule) {
+		getRules().put(rule.getName(), rule);
 	}
 }

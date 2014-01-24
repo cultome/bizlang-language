@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fedex.lac.bizlang.language.BizlangRule;
+
 /* 
  * Bindings.java
  *
@@ -16,8 +18,10 @@ import java.util.Map;
  * @creation	10/01/2014
  */
 public class Bindings {
-	
-	Map<String, Object> bindings;
+
+	public static final String FNCT_SPC_NM = "__functions__";
+
+	private Map<String, Object> bindings;
 
 	public Object addBinding(String name, Object value) {
 		return getBindings().put(name, value);
@@ -100,6 +104,20 @@ public class Bindings {
 		} catch (Exception e) {}
 		
 		throw new RuntimeException("There is no getter method for property [" + property + "] in class [" + obj.getClass().getName() + "].");
+	}
+
+	@SuppressWarnings("unchecked")
+	public void addRule(String key, BizlangRule value) {
+		ensureFunctionSpaceExist();
+		((Map<String, BizlangRule>) getBinding(FNCT_SPC_NM)).put(key, value);
+	}
+
+	private void ensureFunctionSpaceExist() {
+		try{
+			getBinding(FNCT_SPC_NM);
+		} catch(RuntimeException e){
+			addBinding(FNCT_SPC_NM, new HashMap<String, BizlangRule>());
+		}
 	}
 
 }

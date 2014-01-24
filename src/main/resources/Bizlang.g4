@@ -12,6 +12,7 @@ expression  : fnctCall
 			| assignation
 			| value
 			| comment
+			| defRule
 			| NEWLINE
 			;
 fnctCall    : FNCTNAME expression
@@ -58,7 +59,7 @@ block		: 'do' expression+ 'end'
 			| 'do' expression+ elseBlk 'end'
 			;
 elseBlk		: 'else' expression+ ;
-
+defRule		: 'rule' STR block ;
 
 
 
@@ -73,6 +74,7 @@ CONDOPRT	: 'if'
 FNCTNAME	: 'print'
 			| 'sum'
 			| 'getFromDb'
+			| 'callRule'
 			;
 NBR			: [\+\-]?[0-9]+('.'[0-9]+)? ;
 STR         : '"' (~["])*? '"'

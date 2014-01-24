@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fedex.lac.bizlang.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.function.CallRuleFunction;
 import com.fedex.lac.bizlang.language.function.JavaFunction;
 import com.fedex.lac.bizlang.language.function.PrintJavaFunction;
 
@@ -52,6 +53,8 @@ public class BizlangFunction extends BizlangExpression {
 	private JavaFunction getJavaImplementation(String name, List<BizlangExpression> paramList) {
 		if("print".equals(name)){
 			return new PrintJavaFunction();
+		} else if("callRule".equals(name)){
+			return new CallRuleFunction();
 		}
 		return null;
 	}

@@ -18,6 +18,7 @@ import com.fedex.lac.bizlang.language.BizlangLogicOperation;
 import com.fedex.lac.bizlang.language.BizlangMathOperation;
 import com.fedex.lac.bizlang.language.BizlangRange;
 import com.fedex.lac.bizlang.language.BizlangRepetition;
+import com.fedex.lac.bizlang.language.BizlangRule;
 import com.fedex.lac.bizlang.language.BizlangSwitch;
 import com.fedex.lac.bizlang.language.BizlangSwitchBlock;
 import com.fedex.lac.bizlang.language.BizlangValue;
@@ -29,6 +30,7 @@ import com.fedex.lac.bizlang.parser.BizlangParser.BlockContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.CaseBlockContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ConditionalContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.CstmLogOpContext;
+import com.fedex.lac.bizlang.parser.BizlangParser.DefRuleContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.ElseBlkContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
 import com.fedex.lac.bizlang.parser.BizlangParser.LogicOpContext;
@@ -108,14 +110,14 @@ public class TreeListener extends BizlangBaseListener {
 	
 	@Override
 	public void enterBlock(BlockContext ctx) {
-		BizlangBlock block = new BizlangBlock("_block_", ctx.getStart().getLine());
+		BizlangBlock block = new BizlangBlock("__block__", ctx.getStart().getLine());
 		buffer.push(block);
 		parsingStatus.push(ParsingStatus.PARSING_BLOCK);
 	}
 	
 	@Override
 	public void enterElseBlk(ElseBlkContext ctx) {
-		BizlangBlock block = new BizlangBlock("_else_block_", ctx.getStart().getLine());
+		BizlangBlock block = new BizlangBlock("__else_block__", ctx.getStart().getLine());
 		buffer.push(block);
 		parsingStatus.push(ParsingStatus.PARSING_ELSE_BLOCK);
 	}
@@ -138,7 +140,7 @@ public class TreeListener extends BizlangBaseListener {
 
 	@Override
 	public void enterArray(ArrayContext ctx) {
-		BizlangArray array = new BizlangArray("_array_", ctx.getStart().getLine()); 
+		BizlangArray array = new BizlangArray("__array__", ctx.getStart().getLine()); 
 		buffer.push(array);
 		parsingStatus.push(ParsingStatus.PARSING_ARRAY);
 	}
@@ -149,7 +151,7 @@ public class TreeListener extends BizlangBaseListener {
 		if(!parsingStatus.peek().equals(ParsingStatus.GETTING_VALUE)){
 			range = getRange(ctx);
 		} else {
-			range = new BizlangRange("_range_", ctx.getStart().getLine()); 
+			range = new BizlangRange("__range__", ctx.getStart().getLine()); 
 		}
 		buffer.push(range);
 		parsingStatus.push(ParsingStatus.PARSING_RANGE);
@@ -171,7 +173,7 @@ public class TreeListener extends BizlangBaseListener {
 	
 	@Override
 	public void enterSwtch(SwtchContext ctx) {
-		BizlangSwitch swtch = new BizlangSwitch("_switch_", ctx.getStart().getLine());
+		BizlangSwitch swtch = new BizlangSwitch("__switch__", ctx.getStart().getLine());
 //		swtch.addReference(getPrimitiveValue(ctx.getChild(TerminalNode.class, 1), ctx.getStart().getLine()));
 		buffer.push(swtch);
 		parsingStatus.push(ParsingStatus.PARSING_SWITCH);
@@ -182,6 +184,19 @@ public class TreeListener extends BizlangBaseListener {
 		BizlangSwitchBlock cstmLogOp = new BizlangSwitchBlock(ctx.getChild(TerminalNode.class, 0).getText(), ctx.getStart().getLine()); 
 		buffer.push(cstmLogOp);
 		parsingStatus.push(ParsingStatus.PARSING_CASE_BLOCK);
+	}
+	
+	@Override
+	public void enterDefRule(DefRuleContext ctx) {
+		String fnctNameColons = ctx.getChild(TerminalNode.class, 1).getText();
+		BizlangRule rule = new BizlangRule(fnctNameColons.replaceAll("\"", ""), ctx.getStart().getLine()); 
+		buffer.push(rule);
+		parsingStatus.push(ParsingStatus.PARSING_RULE);
+	}
+	
+	@Override
+	public void exitDefRule(DefRuleContext ctx) {
+		exitExpression();
 	}
 	
 	@Override
@@ -257,6 +272,11 @@ public class TreeListener extends BizlangBaseListener {
 	private void exitExpression(){
 		ParsingStatus prevStatus = parsingStatus.pop();
 		BizlangExpression r = buffer.pop();
+		
+		if(prevStatus.equals(ParsingStatus.PARSING_RULE)){
+			flow.addRule((BizlangRule) r);
+		}
+		
 		if(parsingStatus.isEmpty()){
 			flow.addToFlow(r);
 		} else {
@@ -338,6 +358,8 @@ public class TreeListener extends BizlangBaseListener {
 					bizlangSwitchBlock.addExpression((BizlangExpression) r);
 				}
 				break;
+			case PARSING_RULE:
+				((BizlangRule) buffer.peek()).addExpression((BizlangExpression) r);
 			case WAITING:
 			case GETTING_VALUE:
 				break;

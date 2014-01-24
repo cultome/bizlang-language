@@ -1,6 +1,7 @@
 package com.fedex.lac.bizlang.interpreter;
 
 import java.io.InputStream;
+import java.util.Map.Entry;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CharStream;
@@ -9,6 +10,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 
 import com.fedex.lac.bizlang.language.BizlangException;
 import com.fedex.lac.bizlang.language.BizlangExpression;
+import com.fedex.lac.bizlang.language.BizlangRule;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
 import com.fedex.lac.bizlang.parser.BizlangParser;
 import com.fedex.lac.bizlang.parser.BizlangParser.ScriptContext;
@@ -37,8 +39,15 @@ public class Interpreter {
 	}
 
 	public void execute(ExecutionFlow flow, Bindings bindings) throws BizlangException {
+		loadRules(flow, bindings);
 		for(BizlangExpression exp : flow.getFlow()){
 			exp.execute(bindings);
+		}
+	}
+
+	private void loadRules(ExecutionFlow flow, Bindings bindings) {
+		for(Entry<String, BizlangRule> entrySet : flow.getRules().entrySet()){
+			bindings.addRule(entrySet.getKey(), entrySet.getValue());
 		}
 	}
 }
