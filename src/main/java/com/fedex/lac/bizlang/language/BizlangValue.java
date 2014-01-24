@@ -1,6 +1,8 @@
 package com.fedex.lac.bizlang.language;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 
 import com.fedex.lac.bizlang.interpreter.Bindings;
 import com.fedex.lac.bizlang.parser.BizlangLexer;
@@ -15,22 +17,22 @@ import com.fedex.lac.bizlang.util.Utils;
  * @creation	10/01/2014
  */
 public class BizlangValue extends BizlangExpression {
-	
+
 	public static final int COMPLEX_TYPE_ARRAY = 100;
 	public static final int COMPLEX_TYPE_RANGE = 101;
-	
+
 	protected int type;
 	protected String value;
 
 	public BizlangValue(int type, String value, int srcLineDefinedAt) {
-		super("[" + type +":" + srcLineDefinedAt + "]", srcLineDefinedAt);
+		super("[" + type + ":" + srcLineDefinedAt + "]", srcLineDefinedAt);
 		this.type = type;
 		this.value = value;
 	}
 
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
-		switch(type){
+		switch (type) {
 		case BizlangLexer.NBR:
 			return new BigDecimal(value);
 		case BizlangLexer.STR:
@@ -41,7 +43,7 @@ public class BizlangValue extends BizlangExpression {
 		case BizlangLexer.DATE:
 			return Utils.parseDate(value);
 		}
-		
+
 		return null;
 	}
 
@@ -53,7 +55,6 @@ public class BizlangValue extends BizlangExpression {
 		return value;
 	}
 
-	
 	public String inspect() {
 		return "BizlangValue [type=" + type + ", value=" + value + "]";
 	}
@@ -63,24 +64,118 @@ public class BizlangValue extends BizlangExpression {
 		return value;
 	}
 
-	public boolean equals(BizlangValue obj) {
-		switch(getType()){
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof BizlangValue) {
+			BizlangValue bizVal = (BizlangValue) obj;
+			switch (getType()) {
 			case BizlangLexer.NBR:
+				switch (bizVal.getType()) {
+				case BizlangLexer.STR:
+				case BizlangLexer.NBR:
+					return getValue().equalsIgnoreCase(bizVal.getValue());
+				case BizlangLexer.DATE:
+					return false;
+				}
 				break;
 			case BizlangLexer.STR:
-				switch(obj.getType()){
-					case BizlangLexer.STR: return getValue().equalsIgnoreCase(obj.getValue());
+				switch (bizVal.getType()) {
+				case BizlangLexer.STR:
+				case BizlangLexer.NBR:
+				case BizlangLexer.DATE:
+					return getValue().equalsIgnoreCase(bizVal.getValue());
 				}
 				break;
 			case BizlangLexer.DATE:
+				switch (bizVal.getType()) {
+				case BizlangLexer.STR:
+				case BizlangLexer.DATE:
+					return getValue().equalsIgnoreCase(bizVal.getValue());
+				case BizlangLexer.NBR:
+					return false;
+				}
 				break;
-			case BizlangLexer.ID:
-			case BizlangLexer.OBJPROP:
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Las comparacinoes se dan de acuerdo a la siguiente tabla:
+	 * 
+	 *       |   STR    |   NBR    |
+	 * ------|----------|----------|-------------------------------------------------------------
+	 * STR   | Equals   | Equals   |
+	 * NBR   | Equals   | Equals   |
+	 * DATE  | Equals   | false    |
+	 * ARRAY | Contains | Contains |
+	 * RANGE | false    | Contains |
+	 * 
+	 * @param obj
+	 * @param bindings
+	 * @return
+	 * @throws BizlangException
+	 */
+	@SuppressWarnings("unchecked")
+	public boolean equals(BizlangValue obj, Bindings bindings) throws BizlangException {
+		Object thisValue = execute(bindings);
+		Object otherValue = obj.execute(bindings);
+
+		switch (getType()) {
+		case BizlangLexer.NBR:
+			switch (obj.getType()) {
+			case BizlangLexer.STR:
+			case BizlangLexer.NBR:
+			case BizlangLexer.DATE:
+				return equals(obj);
 			case COMPLEX_TYPE_ARRAY:
 			case COMPLEX_TYPE_RANGE:
-				break;
+				return ((List<BizlangValue>) otherValue).contains(this);
+			}
+			break;
+		case BizlangLexer.STR:
+			switch (obj.getType()) {
+			case BizlangLexer.STR:
+			case BizlangLexer.NBR:
+			case BizlangLexer.DATE:
+				return equals(obj);
+			case COMPLEX_TYPE_ARRAY:
+				return ((List<BizlangValue>) otherValue).contains(this);
+			case COMPLEX_TYPE_RANGE:
+				return false;
+			}
+			break;
+		case BizlangLexer.DATE:
+			switch (obj.getType()) {
+			case BizlangLexer.STR:
+			case BizlangLexer.DATE:
+			case BizlangLexer.NBR:
+				return equals(obj);
+			case COMPLEX_TYPE_ARRAY:
+			case COMPLEX_TYPE_RANGE:
+				return ((List<BizlangValue>) otherValue).contains(this);
+			}
+			break;
+		case BizlangLexer.ID:
+		case BizlangLexer.OBJPROP:
+			switch (obj.getType()) {
+			case BizlangLexer.STR:
+				return thisValue.toString().equalsIgnoreCase(obj.getValue());
+			case BizlangLexer.DATE:
+				return Utils.formatDate((Date) otherValue).equalsIgnoreCase(getValue());
+			case BizlangLexer.NBR:
+				return ((BigDecimal) otherValue).toPlainString().equals(getValue());
+			case COMPLEX_TYPE_ARRAY:
+			case COMPLEX_TYPE_RANGE:
+				return ((List<BizlangValue>) otherValue).contains(this);
+			}
+			break;
+		case COMPLEX_TYPE_ARRAY:
+		case COMPLEX_TYPE_RANGE:
+			break;
 		}
-		
-		return true;
+
+		return false;
 	}
 }

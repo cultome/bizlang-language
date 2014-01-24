@@ -21,11 +21,10 @@ public class BizlangParser extends Parser {
 		CONDOPRT=22, FNCTNAME=23, NBR=24, STR=25, DATE=26, ID=27, OBJPROP=28, 
 		NEWLINE=29, WS=30;
 	public static final String[] tokenNames = {
-		"<INVALID>", "'do'", "']'", "'in'", "'default'", "')'", "','", "'['", 
-		"'for'", "'('", "'='", "'...'", "'then'", "'else'", "'when'", "'end'", 
-		"'case'", "SING_LN_CMM", "MULT_LN_CMM", "'><'", "LOGICOPRT", "MATHOPTR", 
-		"CONDOPRT", "FNCTNAME", "NBR", "STR", "DATE", "ID", "OBJPROP", "NEWLINE", 
-		"WS"
+		"<INVALID>", "'do'", "']'", "'...'", "')'", "'default'", "'in'", "','", 
+		"'['", "'('", "'then'", "'for'", "'else'", "'='", "'when'", "'end'", "'case'", 
+		"SING_LN_CMM", "MULT_LN_CMM", "'><'", "LOGICOPRT", "MATHOPTR", "CONDOPRT", 
+		"FNCTNAME", "NBR", "STR", "DATE", "ID", "OBJPROP", "NEWLINE", "WS"
 	};
 	public static final int
 		RULE_script = 0, RULE_expression = 1, RULE_fnctCall = 2, RULE_assignation = 3, 
@@ -96,7 +95,7 @@ public class BizlangParser extends Parser {
 				setState(39); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 7) | (1L << 8) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 8) | (1L << 11) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
 			setState(41); match(EOF);
 			}
 		}
@@ -274,7 +273,7 @@ public class BizlangParser extends Parser {
 				setState(56); match(FNCTNAME);
 				setState(57); match(9);
 				setState(58); paramLst();
-				setState(59); match(5);
+				setState(59); match(4);
 				}
 				break;
 
@@ -324,7 +323,7 @@ public class BizlangParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(65); match(ID);
-			setState(66); match(10);
+			setState(66); match(13);
 			setState(67); expression();
 			}
 		}
@@ -463,7 +462,9 @@ public class BizlangParser extends Parser {
 
 	public static class SwtchContext extends ParserRuleContext {
 		public TerminalNode NEWLINE() { return getToken(BizlangParser.NEWLINE, 0); }
-		public TerminalNode ID() { return getToken(BizlangParser.ID, 0); }
+		public ValueContext value() {
+			return getRuleContext(ValueContext.class,0);
+		}
 		public CaseBlockContext caseBlock(int i) {
 			return getRuleContext(CaseBlockContext.class,i);
 		}
@@ -492,7 +493,7 @@ public class BizlangParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(89); match(16);
-			setState(90); match(ID);
+			setState(90); value();
 			setState(91); match(NEWLINE);
 			setState(93); 
 			_errHandler.sync(this);
@@ -506,7 +507,7 @@ public class BizlangParser extends Parser {
 				setState(95); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( _la==4 || _la==14 );
+			} while ( _la==5 || _la==14 );
 			setState(97); match(15);
 			}
 		}
@@ -557,7 +558,7 @@ public class BizlangParser extends Parser {
 				{
 				setState(99); match(14);
 				setState(100); value();
-				setState(101); match(12);
+				setState(101); match(10);
 				setState(103); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -570,13 +571,13 @@ public class BizlangParser extends Parser {
 					setState(105); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 7) | (1L << 8) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 8) | (1L << 11) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
 				}
 				break;
-			case 4:
+			case 5:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(107); match(4);
+				setState(107); match(5);
 				setState(109); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
@@ -589,7 +590,7 @@ public class BizlangParser extends Parser {
 					setState(111); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 7) | (1L << 8) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 8) | (1L << 11) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
 				}
 				break;
 			default:
@@ -645,9 +646,9 @@ public class BizlangParser extends Parser {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(115); match(8);
+				setState(115); match(11);
 				setState(116); match(ID);
-				setState(117); match(3);
+				setState(117); match(6);
 				setState(118); match(OBJPROP);
 				setState(119); block();
 				}
@@ -656,9 +657,9 @@ public class BizlangParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(120); match(8);
+				setState(120); match(11);
 				setState(121); match(ID);
-				setState(122); match(3);
+				setState(122); match(6);
 				setState(123); match(ID);
 				setState(124); block();
 				}
@@ -667,9 +668,9 @@ public class BizlangParser extends Parser {
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(125); match(8);
+				setState(125); match(11);
 				setState(126); match(ID);
-				setState(127); match(3);
+				setState(127); match(6);
 				setState(128); array();
 				setState(129); block();
 				}
@@ -678,9 +679,9 @@ public class BizlangParser extends Parser {
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(131); match(8);
+				setState(131); match(11);
 				setState(132); match(ID);
-				setState(133); match(3);
+				setState(133); match(6);
 				setState(134); range();
 				setState(135); block();
 				}
@@ -736,7 +737,7 @@ public class BizlangParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(140); value();
-				setState(141); match(6);
+				setState(141); match(7);
 				setState(142); paramLst();
 				}
 				break;
@@ -785,9 +786,9 @@ public class BizlangParser extends Parser {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(146); match(7);
+				setState(146); match(8);
 				setState(147); match(NBR);
-				setState(148); match(11);
+				setState(148); match(3);
 				setState(149); match(NBR);
 				setState(150); match(2);
 				}
@@ -796,9 +797,9 @@ public class BizlangParser extends Parser {
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(151); match(7);
+				setState(151); match(8);
 				setState(152); match(DATE);
-				setState(153); match(11);
+				setState(153); match(3);
 				setState(154); match(DATE);
 				setState(155); match(2);
 				}
@@ -840,7 +841,7 @@ public class BizlangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(158); match(7);
+			setState(158); match(8);
 			setState(159); paramLst();
 			setState(160); match(2);
 			}
@@ -1127,7 +1128,7 @@ public class BizlangParser extends Parser {
 					setState(185); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 7) | (1L << 8) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 8) | (1L << 11) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
 				setState(187); match(15);
 				}
 				break;
@@ -1148,7 +1149,7 @@ public class BizlangParser extends Parser {
 					setState(193); 
 					_errHandler.sync(this);
 					_la = _input.LA(1);
-				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 7) | (1L << 8) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
+				} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 8) | (1L << 11) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
 				setState(195); elseBlk();
 				setState(196); match(15);
 				}
@@ -1194,7 +1195,7 @@ public class BizlangParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(200); match(13);
+			setState(200); match(12);
 			setState(202); 
 			_errHandler.sync(this);
 			_la = _input.LA(1);
@@ -1207,7 +1208,7 @@ public class BizlangParser extends Parser {
 				setState(204); 
 				_errHandler.sync(this);
 				_la = _input.LA(1);
-			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 7) | (1L << 8) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
+			} while ( (((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << 8) | (1L << 11) | (1L << 16) | (1L << SING_LN_CMM) | (1L << MULT_LN_CMM) | (1L << CONDOPRT) | (1L << FNCTNAME) | (1L << NBR) | (1L << STR) | (1L << DATE) | (1L << ID) | (1L << OBJPROP) | (1L << NEWLINE))) != 0) );
 			}
 		}
 		catch (RecognitionException re) {
@@ -1247,29 +1248,29 @@ public class BizlangParser extends Parser {
 		"\32\16\2\64\67\5\34\17\2\65\67\7\37\2\2\66-\3\2\2\2\66.\3\2\2\2\66/\3"+
 		"\2\2\2\66\60\3\2\2\2\66\61\3\2\2\2\66\62\3\2\2\2\66\63\3\2\2\2\66\64\3"+
 		"\2\2\2\66\65\3\2\2\2\67\5\3\2\2\289\7\31\2\29B\5\4\3\2:;\7\31\2\2;<\7"+
-		"\13\2\2<=\5\24\13\2=>\7\7\2\2>B\3\2\2\2?@\7\31\2\2@B\5\24\13\2A8\3\2\2"+
-		"\2A:\3\2\2\2A?\3\2\2\2B\7\3\2\2\2CD\7\35\2\2DE\7\f\2\2EF\5\4\3\2F\t\3"+
+		"\13\2\2<=\5\24\13\2=>\7\6\2\2>B\3\2\2\2?@\7\31\2\2@B\5\24\13\2A8\3\2\2"+
+		"\2A:\3\2\2\2A?\3\2\2\2B\7\3\2\2\2CD\7\35\2\2DE\7\17\2\2EF\5\4\3\2F\t\3"+
 		"\2\2\2GH\5\32\16\2HI\7\27\2\2IJ\5\32\16\2JP\3\2\2\2KL\5\32\16\2LM\7\27"+
 		"\2\2MN\5\n\6\2NP\3\2\2\2OG\3\2\2\2OK\3\2\2\2P\13\3\2\2\2QR\7\30\2\2RS"+
 		"\5\36\20\2ST\5\"\22\2TZ\3\2\2\2UV\7\30\2\2VW\5 \21\2WX\5\"\22\2XZ\3\2"+
-		"\2\2YQ\3\2\2\2YU\3\2\2\2Z\r\3\2\2\2[\\\7\22\2\2\\]\7\35\2\2]_\7\37\2\2"+
-		"^`\5\20\t\2_^\3\2\2\2`a\3\2\2\2a_\3\2\2\2ab\3\2\2\2bc\3\2\2\2cd\7\21\2"+
-		"\2d\17\3\2\2\2ef\7\20\2\2fg\5\32\16\2gi\7\16\2\2hj\5\4\3\2ih\3\2\2\2j"+
-		"k\3\2\2\2ki\3\2\2\2kl\3\2\2\2lt\3\2\2\2mo\7\6\2\2np\5\4\3\2on\3\2\2\2"+
+		"\2\2YQ\3\2\2\2YU\3\2\2\2Z\r\3\2\2\2[\\\7\22\2\2\\]\5\32\16\2]_\7\37\2"+
+		"\2^`\5\20\t\2_^\3\2\2\2`a\3\2\2\2a_\3\2\2\2ab\3\2\2\2bc\3\2\2\2cd\7\21"+
+		"\2\2d\17\3\2\2\2ef\7\20\2\2fg\5\32\16\2gi\7\f\2\2hj\5\4\3\2ih\3\2\2\2"+
+		"jk\3\2\2\2ki\3\2\2\2kl\3\2\2\2lt\3\2\2\2mo\7\7\2\2np\5\4\3\2on\3\2\2\2"+
 		"pq\3\2\2\2qo\3\2\2\2qr\3\2\2\2rt\3\2\2\2se\3\2\2\2sm\3\2\2\2t\21\3\2\2"+
-		"\2uv\7\n\2\2vw\7\35\2\2wx\7\5\2\2xy\7\36\2\2y\u008c\5\"\22\2z{\7\n\2\2"+
-		"{|\7\35\2\2|}\7\5\2\2}~\7\35\2\2~\u008c\5\"\22\2\177\u0080\7\n\2\2\u0080"+
-		"\u0081\7\35\2\2\u0081\u0082\7\5\2\2\u0082\u0083\5\30\r\2\u0083\u0084\5"+
-		"\"\22\2\u0084\u008c\3\2\2\2\u0085\u0086\7\n\2\2\u0086\u0087\7\35\2\2\u0087"+
-		"\u0088\7\5\2\2\u0088\u0089\5\26\f\2\u0089\u008a\5\"\22\2\u008a\u008c\3"+
+		"\2uv\7\r\2\2vw\7\35\2\2wx\7\b\2\2xy\7\36\2\2y\u008c\5\"\22\2z{\7\r\2\2"+
+		"{|\7\35\2\2|}\7\b\2\2}~\7\35\2\2~\u008c\5\"\22\2\177\u0080\7\r\2\2\u0080"+
+		"\u0081\7\35\2\2\u0081\u0082\7\b\2\2\u0082\u0083\5\30\r\2\u0083\u0084\5"+
+		"\"\22\2\u0084\u008c\3\2\2\2\u0085\u0086\7\r\2\2\u0086\u0087\7\35\2\2\u0087"+
+		"\u0088\7\b\2\2\u0088\u0089\5\26\f\2\u0089\u008a\5\"\22\2\u008a\u008c\3"+
 		"\2\2\2\u008bu\3\2\2\2\u008bz\3\2\2\2\u008b\177\3\2\2\2\u008b\u0085\3\2"+
 		"\2\2\u008c\23\3\2\2\2\u008d\u0093\5\32\16\2\u008e\u008f\5\32\16\2\u008f"+
-		"\u0090\7\b\2\2\u0090\u0091\5\24\13\2\u0091\u0093\3\2\2\2\u0092\u008d\3"+
-		"\2\2\2\u0092\u008e\3\2\2\2\u0093\25\3\2\2\2\u0094\u0095\7\t\2\2\u0095"+
-		"\u0096\7\32\2\2\u0096\u0097\7\r\2\2\u0097\u0098\7\32\2\2\u0098\u009f\7"+
-		"\4\2\2\u0099\u009a\7\t\2\2\u009a\u009b\7\34\2\2\u009b\u009c\7\r\2\2\u009c"+
+		"\u0090\7\t\2\2\u0090\u0091\5\24\13\2\u0091\u0093\3\2\2\2\u0092\u008d\3"+
+		"\2\2\2\u0092\u008e\3\2\2\2\u0093\25\3\2\2\2\u0094\u0095\7\n\2\2\u0095"+
+		"\u0096\7\32\2\2\u0096\u0097\7\5\2\2\u0097\u0098\7\32\2\2\u0098\u009f\7"+
+		"\4\2\2\u0099\u009a\7\n\2\2\u009a\u009b\7\34\2\2\u009b\u009c\7\5\2\2\u009c"+
 		"\u009d\7\34\2\2\u009d\u009f\7\4\2\2\u009e\u0094\3\2\2\2\u009e\u0099\3"+
-		"\2\2\2\u009f\27\3\2\2\2\u00a0\u00a1\7\t\2\2\u00a1\u00a2\5\24\13\2\u00a2"+
+		"\2\2\2\u009f\27\3\2\2\2\u00a0\u00a1\7\n\2\2\u00a1\u00a2\5\24\13\2\u00a2"+
 		"\u00a3\7\4\2\2\u00a3\31\3\2\2\2\u00a4\u00ac\7\32\2\2\u00a5\u00ac\7\33"+
 		"\2\2\u00a6\u00ac\7\35\2\2\u00a7\u00ac\7\36\2\2\u00a8\u00ac\7\34\2\2\u00a9"+
 		"\u00ac\5\30\r\2\u00aa\u00ac\5\26\f\2\u00ab\u00a4\3\2\2\2\u00ab\u00a5\3"+
@@ -1283,7 +1284,7 @@ public class BizlangParser extends Parser {
 		"\2\2\2\u00bf\u00c1\7\3\2\2\u00c0\u00c2\5\4\3\2\u00c1\u00c0\3\2\2\2\u00c2"+
 		"\u00c3\3\2\2\2\u00c3\u00c1\3\2\2\2\u00c3\u00c4\3\2\2\2\u00c4\u00c5\3\2"+
 		"\2\2\u00c5\u00c6\5$\23\2\u00c6\u00c7\7\21\2\2\u00c7\u00c9\3\2\2\2\u00c8"+
-		"\u00b7\3\2\2\2\u00c8\u00bf\3\2\2\2\u00c9#\3\2\2\2\u00ca\u00cc\7\17\2\2"+
+		"\u00b7\3\2\2\2\u00c8\u00bf\3\2\2\2\u00c9#\3\2\2\2\u00ca\u00cc\7\16\2\2"+
 		"\u00cb\u00cd\5\4\3\2\u00cc\u00cb\3\2\2\2\u00cd\u00ce\3\2\2\2\u00ce\u00cc"+
 		"\3\2\2\2\u00ce\u00cf\3\2\2\2\u00cf%\3\2\2\2\23)\66AOYakqs\u008b\u0092"+
 		"\u009e\u00ab\u00bb\u00c3\u00c8\u00ce";

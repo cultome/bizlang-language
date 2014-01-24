@@ -4,3 +4,30 @@ case idNbr
 	when "880475" then
 		print "1"
 end
+
+case myObj.valueOne
+	when 1 then
+		print "error"
+	when 2 then
+		print "error"
+	when 3 then
+		print "2"
+end
+
+case myObj.valueOne
+	when [1,2] then
+		print "error"
+	when [3,4] then
+		print "3"
+	when [5,6] then
+		print "error"
+end
+
+case myObj.valueFive
+	when [1/1/2013...31/12/2013] then
+		print "error pasado"
+	when [1/1/2014...31/12/2014] then
+		print "4"
+	when [1/1/2015...31/12/2015] then
+		print "error futuro"
+end

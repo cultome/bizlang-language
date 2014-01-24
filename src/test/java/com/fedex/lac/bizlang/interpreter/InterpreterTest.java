@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +25,8 @@ import org.junit.Test;
  * @creation	09/01/2014
  */
 public class InterpreterTest {
+	
+	private final String NL = "\n";
 	
 	private Interpreter interpreter;
 	private Bindings bindings;
@@ -52,56 +55,56 @@ public class InterpreterTest {
 	public void testExecute() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/exec.biz");
 		interpreter.execute(flow, bindings);
-		assertEquals("hola mundo\r\n6\r\nmyId880475\r\n", buffer.toString());
+		assertEquals("hola mundo" + NL + "6" + NL + "myId880475" + NL, buffer.toString());
 	}
 	
 	@Test
 	public void testConditional() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/conditional.biz");
 		interpreter.execute(flow, bindings);
-		assertEquals("<1>\r\n<2>\r\n<3>\r\n<4>\r\n<5>\r\n<6>\r\n", buffer.toString());
+		assertEquals("<1>" + NL + "<2>" + NL + "<3>" + NL + "<4>" + NL + "<5>" + NL + "<6>" + NL, buffer.toString());
 	}
 	
 	@Test
 	public void testExecuteWithObject() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/objects.biz");
 		interpreter.execute(flow, bindings);
-		assertEquals("TestingClass [valueOne=3, valueTwo={entero=5.5}]\r\n8.5\r\nsegundo\r\nabc\r\n", buffer.toString());
+		assertEquals("TestingClass [valueOne=3, valueTwo={entero=5.5}]" + NL + "8.5" + NL + "segundo" + NL + "abc" + NL, buffer.toString());
 	}
 	
 	@Test
 	public void testRepetition() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/repetition.biz");
 		interpreter.execute(flow, bindings);
-		assertEquals("a,b,c\r\n", buffer.toString());
+		assertEquals("a,b,c" + NL, buffer.toString());
 	}
 	
 	@Test
 	public void testArrays() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/arrays.biz");
 		interpreter.execute(flow, bindings);
-		assertEquals("'a'\r\n'b'\r\n'c'\r\n1\r\n\"dos\"\r\nidNbr\r\nmyObj.valueOne\r\nprimero\r\nsegundo\r\n", buffer.toString());
+		assertEquals("'a'" + NL + "'b'" + NL + "'c'" + NL + "1" + NL + "\"dos\"" + NL + "idNbr" + NL + "myObj.valueOne" + NL + "primero" + NL + "segundo" + NL, buffer.toString());
 	}
 	
 	@Test
 	public void testRanges() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/ranges.biz");
 		interpreter.execute(flow, bindings);
-		assertEquals("1\r\n2\r\n3\r\n4\r\n5\r\n6\r\n7\r\n8\r\n9\r\n10\r\n<1>\r\n", buffer.toString());
+		assertEquals("1" + NL + "2" + NL + "3" + NL + "4" + NL + "5" + NL + "6" + NL + "7" + NL + "8" + NL + "9" + NL + "10" + NL + "<1>" + NL, buffer.toString());
 	}
 	
 	@Test
 	public void testDates() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/dates.biz");
 		interpreter.execute(flow, bindings);
-		assertEquals("1\r\n2\r\n3\r\n", buffer.toString());
+		assertEquals("1" + NL + "2" + NL + "3" + NL, buffer.toString());
 	}
 	
 	@Test
 	public void testSwitch() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/switch.biz");
 		interpreter.execute(flow, bindings);
-		assertEquals("1\r\n", buffer.toString());
+		assertEquals("1" + NL + "2" + NL + "3" + NL + "4" + NL + "5" + NL, buffer.toString());
 	}
 	
 	/* *******************************
@@ -117,6 +120,7 @@ public class InterpreterTest {
 		private Map<String, String> valueTwo;
 		private Collection<String> valueThree;
 		private String[] valueFour;
+		private Date valueFive;
 		
 		public TestingClass(int one, String two) {
 			valueTwo = new HashMap<String, String>();
@@ -126,6 +130,7 @@ public class InterpreterTest {
 			valueThree.add("primero");
 			valueThree.add("segundo");
 			valueFour = new String[]{"a", "b", "c"};
+			valueFive = new Date();
 		}
 		
 		@SuppressWarnings("unused")
@@ -150,6 +155,11 @@ public class InterpreterTest {
 		@SuppressWarnings("unused")
 		public String[] getValueFour() {
 			return valueFour;
+		}
+
+		@SuppressWarnings("unused")
+		public Date getValueFive() {
+			return valueFive;
 		}
 	}
 }

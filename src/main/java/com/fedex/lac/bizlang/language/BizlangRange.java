@@ -105,7 +105,15 @@ public class BizlangRange extends BizlangValue {
 		
 		throw new RuntimeException("Unknown rage type [" + lowerLimit.getType() + ", " + upperLimit.getType() + "]");
 	}
+	
+	public void setUpperLimit(BizlangValue limit) {
+		upperLimit = limit;
+	}
 
+	public void setLowerLimit(BizlangValue limit) {
+		lowerLimit = limit;
+	}
+	
 	public void addLimit(BizlangValue limit) {
 		if(lowerLimit == null){
 			lowerLimit = limit;

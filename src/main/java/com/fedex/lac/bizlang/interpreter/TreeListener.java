@@ -172,7 +172,7 @@ public class TreeListener extends BizlangBaseListener {
 	@Override
 	public void enterSwtch(SwtchContext ctx) {
 		BizlangSwitch swtch = new BizlangSwitch("_switch_", ctx.getStart().getLine());
-		swtch.addReference(getPrimitiveValue(ctx.getChild(TerminalNode.class, 1), ctx.getStart().getLine()));
+//		swtch.addReference(getPrimitiveValue(ctx.getChild(TerminalNode.class, 1), ctx.getStart().getLine()));
 		buffer.push(swtch);
 		parsingStatus.push(ParsingStatus.PARSING_SWITCH);
 	}
@@ -320,7 +320,9 @@ public class TreeListener extends BizlangBaseListener {
 				((BizlangRange) buffer.peek()).addLimit((BizlangValue) r);
 				break;
 			case PARSING_SWITCH:
-				if(prevStatus.equals(ParsingStatus.PARSING_CASE_BLOCK)){
+				if(prevStatus.equals(ParsingStatus.GETTING_VALUE)){
+					((BizlangSwitch) buffer.peek()).addReference((BizlangValue) r);
+				} else if(prevStatus.equals(ParsingStatus.PARSING_CASE_BLOCK)){
 					((BizlangSwitch) buffer.peek()).addCase((BizlangSwitchBlock) r);
 				}
 				break;

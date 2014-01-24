@@ -29,4 +29,5 @@ public class Utils {
 	public static String formatDate(Date date) {
 		return formatter.format(date);
 	}
+
 }
