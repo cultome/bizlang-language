@@ -186,7 +186,11 @@ public class BizlangValue extends BizlangExpression {
 				}
 			case COMPLEX_TYPE_ARRAY:
 			case COMPLEX_TYPE_RANGE:
-				return ((List<BizlangValue>) otherValue).contains(thisValue);
+				// si se requiere formateamos el tipo de dato
+				if(thisValue instanceof Date){
+					thisValue = Utils.parseDate(Utils.formatDate((Date) thisValue));
+				}
+				return Utils.containsFinalValue((List<BizlangValue>) otherValue, thisValue, bindings);
 			}
 			break;
 		case COMPLEX_TYPE_ARRAY:

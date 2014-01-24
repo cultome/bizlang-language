@@ -4,7 +4,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.junit.Before;
@@ -255,7 +254,7 @@ public class BizlangValueTest {
 		bindings.addBinding("id_str", "myValue");
 		bindings.addBinding("id_nbr", new BigDecimal("12.34"));
 		bindings.addBinding("id_date", cal.getTime());
-		bindings.addBinding("id_obj", new ArrayList<Object>());
+		bindings.addBinding("id_obj", new Object());
 		
 		v1 = new BizlangValue(BizlangLexer.ID, "id_str", 1);
 		v2 = new BizlangValue(BizlangLexer.ID, "id_nbr", 1);
@@ -311,6 +310,25 @@ public class BizlangValueTest {
 	
 	@Test
 	public void testEqualsIdVsArray() throws BizlangException {
+		BizlangArray ref1 = new BizlangArray("__array__", 1);
+		ref1.addElement(new BizlangValue(BizlangLexer.STR, "myValue", 1));
+		ref1.addElement(new BizlangValue(BizlangLexer.NBR, "12.34", 1));
+		ref1.addElement(new BizlangValue(BizlangLexer.DATE, "01/03/2010", 1));
+		
+		BizlangArray ref2 = new BizlangArray("__array__", 1);
+		ref1.addElement(new BizlangValue(BizlangLexer.STR, "anotherValue", 1));
+		ref1.addElement(new BizlangValue(BizlangLexer.NBR, "1234", 1));
+		ref1.addElement(new BizlangValue(BizlangLexer.DATE, "2/03/2010", 1));
+		
+		assertTrue(v1.equals(ref1, bindings));
+		assertTrue(v2.equals(ref1, bindings));
+		assertTrue(v3.equals(ref1, bindings));
+		assertFalse(v4.equals(ref1, bindings));
+		
+		assertFalse(v1.equals(ref2, bindings));
+		assertFalse(v2.equals(ref2, bindings));
+		assertFalse(v3.equals(ref2, bindings));
+		assertFalse(v4.equals(ref2, bindings));
 	}
 	
 	@Test

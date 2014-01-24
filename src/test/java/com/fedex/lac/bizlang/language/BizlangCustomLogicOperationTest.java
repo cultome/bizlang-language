@@ -33,7 +33,7 @@ public class BizlangCustomLogicOperationTest {
 				new BizlangValue(BizlangLexer.NBR, "10", 1)));
 		Object r = op.execute(new Bindings());
 		assertNotNull(r);
-		assertTrue(r.getClass().getName().endsWith("Boolean"));
+		assertTrue(r instanceof Boolean);
 	}
 	
 	@Test
@@ -45,7 +45,7 @@ public class BizlangCustomLogicOperationTest {
 		op.addParam(array);
 		Object r = op.execute(new Bindings());
 		assertNotNull(r);
-		assertTrue(r.getClass().getName().endsWith("Boolean"));
+		assertTrue(r instanceof Boolean);
 	}
 
 	@Test

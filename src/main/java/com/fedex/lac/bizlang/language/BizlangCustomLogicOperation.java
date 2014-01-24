@@ -25,7 +25,7 @@ public class BizlangCustomLogicOperation extends BizlangLogicOperation {
 		Object rVal = getRightValue().execute(bindings);
 		
 		if("><".equals(getName())){
-			if(!rVal.getClass().getName().endsWith("List")){
+			if(!(rVal instanceof List)){
 				throw new RuntimeException("The include operator only work with array/range in the rValue.");
 			}
 			

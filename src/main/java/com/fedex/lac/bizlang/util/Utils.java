@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.fedex.lac.bizlang.interpreter.Bindings;
 import com.fedex.lac.bizlang.language.BizlangException;
 import com.fedex.lac.bizlang.language.BizlangValue;
 
@@ -54,18 +55,26 @@ public class Utils {
 		}
 	}
 
+	public static boolean compareArrays(List<BizlangValue> thisValue, List<BizlangValue> otherValue) {
+		return thisValue.equals(otherValue);
+	}
+
+	public static boolean containsFinalValue(List<BizlangValue> values, Object thisValue, Bindings bindings) throws BizlangException {
+		for (BizlangValue bizlangValue : values) {
+			if(bizlangValue.execute(bindings).equals(thisValue)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private static boolean areEquivalentNumbers(String nbr1, String nbr2, int precision) {
 		BigDecimal bd1 = new BigDecimal(nbr1).setScale(precision);
 		BigDecimal bd2 = new BigDecimal(nbr2).setScale(precision);
 		return bd1.equals(bd2);
 	}
-
+	
 	private static int getPrecision(String nbr) {
 		return nbr.substring(nbr.lastIndexOf(".")+1).length();
 	}
-
-	public static boolean compareArrays(List<BizlangValue> thisValue, List<BizlangValue> otherValue) {
-		return thisValue.equals(otherValue);
-	}
-
 }

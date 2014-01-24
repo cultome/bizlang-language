@@ -28,12 +28,12 @@ public class BizlangLogicOperation extends BizlangExpression {
 		Object rVal = rightValue.execute(bindings);
 		Integer compare = -2;
 		
-		if(lVal.getClass().getName().endsWith("Date") && rVal.getClass().getName().endsWith("Date")){
+		if(lVal instanceof Date && rVal instanceof Date){
 			compare = compareWithDate((Date) lVal, (Date) rVal);
-		} else if(lVal.getClass().getName().endsWith("String")){
+		} else if(lVal instanceof String){
 			compare = compareWithString(lVal.toString(), rVal.toString());
 			
-		} else if(lVal.getClass().getName().endsWith("BigDecimal")){
+		} else if(lVal instanceof BigDecimal){
 			compare = compareWithBigDecimal((BigDecimal) lVal, rVal);
 			
 		}
@@ -60,13 +60,13 @@ public class BizlangLogicOperation extends BizlangExpression {
 	}
 
 	private Integer compareWithBigDecimal(BigDecimal lValBigDec, Object rVal) {
-		if(rVal.getClass().getName().endsWith("String")){ // si el primero es NBR y el segundo STR...
+		if(rVal instanceof String){ // si el primero es NBR y el segundo STR...
 			if(((String) rVal).matches("^[\\d]+(.[\\d]+)$")){ // si es un numero
 				return lValBigDec.compareTo(new BigDecimal((String) rVal)); // convertimos a NBR
 			} else {
 				return lValBigDec.toString().compareTo(rVal.toString()); // convertimos el NBR a STR
 			}
-		} else if(rVal.getClass().getName().endsWith("BigDecimal")){ // ambos son NBR
+		} else if(rVal instanceof BigDecimal){ // ambos son NBR
 			return lValBigDec.compareTo((BigDecimal) rVal);
 		}
 		return -2;

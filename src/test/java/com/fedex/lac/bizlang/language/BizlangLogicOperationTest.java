@@ -26,7 +26,7 @@ public class BizlangLogicOperationTest {
 		cond.addParam(new BizlangValue(BizlangLexer.NBR, "1", 1));
 		Object r = cond.execute(new Bindings());
 		assertNotNull(r);
-		assertTrue(r.getClass().getName().endsWith("Boolean"));
+		assertTrue(r instanceof Boolean);
 		assertFalse(((Boolean) r).booleanValue());
 	}
 
@@ -37,7 +37,7 @@ public class BizlangLogicOperationTest {
 		cond.addParam(new BizlangValue(BizlangLexer.STR, "xyz", 1));
 		Object r = cond.execute(new Bindings());
 		assertNotNull(r);
-		assertTrue(r.getClass().getName().endsWith("Boolean"));
+		assertTrue(r instanceof Boolean);
 		assertTrue(((Boolean) r).booleanValue());
 	}
 	
@@ -48,7 +48,7 @@ public class BizlangLogicOperationTest {
 		cond.addParam(new BizlangValue(BizlangLexer.NBR, "10", 1));
 		Object r = cond.execute(new Bindings());
 		assertNotNull(r);
-		assertTrue(r.getClass().getName().endsWith("Boolean"));
+		assertTrue(r instanceof Boolean);
 		assertFalse(((Boolean) r).booleanValue());
 	}
 	
@@ -59,7 +59,7 @@ public class BizlangLogicOperationTest {
 		cond.addParam(new BizlangValue(BizlangLexer.STR, "abc", 1));
 		Object r = cond.execute(new Bindings());
 		assertNotNull(r);
-		assertTrue(r.getClass().getName().endsWith("Boolean"));
+		assertTrue(r instanceof Boolean);
 		assertFalse(((Boolean) r).booleanValue());
 	}
 	
@@ -70,7 +70,7 @@ public class BizlangLogicOperationTest {
 		cond.addParam(new BizlangValue(BizlangLexer.STR, "10.0", 1));
 		Object r = cond.execute(new Bindings());
 		assertNotNull(r);
-		assertTrue(r.getClass().getName().endsWith("Boolean"));
+		assertTrue(r instanceof Boolean);
 		assertTrue(((Boolean) r).booleanValue());
 	}
 	
@@ -81,7 +81,7 @@ public class BizlangLogicOperationTest {
 		cond.addParam(new BizlangValue(BizlangLexer.DATE, "3/1/2014", 1));
 		Object r = cond.execute(new Bindings());
 		assertNotNull(r);
-		assertTrue(r.getClass().getName().endsWith("Boolean"));
+		assertTrue(r instanceof Boolean);
 		assertTrue(((Boolean) r).booleanValue());
 	}
 

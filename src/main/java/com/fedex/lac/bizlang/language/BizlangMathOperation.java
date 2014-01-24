@@ -48,7 +48,7 @@ public class BizlangMathOperation extends BizlangFunction {
 		Date dt;
 		BigDecimal nbr;
 		
-		if(values.get(0).getClass().getName().endsWith("Date")){
+		if(values.get(0) instanceof Date){
 			dt = (Date) values.get(0);
 			nbr = (BigDecimal) values.get(1);
 		} else {

@@ -63,14 +63,14 @@ public class Bindings {
 
 	private Object getPropertyFromObject(Object obj, String property) {
 			try {
-				if(obj.getClass().getName().endsWith("Map")){
+				if(obj instanceof Map){
 					return ((Map<?, ?>) obj).get(property);
 				} else if(property.contains("[")){
 					String[] split = property.split("[\\[\\]]");
 					Object list = getPropertyFromObject(obj, split[0]);
 					int idx = Integer.parseInt(split[1]);
 					
-					if(list.getClass().getName().endsWith("List")){
+					if(list instanceof List){
 						return ((List<?>) list).get(idx);
 					} else if(list.getClass().getName().startsWith("[L")){
 						return ((Object[]) list)[idx];

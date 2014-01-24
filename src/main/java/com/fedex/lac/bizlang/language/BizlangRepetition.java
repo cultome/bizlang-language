@@ -33,7 +33,7 @@ public class BizlangRepetition extends BizlangExpression {
 			}
 		} else {
 			Object collection = bindings.getBinding(collectionName);
-			if(collection.getClass().getName().endsWith("List")){
+			if(collection instanceof List){
 				for(Object obj : (List<?>) collection){
 					executeBlock(obj, bindings);
 				}

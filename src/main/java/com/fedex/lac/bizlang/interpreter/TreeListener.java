@@ -295,7 +295,7 @@ public class TreeListener extends BizlangBaseListener {
 			case PARSING_ELSE_BLOCK:
 				if(prevStatus.equals(ParsingStatus.PARSING_ELSE_BLOCK)){
 					BizlangExpression elementAt = buffer.elementAt(buffer.size() - 2);
-					if(elementAt.getClass().getName().endsWith("BizlangConditionalExpression")){
+					if(elementAt instanceof BizlangConditionalExpression){
 						((BizlangConditionalExpression) elementAt).addElseBlock((BizlangBlock) r);
 					} else {
 						((BizlangConditionalExpression) buffer.elementAt(buffer.size() - 3)).addElseBlock((BizlangBlock) r);
@@ -346,10 +346,10 @@ public class TreeListener extends BizlangBaseListener {
 			return getPrimitiveValue(valueNode, ctx.getStart().getLine());
 		} else {
 			// es un tipo complejo
-			if(ctx.getChild(0).getClass().getName().endsWith("ArrayContext")){
+			if(ctx.getChild(0) instanceof ArrayContext){
 				List<BizlangValue> values = extractValuesFromParamList((ParamLstContext) ctx.getChild(0).getChild(1));
 				return new BizlangArray(ctx.getChild(0).getText(), ctx.getStart().getLine(), values);
-			} else if(ctx.getChild(0).getClass().getName().endsWith("RangeContext")){
+			} else if(ctx.getChild(0)instanceof RangeContext){
 				return getRange((RangeContext) ctx.getChild(0));
 			}
 		}
@@ -384,11 +384,11 @@ public class TreeListener extends BizlangBaseListener {
 		ArrayList<BizlangValue> arrayValues = new ArrayList<BizlangValue>();
 		for(int i = 0; i < values.getChildCount(); i++){
 			ParseTree child = values.getChild(i);
-			if(child.getClass().getName().endsWith("ValueContext")){
+			if(child instanceof ValueContext){
 				arrayValues.add(getValue((ValueContext) child));
-			} else if(child.getClass().getName().endsWith("ParamLstContext")){
+			} else if(child instanceof ParamLstContext){
 				arrayValues.addAll(extractValuesFromParamList((ParamLstContext) child));
-			} else if(child.getClass().getName().endsWith("TerminalNodeImpl")){
+			} else if(child instanceof TerminalNode){
 				// ignore the colons
 			} else {
 				throw new RuntimeException("Unknown type in inner arrau value. [" + child.getClass().getName() + "]");
