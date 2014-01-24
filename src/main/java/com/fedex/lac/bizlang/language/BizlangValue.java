@@ -68,12 +68,14 @@ public class BizlangValue extends BizlangExpression {
 	public boolean equals(Object obj) {
 		if (obj instanceof BizlangValue) {
 			BizlangValue bizVal = (BizlangValue) obj;
+			
 			switch (getType()) {
 			case BizlangLexer.NBR:
 				switch (bizVal.getType()) {
 				case BizlangLexer.STR:
-				case BizlangLexer.NBR:
 					return getValue().equalsIgnoreCase(bizVal.getValue());
+				case BizlangLexer.NBR:
+					return Utils.areEquivalentNumbers(getValue(), bizVal.getValue());
 				case BizlangLexer.DATE:
 					return false;
 				}
@@ -90,7 +92,11 @@ public class BizlangValue extends BizlangExpression {
 				switch (bizVal.getType()) {
 				case BizlangLexer.STR:
 				case BizlangLexer.DATE:
-					return getValue().equalsIgnoreCase(bizVal.getValue());
+					try {
+						return Utils.parseDate(getValue()).equals(Utils.parseDate(bizVal.getValue()));
+					} catch (BizlangException e) {
+						return false;
+					}
 				case BizlangLexer.NBR:
 					return false;
 				}
@@ -102,15 +108,15 @@ public class BizlangValue extends BizlangExpression {
 	}
 
 	/**
-	 * Las comparacinoes se dan de acuerdo a la siguiente tabla:
+	 * Las comparaciones se dan de acuerdo a la siguiente tabla:
 	 * 
-	 *       |   STR    |   NBR    |
-	 * ------|----------|----------|-------------------------------------------------------------
-	 * STR   | Equals   | Equals   |
-	 * NBR   | Equals   | Equals   |
-	 * DATE  | Equals   | false    |
-	 * ARRAY | Contains | Contains |
-	 * RANGE | false    | Contains |
+	 *       |   STR        |   NBR        |  DATE      | Range
+	 * ------|--------------|--------------|------------|----------------
+	 * STR   | Equals       | Equivalent   | Equivalent |
+	 * NBR   | Equivalent   | Equivalent   | false      |
+	 * DATE  | Equivalent   | false        | Equals     |
+	 * ARRAY | Contains     | Contains     | Contains   |
+	 * RANGE | false        | Contains     | Contains   |
 	 * 
 	 * @param obj
 	 * @param bindings
@@ -173,6 +179,11 @@ public class BizlangValue extends BizlangExpression {
 			break;
 		case COMPLEX_TYPE_ARRAY:
 		case COMPLEX_TYPE_RANGE:
+			switch(obj.getType()){
+				case COMPLEX_TYPE_ARRAY:
+				case COMPLEX_TYPE_RANGE:
+					return Utils.compareArrays((List<BizlangValue>) thisValue, (List<BizlangValue>) otherValue);
+			}
 			break;
 		}
 

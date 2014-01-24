@@ -68,9 +68,9 @@ public class BizlangRange extends BizlangValue {
 		}
 		
 		do {
-			cal.add(Calendar.DAY_OF_YEAR, increment);
 			currentDt = cal.getTime();
 			dateRange.add(new BizlangValue(BizlangLexer.DATE, Utils.formatDate(currentDt), -1));
+			cal.add(Calendar.DAY_OF_YEAR, increment);
 		} while(currentDt.compareTo(uppDt) != 0);
 		
 		return dateRange;
