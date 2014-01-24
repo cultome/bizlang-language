@@ -104,7 +104,7 @@ public class InterpreterTest {
 	public void testSwitch() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/switch.biz");
 		interpreter.execute(flow, bindings);
-		assertEquals("1" + NL + "2" + NL + "3" + NL + "4" + NL + "5" + NL, buffer.toString());
+		assertEquals("1" + NL + "2" + NL + "3" + NL + "4" + NL, buffer.toString());
 	}
 	
 	/* *******************************

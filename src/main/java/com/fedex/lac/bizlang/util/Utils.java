@@ -67,14 +67,18 @@ public class Utils {
 		}
 		return false;
 	}
+	
+	public static int getPrecision(String nbr) {
+		return nbr.substring(nbr.lastIndexOf(".")+1).length();
+	}
+	
+	public static int getPrecision(BigDecimal nbr) {
+		return nbr.toPlainString().substring(nbr.toPlainString().lastIndexOf(".")+1).length();
+	}
 
 	private static boolean areEquivalentNumbers(String nbr1, String nbr2, int precision) {
 		BigDecimal bd1 = new BigDecimal(nbr1).setScale(precision);
 		BigDecimal bd2 = new BigDecimal(nbr2).setScale(precision);
 		return bd1.equals(bd2);
-	}
-	
-	private static int getPrecision(String nbr) {
-		return nbr.substring(nbr.lastIndexOf(".")+1).length();
 	}
 }

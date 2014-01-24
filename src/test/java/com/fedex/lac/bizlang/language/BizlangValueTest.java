@@ -333,6 +333,23 @@ public class BizlangValueTest {
 	
 	@Test
 	public void testEqualsIdVsRange() throws BizlangException {
+		BizlangRange ref1 = new BizlangRange("__range__", 1);
+		ref1.setLowerLimit(new BizlangValue(BizlangLexer.NBR, "12.30", 1));
+		ref1.setUpperLimit(new BizlangValue(BizlangLexer.NBR, "12.40", 1));
+		
+		BizlangRange ref2 = new BizlangRange("__range__", 1);
+		ref2.setLowerLimit(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
+		ref2.setUpperLimit(new BizlangValue(BizlangLexer.DATE, "5/3/2010", 1));
+		
+		assertFalse(v1.equals(ref1, bindings));
+		assertTrue(v2.equals(ref1, bindings));
+		assertFalse(v3.equals(ref1, bindings));
+		assertFalse(v4.equals(ref1, bindings));
+		
+		assertFalse(v1.equals(ref2, bindings));
+		assertFalse(v2.equals(ref2, bindings));
+		assertTrue(v3.equals(ref2, bindings));
+		assertFalse(v4.equals(ref2, bindings));
 	}
 	
 	@Test
