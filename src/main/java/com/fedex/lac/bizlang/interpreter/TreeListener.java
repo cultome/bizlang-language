@@ -327,10 +327,15 @@ public class TreeListener extends BizlangBaseListener {
 				}
 				break;
 			case PARSING_CASE_BLOCK:
+				BizlangSwitchBlock bizlangSwitchBlock = (BizlangSwitchBlock) buffer.peek();
 				if(prevStatus.equals(ParsingStatus.GETTING_VALUE)){
-					((BizlangSwitchBlock) buffer.peek()).addCondition((BizlangValue) r);
+					if(bizlangSwitchBlock.getCondition() == null){
+						bizlangSwitchBlock.addCondition((BizlangValue) r);
+					} else {
+						bizlangSwitchBlock.addExpression((BizlangExpression) r);
+					}
 				} else { 
-					((BizlangSwitchBlock) buffer.peek()).addExpression((BizlangExpression) r);
+					bizlangSwitchBlock.addExpression((BizlangExpression) r);
 				}
 				break;
 			case WAITING:

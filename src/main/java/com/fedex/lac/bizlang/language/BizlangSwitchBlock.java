@@ -30,4 +30,9 @@ public class BizlangSwitchBlock extends BizlangBlock {
 	public BizlangValue getCondition() {
 		return condition;
 	}
+	
+	@Override
+	public String toString() {
+		return condition.toString();
+	}
 }

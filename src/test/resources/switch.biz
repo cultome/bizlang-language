@@ -1,17 +1,12 @@
 case idNbr
-	when "880474" then
-		print "error"
-	when "880475" then
-		print "1"
+	when "880474" then "error"
+	when "880475" then print "1"
 end
 
 case myObj.valueOne
-	when 1 then
-		print "error"
-	when 2 then
-		print "error"
-	when 3 then
-		print "2"
+	when 1 then print "error"
+	when 2 then print "error"
+	when 3 then print "2"
 end
 
 case myObj.valueOne

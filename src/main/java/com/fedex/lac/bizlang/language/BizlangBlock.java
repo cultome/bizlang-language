@@ -24,10 +24,11 @@ public class BizlangBlock extends BizlangExpression {
 
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
+		Object lastEvaluated = null;
 		for (BizlangExpression expr : expressions) {
-			expr.execute(bindings);
+			lastEvaluated = expr.execute(bindings);
 		}
-		return null;
+		return lastEvaluated;
 	}
 
 	public void addExpression(BizlangExpression r) {

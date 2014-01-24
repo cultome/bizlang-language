@@ -26,30 +26,31 @@ public class BizlangRepetition extends BizlangExpression {
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object execute(Bindings bindings) throws BizlangException {
+		Object lastEvaluated = null;
 		if(collectionName == null){
 			List<BizlangValue> execute = (List<BizlangValue>) collection.execute(bindings);
 			for(BizlangValue obj : execute){
-				executeBlock(obj, bindings);
+				lastEvaluated = executeBlock(obj, bindings);
 			}
 		} else {
 			Object collection = bindings.getBinding(collectionName);
 			if(collection instanceof List){
 				for(Object obj : (List<?>) collection){
-					executeBlock(obj, bindings);
+					lastEvaluated = executeBlock(obj, bindings);
 				}
 			} else if(collection.getClass().getName().startsWith("[L")){
 				Object[] array = (Object[]) collection;
 				for(int i = 0; i < array.length; i++){
-					executeBlock(array[i], bindings);
+					lastEvaluated = executeBlock(array[i], bindings);
 				}
 			}
 		}
-		return null;
+		return lastEvaluated;
 	}
 
-	private void executeBlock(Object obj, Bindings bindings) throws BizlangException {
+	private Object executeBlock(Object obj, Bindings bindings) throws BizlangException {
 		bindings.addBinding(varName, obj);
-		block.execute(bindings);
+		return block.execute(bindings);
 	}
 
 	public void addBlock(BizlangBlock block) {

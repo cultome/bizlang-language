@@ -30,8 +30,7 @@ public class PrintJavaFunction implements JavaFunction {
 		try{
 			PrintStream out = (PrintStream) bindings.getBinding("STDOUT");
 			out.println(b.toString());
-		} catch(Exception e){
-			e.printStackTrace();
+		} catch(RuntimeException e){
 			System.err.println(b.toString());
 		}
 		
