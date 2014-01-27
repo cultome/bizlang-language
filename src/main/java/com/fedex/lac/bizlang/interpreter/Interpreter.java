@@ -25,7 +25,7 @@ import com.fedex.lac.bizlang.parser.BizlangParser.ScriptContext;
  */
 public class Interpreter {
 
-	public ExecutionFlow interpret(InputStream script) throws Exception{
+	public ExecutionFlow parseProgram(InputStream script) throws Exception{
 		CharStream input = new ANTLRInputStream(script);
 		BizlangLexer lexer = new BizlangLexer(input);
 		CommonTokenStream tokenStream = new CommonTokenStream(lexer);

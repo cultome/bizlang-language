@@ -1,5 +1,7 @@
 package com.fedex.lac.bizlang.language;
 
+import java.util.logging.Logger;
+
 import com.fedex.lac.bizlang.interpreter.Bindings;
 
 /* 
@@ -12,6 +14,8 @@ import com.fedex.lac.bizlang.interpreter.Bindings;
  */
 public abstract class BizlangExpression {
 	
+	private static final Logger LOGGER = Logger.getAnonymousLogger();
+	
 	protected String name;
 	protected int definedAt;
 
@@ -21,7 +25,10 @@ public abstract class BizlangExpression {
 	}
 
 	public Object execute(Bindings bindings) throws BizlangException {
-		return getValue(bindings);
+		LOGGER.info("[ENTER]" + getClass().getSimpleName());
+		Object returnValue = getValue(bindings);
+		LOGGER.info("[EXIT]" + getClass().getSimpleName());
+		return returnValue;
 	}
 	
 	public abstract Object getValue(Bindings bindings) throws BizlangException;

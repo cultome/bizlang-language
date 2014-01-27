@@ -119,7 +119,7 @@ public class InterpreterTest {
 	 *********************************/
 	private ExecutionFlow getExecutionFlow(String filepath) throws Exception{
 		InputStream input = new FileInputStream(filepath);
-		return interpreter.interpret(input);
+		return interpreter.parseProgram(input);
 	}
 
 	private class TestingClass {
