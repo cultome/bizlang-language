@@ -16,6 +16,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fedex.lac.bizlang.language.BizlangFunction;
+
 /* 
  * InterpreterTest.java
  *
@@ -34,6 +36,19 @@ public class InterpreterTest {
 	
 	@Before
 	public void setup(){
+		ExecutionListener.addExecutionListeners(new ExecutionListener() {
+
+			@Override
+			public void enterFunction(BizlangFunction bizlangExpression, Bindings bindings) {
+				System.out.println("function " + bizlangExpression.getName() + "() {");
+			}
+
+			@Override
+			public void leaverFunction(BizlangFunction bizlangExpression, Object returnValue) {
+				System.out.println("}");
+			}
+		});
+		
 		interpreter = new Interpreter();
 		bindings = new Bindings();
 		bindings.addBinding("idNbr", "880475");

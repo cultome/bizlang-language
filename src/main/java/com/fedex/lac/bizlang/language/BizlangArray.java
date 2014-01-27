@@ -31,12 +31,27 @@ public class BizlangArray extends BizlangValue {
 		return elements;
 	}
 
-	public void addElement(BizlangValue r) {
-		elements.add(r);
+	public void addElement(BizlangValue element) {
+		elements.add(element);
 	}
 
 	public List<BizlangValue> getElements() {
 		return elements;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder b = new StringBuilder();
+		b.append("[");
+		for(BizlangValue val : getElements()){
+			b.append(val.toString() + ", ");
+		}
+		
+		if(b.length() > 1){
+			b.delete(b.length()-2, b.length());
+		}
+		b.append("]");
+		
+		return b.toString();
+	}
 }

@@ -3,6 +3,7 @@ package com.fedex.lac.bizlang.language;
 import java.util.logging.Logger;
 
 import com.fedex.lac.bizlang.interpreter.Bindings;
+import com.fedex.lac.bizlang.interpreter.ExecutionListener;
 
 /* 
  * BizlangExpression.java
@@ -24,14 +25,18 @@ public abstract class BizlangExpression {
 		this.definedAt = srcLineDefinedAt;
 	}
 
+	public abstract Object getValue(Bindings bindings) throws BizlangException;
+	
 	public Object execute(Bindings bindings) throws BizlangException {
 		LOGGER.info("[ENTER]" + getClass().getSimpleName());
+		
+		ExecutionListener.enterExpression(this, bindings);
 		Object returnValue = getValue(bindings);
+		ExecutionListener.leaveExpression(this, returnValue);
+		
 		LOGGER.info("[EXIT]" + getClass().getSimpleName());
 		return returnValue;
 	}
-	
-	public abstract Object getValue(Bindings bindings) throws BizlangException;
 
 	public String getName() {
 		return name;
