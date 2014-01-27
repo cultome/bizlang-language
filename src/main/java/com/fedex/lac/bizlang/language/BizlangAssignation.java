@@ -35,4 +35,12 @@ public class BizlangAssignation extends BizlangExpression {
 		return getName() + " = " + rValue;
 	}
 
+	public BizlangExpression getRValue() {
+		return rValue;
+	}
+	
+	public String getLValue() {
+		return getName();
+	}
+	
 }
