@@ -23,7 +23,7 @@ public class BizlangSwitch extends BizlangExpression {
 	}
 
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		for(BizlangSwitchBlock block : getBlocks()){
 			if(reference.equals(block.getCondition(), bindings)){
 				return block.execute(bindings);

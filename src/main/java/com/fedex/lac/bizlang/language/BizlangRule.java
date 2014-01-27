@@ -18,12 +18,12 @@ public class BizlangRule extends BizlangBlock {
 	}
 	
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		return null;
 	}
 	
 	public Object call(Bindings bindings) throws BizlangException{
-		return super.execute(bindings);
+		return super.getValue(bindings);
 	}
 	
 	@Override

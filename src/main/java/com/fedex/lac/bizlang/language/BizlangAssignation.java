@@ -19,7 +19,7 @@ public class BizlangAssignation extends BizlangExpression {
 	}
 
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		Object result = rValue.execute(bindings);
 		bindings.addBinding(name, result);
 		return result;

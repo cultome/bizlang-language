@@ -20,7 +20,11 @@ public abstract class BizlangExpression {
 		this.definedAt = srcLineDefinedAt;
 	}
 
-	public abstract Object execute(Bindings bindings) throws BizlangException;
+	public Object execute(Bindings bindings) throws BizlangException {
+		return getValue(bindings);
+	}
+	
+	public abstract Object getValue(Bindings bindings) throws BizlangException;
 
 	public String getName() {
 		return name;

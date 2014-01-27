@@ -25,7 +25,7 @@ public class BizlangFunction extends BizlangExpression {
 	}
 
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		JavaFunction fnct = getJavaImplementation(name, paramList);
 		return fnct.execute(bindings, paramList.toArray(new BizlangExpression[]{}));
 	}

@@ -23,7 +23,7 @@ public class BizlangBlock extends BizlangExpression {
 	}
 
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		Object lastEvaluated = null;
 		for (BizlangExpression expr : expressions) {
 			lastEvaluated = expr.execute(bindings);

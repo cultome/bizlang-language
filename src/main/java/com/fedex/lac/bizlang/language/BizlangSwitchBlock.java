@@ -23,8 +23,8 @@ public class BizlangSwitchBlock extends BizlangBlock {
 	}
 
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
-		return super.execute(bindings);
+	public Object getValue(Bindings bindings) throws BizlangException {
+		return super.getValue(bindings);
 	}
 
 	public BizlangValue getCondition() {

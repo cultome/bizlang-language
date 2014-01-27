@@ -25,7 +25,7 @@ public class BizlangRepetition extends BizlangExpression {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		Object lastEvaluated = null;
 		if(collectionName == null){
 			List<BizlangValue> execute = (List<BizlangValue>) collection.execute(bindings);

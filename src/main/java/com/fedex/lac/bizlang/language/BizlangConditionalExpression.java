@@ -21,7 +21,7 @@ public class BizlangConditionalExpression extends BizlangExpression {
 	}
 
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		Boolean r = (Boolean) condition.execute(bindings);
 		if("if".equals(getName())){
 			if(r.booleanValue()){

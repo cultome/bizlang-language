@@ -20,7 +20,7 @@ public class BizlangCustomLogicOperation extends BizlangLogicOperation {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		Object lVal = getLeftValue().execute(bindings);
 		Object rVal = getRightValue().execute(bindings);
 		

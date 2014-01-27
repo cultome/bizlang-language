@@ -31,7 +31,7 @@ public class BizlangValue extends BizlangExpression {
 	}
 
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		switch (type) {
 		case BizlangLexer.NBR:
 			return new BigDecimal(value);

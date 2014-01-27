@@ -26,7 +26,7 @@ public class BizlangMathOperation extends BizlangFunction {
 	}
 
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		// evaluamos los parametros de la funcion
 		List<Object> values = getFinalValues(bindings);
 		// checamos el tipo de parametros para determinar el tipo de operacion

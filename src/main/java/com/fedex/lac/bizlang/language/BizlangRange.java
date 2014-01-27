@@ -38,7 +38,7 @@ public class BizlangRange extends BizlangValue {
 	}
 
 	@Override
-	public Object execute(Bindings bindings) throws BizlangException {
+	public Object getValue(Bindings bindings) throws BizlangException {
 		int rangeType = checkRangeType();
 		switch(rangeType){
 		case INTEGER_RANGE:
