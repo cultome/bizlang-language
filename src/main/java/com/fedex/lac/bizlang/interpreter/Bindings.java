@@ -120,4 +120,8 @@ public class Bindings {
 		}
 	}
 
+	public void addBindings(Map<String, Object> valueMap) {
+		getBindings().putAll(valueMap);
+	}
+
 }
