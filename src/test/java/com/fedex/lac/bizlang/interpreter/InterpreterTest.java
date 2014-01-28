@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.fedex.lac.bizlang.listener.CodeExtractorListener;
+import com.fedex.lac.bizlang.util.Utils;
 
 /* 
  * InterpreterTest.java
@@ -116,6 +117,8 @@ public class InterpreterTest {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/rules.biz");
 		interpreter.execute(flow, bindings);
 		assertEquals("1" + NL + "2" + NL + "3" + NL, buffer.toString());
+		assertEquals("hola mundo", bindings.getBinding("primera ley"));
+		assertEquals("1/1/2015", Utils.formatDate((Date) bindings.getBinding("segunda_ley")));
 	}
 	
 	@Test

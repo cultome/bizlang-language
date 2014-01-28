@@ -23,7 +23,9 @@ public class BizlangRule extends BizlangBlock {
 	}
 	
 	public Object call(Bindings bindings) throws BizlangException{
-		return super.getValue(bindings);
+		Object returnValue = super.getValue(bindings);
+		bindings.addBinding(getName(), returnValue);
+		return returnValue;
 	}
 	
 	@Override

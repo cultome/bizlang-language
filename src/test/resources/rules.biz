@@ -1,10 +1,12 @@
 rule "primera ley" do
 	print "1"
+	"hola mundo"
 end
 
 rule "segunda_ley" do
 	callRule("primera ley")
 	print "2"
+	1/1/2015
 end
 
 rule "ley_ignorada" do
