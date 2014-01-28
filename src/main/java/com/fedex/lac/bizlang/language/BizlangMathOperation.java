@@ -50,12 +50,14 @@ public class BizlangMathOperation extends BizlangFunction {
 	}
 
 	private BizlangArray rangeOperation(List<BizlangValue> list, BizlangValue object) {
+		List<BizlangValue> newList = Utils.cloneList(list);
+		
 		if ("+".equals(name)) {
-			list.add(object);
+			newList.add(object);
 		} else if ("-".equals(name)) {
-			list.remove(object);
+			newList.remove(object);
 		}
-		return new BizlangArray(list);
+		return new BizlangArray(newList);
 	}
 
 	private Object dateOperation(List<Object> values) {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fedex.lac.bizlang.interpreter.Bindings;
 import com.fedex.lac.bizlang.language.function.CallRuleFunction;
+import com.fedex.lac.bizlang.language.function.CountFunction;
 import com.fedex.lac.bizlang.language.function.JavaFunction;
 import com.fedex.lac.bizlang.language.function.PrintJavaFunction;
 
@@ -55,6 +56,8 @@ public class BizlangFunction extends BizlangExpression {
 			return new PrintJavaFunction();
 		} else if("callRule".equals(name)){
 			return new CallRuleFunction();
+		} else if("count".equals(name)){
+			return new CountFunction();
 		}
 		return null;
 	}

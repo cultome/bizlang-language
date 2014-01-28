@@ -75,6 +75,7 @@ FNCTNAME	: 'print'
 			| 'sum'
 			| 'getFromDb'
 			| 'callRule'
+			| 'count'
 			;
 NBR			: [\+\-]?[0-9]+('.'[0-9]+)? ;
 STR         : '"' (~["])*? '"'

@@ -120,8 +120,11 @@ public class InterpreterTest {
 	
 	@Test
 	public void testExecutionInLine() throws Exception {
-		interpreter.execute("range = [3/1/2014...7/1/2014] - 5/1/2014", bindings);
-		assertEquals("[3/1/2014, 4/1/2014, 6/1/2014, 7/1/2014]", bindings.getBinding("range").toString());
+		interpreter.execute("range = [3/1/2014...7/1/2014]\narray = range - 5/1/2014\ncntRng = count range\ncntArr = count array\n", bindings);
+		assertEquals("[3/1/2014, 4/1/2014, 5/1/2014, 6/1/2014, 7/1/2014]", bindings.getBinding("range").toString());
+		assertEquals("5", bindings.getBinding("cntRng").toString());
+		assertEquals("[3/1/2014, 4/1/2014, 6/1/2014, 7/1/2014]", bindings.getBinding("array").toString());
+		assertEquals("4", bindings.getBinding("cntArr").toString());
 	}
 	
 	

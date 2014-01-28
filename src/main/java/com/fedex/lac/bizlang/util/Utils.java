@@ -3,6 +3,7 @@ package com.fedex.lac.bizlang.util;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -104,6 +105,14 @@ public class Utils {
 		}
 		
 		return false;
+	}
+
+	public static List<BizlangValue> cloneList(List<BizlangValue> list) {
+		List<BizlangValue> newList = new ArrayList<BizlangValue>();
+		for (BizlangValue value : list) {
+			newList.add(value);
+		}
+		return newList;
 	}
 
 	private static boolean areEquivalentNumbers(String nbr1, String nbr2, int precision) {
