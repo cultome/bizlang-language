@@ -118,6 +118,13 @@ public class InterpreterTest {
 		assertEquals("1" + NL + "2" + NL + "3" + NL, buffer.toString());
 	}
 	
+	@Test
+	public void testExecutionInLine() throws Exception {
+		interpreter.execute("range = [3/1/2014...7/1/2014] - 5/1/2014", bindings);
+		assertEquals("[3/1/2014, 4/1/2014, 6/1/2014, 7/1/2014]", bindings.getBinding("range").toString());
+	}
+	
+	
 	/* *******************************
 	 * Backup functions and classes  *
 	 *********************************/

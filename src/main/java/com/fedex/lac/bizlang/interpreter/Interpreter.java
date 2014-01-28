@@ -1,5 +1,7 @@
 package com.fedex.lac.bizlang.interpreter;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map.Entry;
 
@@ -25,7 +27,7 @@ import com.fedex.lac.bizlang.parser.BizlangParser.ScriptContext;
  */
 public class Interpreter {
 
-	public ExecutionFlow parseProgram(InputStream script) throws Exception{
+	public ExecutionFlow parseProgram(InputStream script) throws IOException {
 		CharStream input = new ANTLRInputStream(script);
 		BizlangLexer lexer = new BizlangLexer(input);
 		CommonTokenStream tokenStream = new CommonTokenStream(lexer);
@@ -43,6 +45,12 @@ public class Interpreter {
 		for(BizlangExpression exp : flow.getFlow()){
 			exp.execute(bindings);
 		}
+	}
+
+	public void execute(String code, Bindings bindings) throws IOException, BizlangException {
+		ByteArrayInputStream bis = new ByteArrayInputStream(code.getBytes());
+		ExecutionFlow ef = parseProgram(bis);
+		execute(ef, bindings);
 	}
 
 	private void loadRules(ExecutionFlow flow, Bindings bindings) {
