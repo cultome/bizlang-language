@@ -1,4 +1,4 @@
-package com.fedex.lac.bizlang.interpreter;
+package com.fedex.lac.bizlang.language.interpreter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,8 +16,12 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fedex.lac.bizlang.listener.CodeExtractorListener;
-import com.fedex.lac.bizlang.util.Utils;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.interpreter.ExecutionFlow;
+import com.fedex.lac.bizlang.language.interpreter.ExecutionListener;
+import com.fedex.lac.bizlang.language.interpreter.Interpreter;
+import com.fedex.lac.bizlang.language.listener.CodeExtractorListener;
+import com.fedex.lac.bizlang.language.util.Utils;
 
 /* 
  * InterpreterTest.java

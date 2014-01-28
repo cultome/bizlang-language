@@ -1,5 +1,5 @@
 // Generated from Bizlang.g4 by ANTLR 4.1
-package com.fedex.lac.bizlang.parser;
+package com.fedex.lac.bizlang.language.parser;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 

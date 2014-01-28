@@ -1,4 +1,4 @@
-package com.fedex.lac.bizlang.interpreter;
+package com.fedex.lac.bizlang.language.interpreter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,24 +22,24 @@ import com.fedex.lac.bizlang.language.BizlangRule;
 import com.fedex.lac.bizlang.language.BizlangSwitch;
 import com.fedex.lac.bizlang.language.BizlangSwitchBlock;
 import com.fedex.lac.bizlang.language.BizlangValue;
-import com.fedex.lac.bizlang.parser.BizlangBaseListener;
-import com.fedex.lac.bizlang.parser.BizlangLexer;
-import com.fedex.lac.bizlang.parser.BizlangParser.ArrayContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.AssignationContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.BlockContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.CaseBlockContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.ConditionalContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.CstmLogOpContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.DefRuleContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.ElseBlkContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.FnctCallContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.LogicOpContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.MathExprContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.ParamLstContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.RangeContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.RepetitionContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.SwtchContext;
-import com.fedex.lac.bizlang.parser.BizlangParser.ValueContext;
+import com.fedex.lac.bizlang.language.parser.BizlangBaseListener;
+import com.fedex.lac.bizlang.language.parser.BizlangLexer;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.ArrayContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.AssignationContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.BlockContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.CaseBlockContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.ConditionalContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.CstmLogOpContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.DefRuleContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.ElseBlkContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.FnctCallContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.LogicOpContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.MathExprContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.ParamLstContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.RangeContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.RepetitionContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.SwtchContext;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.ValueContext;
 
 /* 
  * TreeListener.java

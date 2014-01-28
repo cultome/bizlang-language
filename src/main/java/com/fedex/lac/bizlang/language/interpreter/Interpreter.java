@@ -1,4 +1,4 @@
-package com.fedex.lac.bizlang.interpreter;
+package com.fedex.lac.bizlang.language.interpreter;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,9 +13,9 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import com.fedex.lac.bizlang.language.BizlangException;
 import com.fedex.lac.bizlang.language.BizlangExpression;
 import com.fedex.lac.bizlang.language.BizlangRule;
-import com.fedex.lac.bizlang.parser.BizlangLexer;
-import com.fedex.lac.bizlang.parser.BizlangParser;
-import com.fedex.lac.bizlang.parser.BizlangParser.ScriptContext;
+import com.fedex.lac.bizlang.language.parser.BizlangLexer;
+import com.fedex.lac.bizlang.language.parser.BizlangParser;
+import com.fedex.lac.bizlang.language.parser.BizlangParser.ScriptContext;
 
 /* 
  * Interpreter.java

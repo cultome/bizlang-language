@@ -2,7 +2,7 @@ package com.fedex.lac.bizlang.language;
 
 import java.util.List;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
 
 /* 
  * BizlangRepetition.java

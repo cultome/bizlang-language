@@ -1,6 +1,6 @@
 package com.fedex.lac.bizlang.language;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
 
 /* 
  * BizlangSwitchBlock.java

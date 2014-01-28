@@ -2,8 +2,8 @@ package com.fedex.lac.bizlang.language;
 
 import java.util.logging.Logger;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
-import com.fedex.lac.bizlang.interpreter.ExecutionListener;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.interpreter.ExecutionListener;
 
 /* 
  * BizlangExpression.java

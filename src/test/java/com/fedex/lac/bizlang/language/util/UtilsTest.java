@@ -1,4 +1,4 @@
-package com.fedex.lac.bizlang.util;
+package com.fedex.lac.bizlang.language.util;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+
+import com.fedex.lac.bizlang.language.util.Utils;
 
 /* 
  * UtilsTest.java

@@ -3,7 +3,7 @@ package com.fedex.lac.bizlang.language;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
 
 /* 
  * BizlangSwitch.java

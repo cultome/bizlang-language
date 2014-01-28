@@ -7,8 +7,8 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
-import com.fedex.lac.bizlang.parser.BizlangLexer;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.parser.BizlangLexer;
 
 /* 
  * BizlangCustomLogicOperationTest.java

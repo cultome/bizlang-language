@@ -1,4 +1,4 @@
-package com.fedex.lac.bizlang.interpreter;
+package com.fedex.lac.bizlang.language.interpreter;
 
 /* 
  * ParsingStatus.java

@@ -1,7 +1,5 @@
-package com.fedex.lac.bizlang.listener;
+package com.fedex.lac.bizlang.language.listener;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
-import com.fedex.lac.bizlang.interpreter.ExecutionListener;
 import com.fedex.lac.bizlang.language.BizlangArray;
 import com.fedex.lac.bizlang.language.BizlangAssignation;
 import com.fedex.lac.bizlang.language.BizlangBlock;
@@ -17,6 +15,8 @@ import com.fedex.lac.bizlang.language.BizlangRule;
 import com.fedex.lac.bizlang.language.BizlangSwitch;
 import com.fedex.lac.bizlang.language.BizlangSwitchBlock;
 import com.fedex.lac.bizlang.language.BizlangValue;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.interpreter.ExecutionListener;
 
 /* 
  * CodeExtractorListener.java

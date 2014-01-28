@@ -1,6 +1,7 @@
 package com.fedex.lac.bizlang.language;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -9,9 +10,9 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
-import com.fedex.lac.bizlang.parser.BizlangLexer;
-import com.fedex.lac.bizlang.util.Utils;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.parser.BizlangLexer;
+import com.fedex.lac.bizlang.language.util.Utils;
 
 /* 
  * BizlangRangeTest.java

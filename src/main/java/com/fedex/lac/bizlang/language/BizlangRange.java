@@ -6,9 +6,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
-import com.fedex.lac.bizlang.parser.BizlangLexer;
-import com.fedex.lac.bizlang.util.Utils;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.parser.BizlangLexer;
+import com.fedex.lac.bizlang.language.util.Utils;
 
 /* 
  * BizlangRange.java

@@ -3,7 +3,7 @@ package com.fedex.lac.bizlang.language;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
 
 /* 
  * BizlangLogicOperation.java

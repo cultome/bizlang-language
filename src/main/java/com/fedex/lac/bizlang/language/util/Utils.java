@@ -1,4 +1,4 @@
-package com.fedex.lac.bizlang.util;
+package com.fedex.lac.bizlang.language.util;
 
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.fedex.lac.bizlang.interpreter.Bindings;
 import com.fedex.lac.bizlang.language.BizlangException;
 import com.fedex.lac.bizlang.language.BizlangValue;
+import com.fedex.lac.bizlang.language.interpreter.Bindings;
 
 /* 
  * Utils.java

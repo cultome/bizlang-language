@@ -2,13 +2,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-import com.fedex.lac.bizlang.interpreter.InterpreterTest;
 import com.fedex.lac.bizlang.language.BizlangCustomLogicOperationTest;
 import com.fedex.lac.bizlang.language.BizlangLogicOperationTest;
 import com.fedex.lac.bizlang.language.BizlangMathOperationTest;
 import com.fedex.lac.bizlang.language.BizlangRangeTest;
 import com.fedex.lac.bizlang.language.BizlangValueTest;
-import com.fedex.lac.bizlang.util.UtilsTest;
+import com.fedex.lac.bizlang.language.interpreter.InterpreterTest;
+import com.fedex.lac.bizlang.language.util.UtilsTest;
 
 
 /* 
