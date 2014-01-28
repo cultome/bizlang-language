@@ -28,7 +28,7 @@ import com.fedex.lac.bizlang.listener.CodeExtractorListener;
  */
 public class InterpreterTest {
 	
-	private final String NL = "\n";
+	private final String NL = "\r\n";
 	
 	private Interpreter interpreter;
 	private Bindings bindings;

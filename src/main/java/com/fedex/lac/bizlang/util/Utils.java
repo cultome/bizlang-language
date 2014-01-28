@@ -76,9 +76,40 @@ public class Utils {
 		return nbr.toPlainString().substring(nbr.toPlainString().lastIndexOf(".")+1).length();
 	}
 
+	public static boolean areAllOfThisTypes(List<Object> values, String... classNames){
+		boolean keepOn = false;
+		for (Object obj : values) {
+			keepOn = false;
+			for (String className : classNames) {
+				if(obj.getClass().getName().endsWith(className)){
+					keepOn = true;
+					break;
+				}
+			}
+			if(!keepOn){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	public static boolean areAnyOfThisTypes(List<Object> values, String... classNames){
+		for (Object obj : values) {
+			for (String className : classNames) {
+				if(obj.getClass().getName().endsWith(className)){
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
 	private static boolean areEquivalentNumbers(String nbr1, String nbr2, int precision) {
 		BigDecimal bd1 = new BigDecimal(nbr1).setScale(precision);
 		BigDecimal bd2 = new BigDecimal(nbr2).setScale(precision);
 		return bd1.equals(bd2);
 	}
+
 }

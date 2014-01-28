@@ -140,7 +140,7 @@ public class TreeListener extends BizlangBaseListener {
 
 	@Override
 	public void enterArray(ArrayContext ctx) {
-		BizlangArray array = new BizlangArray("__array__", ctx.getStart().getLine()); 
+		BizlangArray array = new BizlangArray(ctx.getStart().getLine()); 
 		buffer.push(array);
 		parsingStatus.push(ParsingStatus.PARSING_ARRAY);
 	}
@@ -151,7 +151,7 @@ public class TreeListener extends BizlangBaseListener {
 		if(!parsingStatus.peek().equals(ParsingStatus.GETTING_VALUE)){
 			range = getRange(ctx);
 		} else {
-			range = new BizlangRange("__range__", ctx.getStart().getLine()); 
+			range = new BizlangRange(ctx.getStart().getLine()); 
 		}
 		buffer.push(range);
 		parsingStatus.push(ParsingStatus.PARSING_RANGE);
@@ -173,8 +173,7 @@ public class TreeListener extends BizlangBaseListener {
 	
 	@Override
 	public void enterSwtch(SwtchContext ctx) {
-		BizlangSwitch swtch = new BizlangSwitch("__switch__", ctx.getStart().getLine());
-//		swtch.addReference(getPrimitiveValue(ctx.getChild(TerminalNode.class, 1), ctx.getStart().getLine()));
+		BizlangSwitch swtch = new BizlangSwitch(ctx.getStart().getLine());
 		buffer.push(swtch);
 		parsingStatus.push(ParsingStatus.PARSING_SWITCH);
 	}
@@ -281,8 +280,6 @@ public class TreeListener extends BizlangBaseListener {
 			flow.addToFlow(r);
 		} else {
 			switch(parsingStatus.peek()){
-			// T__8 = 1, T__7 = 2, T__6 = 3, T__5 = 4, T__4 = 5, T__3 = 6, T__2 = 7, T__1 = 8, T__0 = 9, 
-			// FNCTNAME = 10, ID = 11, STR = 12, NBR = 13, OBJPROP = 14, MATHOPTR = 15, NEWLINE = 16, WS = 17;
 			case PARSING_MATH_EXPR:
 				((BizlangMathOperation) buffer.peek()).addParam(r);
 				break;

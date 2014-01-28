@@ -17,13 +17,18 @@ public class BizlangArray extends BizlangValue {
 	
 	private List<BizlangValue> elements;
 
-	public BizlangArray(String fnctName, int srcLineDefinedAt) {
-		this(fnctName, srcLineDefinedAt, new ArrayList<BizlangValue>());
+	public BizlangArray(int srcLineDefinedAt) {
+		this("__array__", srcLineDefinedAt, new ArrayList<BizlangValue>());
 	}
 	
 	public BizlangArray(String fnctName, int srcLineDefinedAt, List<BizlangValue> elements) {
 		super(COMPLEX_TYPE_ARRAY, fnctName, srcLineDefinedAt);
 		this.elements = elements;
+	}
+
+	public BizlangArray(List<BizlangValue> list) {
+		this(-1);
+		elements = list;
 	}
 
 	@Override
@@ -36,6 +41,9 @@ public class BizlangArray extends BizlangValue {
 	}
 
 	public List<BizlangValue> getElements() {
+		if(elements == null){
+			elements = new ArrayList<BizlangValue>();
+		}
 		return elements;
 	}
 
@@ -53,5 +61,13 @@ public class BizlangArray extends BizlangValue {
 		b.append("]");
 		
 		return b.toString();
+	}
+
+	public boolean isEmpty() {
+		return getElements().isEmpty();
+	}
+
+	public int size() {
+		return getElements().size();
 	}
 }

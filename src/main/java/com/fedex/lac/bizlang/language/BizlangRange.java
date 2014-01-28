@@ -27,12 +27,12 @@ public class BizlangRange extends BizlangValue {
 	public static final int DECIMAL_RANGE = 2;
 	public static final int DATE_RANGE = 3;
 
-	public BizlangRange(String fnctName, int srcLineDefinedAt) {
-		super(COMPLEX_TYPE_RANGE, fnctName, srcLineDefinedAt);
+	public BizlangRange(int srcLineDefinedAt) {
+		super(COMPLEX_TYPE_RANGE, "__range__", srcLineDefinedAt);
 	}
 	
 	public BizlangRange(String fnctName, int srcLineDefinedAt, BizlangValue lowerLimit, BizlangValue upperLimit) {
-		this(fnctName, srcLineDefinedAt);
+		this(srcLineDefinedAt);
 		this.lowerLimit = lowerLimit;
 		this.upperLimit = upperLimit;
 	}

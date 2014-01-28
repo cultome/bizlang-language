@@ -55,11 +55,11 @@ public class BizlangValueTest {
 	public void testEqualsStringVsArray() throws BizlangException {
 		BizlangValue v1 = new BizlangValue(BizlangLexer.STR, "1", 1);
 		
-		BizlangArray arrayTrue = new BizlangArray("__array__", 1);
+		BizlangArray arrayTrue = new BizlangArray(1);
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.NBR, "1", 1));
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.STR, "uno", 1));
 		
-		BizlangArray arrayFalse = new BizlangArray("__array__", 1);
+		BizlangArray arrayFalse = new BizlangArray(1);
 		arrayFalse.addElement(new BizlangValue(BizlangLexer.NBR, "2", 1));
 		arrayFalse.addElement(new BizlangValue(BizlangLexer.STR, "dos", 1));
 		
@@ -96,11 +96,11 @@ public class BizlangValueTest {
 	public void testEqualsNumberVsArray() throws BizlangException {
 		BizlangValue v1 = new BizlangValue(BizlangLexer.NBR, "5", 1);
 		
-		BizlangArray arrayTrue = new BizlangArray("__array__", 1);
+		BizlangArray arrayTrue = new BizlangArray(1);
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.NBR, "5", 1));
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.STR, "cinco", 1));
 		
-		BizlangArray arrayFalse = new BizlangArray("__array__", 1);
+		BizlangArray arrayFalse = new BizlangArray(1);
 		arrayFalse.addElement(new BizlangValue(BizlangLexer.NBR, "20", 1));
 		arrayFalse.addElement(new BizlangValue(BizlangLexer.STR, "veinte", 1));
 		
@@ -114,11 +114,11 @@ public class BizlangValueTest {
 		BizlangValue v2 = new BizlangValue(BizlangLexer.NBR, "1", 1);
 		BizlangValue v3 = new BizlangValue(BizlangLexer.NBR, "20", 1);
 		
-		BizlangRange rangeTrue = new BizlangRange("__range__", 1);
+		BizlangRange rangeTrue = new BizlangRange(1);
 		rangeTrue.setLowerLimit(new BizlangValue(BizlangLexer.NBR, "1", 1));
 		rangeTrue.setUpperLimit(new BizlangValue(BizlangLexer.NBR, "20", 1));
 		
-		BizlangRange rangeFalse = new BizlangRange("__range__", 1);
+		BizlangRange rangeFalse = new BizlangRange(1);
 		rangeFalse.setLowerLimit(new BizlangValue(BizlangLexer.NBR, "1", 1));
 		rangeFalse.setUpperLimit(new BizlangValue(BizlangLexer.NBR, "6", 1));
 		
@@ -157,11 +157,11 @@ public class BizlangValueTest {
 	public void testEqualsDateVsArray() throws BizlangException {
 		BizlangValue v1 = new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1);
 		
-		BizlangArray arrayTrue = new BizlangArray("__array__", 1);
+		BizlangArray arrayTrue = new BizlangArray(1);
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.DATE, "2/10/1983", 1));
 		
-		BizlangArray arrayFalse = new BizlangArray("__array__", 1);
+		BizlangArray arrayFalse = new BizlangArray(1);
 		arrayFalse.addElement(new BizlangValue(BizlangLexer.DATE, "2/10/2010", 1));
 		arrayFalse.addElement(new BizlangValue(BizlangLexer.DATE, "28/10/2010", 1));
 		
@@ -174,11 +174,11 @@ public class BizlangValueTest {
 		BizlangValue v1 = new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1);
 		BizlangValue v2 = new BizlangValue(BizlangLexer.DATE, "1/4/2010", 1);
 		
-		BizlangRange rangeTrue = new BizlangRange("__range__", 1);
+		BizlangRange rangeTrue = new BizlangRange(1);
 		rangeTrue.setLowerLimit(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
 		rangeTrue.setUpperLimit(new BizlangValue(BizlangLexer.DATE, "1/4/2010", 1));
 		
-		BizlangRange rangeFalse = new BizlangRange("__range__", 1);
+		BizlangRange rangeFalse = new BizlangRange(1);
 		rangeFalse.setLowerLimit(new BizlangValue(BizlangLexer.DATE, "2/3/2010", 1));
 		rangeFalse.setUpperLimit(new BizlangValue(BizlangLexer.DATE, "1/4/2010", 1));
 		
@@ -196,15 +196,15 @@ public class BizlangValueTest {
 
 	@Test
 	public void testEqualsRangeVsRange() throws BizlangException {
-		BizlangRange v1 = new BizlangRange("__range__", 1);
+		BizlangRange v1 = new BizlangRange(1);
 		v1.setLowerLimit(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
 		v1.setUpperLimit(new BizlangValue(BizlangLexer.DATE, "4/3/2010", 1));
 		
-		BizlangRange v2 = new BizlangRange("__range__", 1);
+		BizlangRange v2 = new BizlangRange(1);
 		v2.setLowerLimit(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
 		v2.setUpperLimit(new BizlangValue(BizlangLexer.DATE, "4/3/2010", 1));
 		
-		BizlangRange v3 = new BizlangRange("__range__", 1);
+		BizlangRange v3 = new BizlangRange(1);
 		v3.setLowerLimit(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
 		v3.setUpperLimit(new BizlangValue(BizlangLexer.DATE, "3/3/2010", 1));
 		
@@ -214,17 +214,17 @@ public class BizlangValueTest {
 
 	@Test
 	public void testEqualsRangeVsArray() throws BizlangException {
-		BizlangRange v1 = new BizlangRange("__range__", 1);
+		BizlangRange v1 = new BizlangRange(1);
 		v1.setLowerLimit(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
 		v1.setUpperLimit(new BizlangValue(BizlangLexer.DATE, "4/3/2010", 1));
 		
-		BizlangArray arrayTrue = new BizlangArray("__array__", 1);
+		BizlangArray arrayTrue = new BizlangArray(1);
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.DATE, "2/3/2010", 1));
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.DATE, "3/3/2010", 1));
 		arrayTrue.addElement(new BizlangValue(BizlangLexer.DATE, "4/3/2010", 1));
 		
-		BizlangArray arrayFalse = new BizlangArray("__array__", 1);
+		BizlangArray arrayFalse = new BizlangArray(1);
 		arrayFalse.addElement(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
 		arrayFalse.addElement(new BizlangValue(BizlangLexer.DATE, "3/3/2010", 1));
 		arrayFalse.addElement(new BizlangValue(BizlangLexer.DATE, "4/3/2010", 1));
@@ -310,12 +310,12 @@ public class BizlangValueTest {
 	
 	@Test
 	public void testEqualsIdVsArray() throws BizlangException {
-		BizlangArray ref1 = new BizlangArray("__array__", 1);
+		BizlangArray ref1 = new BizlangArray(1);
 		ref1.addElement(new BizlangValue(BizlangLexer.STR, "myValue", 1));
 		ref1.addElement(new BizlangValue(BizlangLexer.NBR, "12.34", 1));
 		ref1.addElement(new BizlangValue(BizlangLexer.DATE, "01/03/2010", 1));
 		
-		BizlangArray ref2 = new BizlangArray("__array__", 1);
+		BizlangArray ref2 = new BizlangArray(1);
 		ref1.addElement(new BizlangValue(BizlangLexer.STR, "anotherValue", 1));
 		ref1.addElement(new BizlangValue(BizlangLexer.NBR, "1234", 1));
 		ref1.addElement(new BizlangValue(BizlangLexer.DATE, "2/03/2010", 1));
@@ -333,11 +333,11 @@ public class BizlangValueTest {
 	
 	@Test
 	public void testEqualsIdVsRange() throws BizlangException {
-		BizlangRange ref1 = new BizlangRange("__range__", 1);
+		BizlangRange ref1 = new BizlangRange(1);
 		ref1.setLowerLimit(new BizlangValue(BizlangLexer.NBR, "12.30", 1));
 		ref1.setUpperLimit(new BizlangValue(BizlangLexer.NBR, "12.40", 1));
 		
-		BizlangRange ref2 = new BizlangRange("__range__", 1);
+		BizlangRange ref2 = new BizlangRange(1);
 		ref2.setLowerLimit(new BizlangValue(BizlangLexer.DATE, "1/3/2010", 1));
 		ref2.setUpperLimit(new BizlangValue(BizlangLexer.DATE, "5/3/2010", 1));
 		

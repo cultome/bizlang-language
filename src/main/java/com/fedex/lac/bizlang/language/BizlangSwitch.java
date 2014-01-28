@@ -18,8 +18,8 @@ public class BizlangSwitch extends BizlangExpression {
 	private List<BizlangSwitchBlock> blocks;
 	private BizlangValue reference;
 
-	public BizlangSwitch(String fnctName, int srcLineDefinedAt) {
-		super(fnctName, srcLineDefinedAt);
+	public BizlangSwitch(int srcLineDefinedAt) {
+		super("__switch__", srcLineDefinedAt);
 	}
 
 	@Override

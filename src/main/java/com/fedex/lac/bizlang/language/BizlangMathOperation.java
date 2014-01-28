@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fedex.lac.bizlang.interpreter.Bindings;
+import com.fedex.lac.bizlang.util.Utils;
 
 /* 
  * MathOperation.java
@@ -20,11 +21,13 @@ public class BizlangMathOperation extends BizlangFunction {
 	private static final int NUMBERS_OP = 1;
 	private static final int CONCAT_STR_OP = 2;
 	private static final int DATE_OP = 3;
+	private static final int RANGE_OP = 4;
 
 	public BizlangMathOperation(String fnctName, int srcLineDefinedAt) {
 		super(fnctName, srcLineDefinedAt);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Object getValue(Bindings bindings) throws BizlangException {
 		// evaluamos los parametros de la funcion
@@ -39,9 +42,20 @@ public class BizlangMathOperation extends BizlangFunction {
 			return concatenate(values);
 		case DATE_OP:
 			return dateOperation(values);
+		case RANGE_OP:
+			return rangeOperation((List<BizlangValue>) values.get(0), (BizlangValue) getParamList().get(1));
 		}
 
 		return null;
+	}
+
+	private BizlangArray rangeOperation(List<BizlangValue> list, BizlangValue object) {
+		if ("+".equals(name)) {
+			list.add(object);
+		} else if ("-".equals(name)) {
+			list.remove(object);
+		}
+		return new BizlangArray(list);
 	}
 
 	private Object dateOperation(List<Object> values) {
@@ -93,30 +107,14 @@ public class BizlangMathOperation extends BizlangFunction {
 		}
 		return b.toString();
 	}
-
-	private boolean areAllOfThisTypes(List<Object> values, String... classNames){
-		boolean keepOn = false;
-		for (Object obj : values) {
-			keepOn = false;
-			for (String className : classNames) {
-				if(obj.getClass().getName().endsWith(className)){
-					keepOn = true;
-					break;
-				}
-			}
-			if(!keepOn){
-				return false;
-			}
-		}
-		
-		return true;
-	}
 	
 	private int checkOperationType(List<Object> values) {
-		if(areAllOfThisTypes(values, "BigDecimal")){
+		if(Utils.areAllOfThisTypes(values, "BigDecimal")){
 			return NUMBERS_OP;
-		} else if(areAllOfThisTypes(values, "Date", "BigDecimal") && values.size() == 2){
+		} else if(Utils.areAllOfThisTypes(values, "Date", "BigDecimal") && values.size() == 2){
 			return DATE_OP;
+		} else if(Utils.areAllOfThisTypes(values.subList(0, 1), "List")){
+			return RANGE_OP;
 		}
 		
 		return CONCAT_STR_OP;
