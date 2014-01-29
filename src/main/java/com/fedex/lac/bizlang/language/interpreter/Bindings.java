@@ -19,7 +19,9 @@ import com.fedex.lac.bizlang.language.BizlangRule;
  */
 public class Bindings {
 
-	public static final String FNCT_SPC_NM = "__functions__";
+	public static final String FNCT_NS = "__functions__";
+	public static final String CNFG_NS = "__configs__";
+	public static final String CNFG_NS_DATABASES = "databases";
 
 	private Map<String, Object> bindings;
 
@@ -109,19 +111,46 @@ public class Bindings {
 	@SuppressWarnings("unchecked")
 	public void addRule(String key, BizlangRule value) {
 		ensureFunctionSpaceExist();
-		((Map<String, BizlangRule>) getBinding(FNCT_SPC_NM)).put(key, value);
+		((Map<String, BizlangRule>) getBinding(FNCT_NS)).put(key, value);
 	}
-
-	private void ensureFunctionSpaceExist() {
-		try{
-			getBinding(FNCT_SPC_NM);
-		} catch(RuntimeException e){
-			addBinding(FNCT_SPC_NM, new HashMap<String, BizlangRule>());
+	
+	@SuppressWarnings("unchecked")
+	public <E> E getConfig(String configSpaceName, String configName, Class<E> clazz) {
+		Map<String, Object> configNS = (Map<String, Object>) getBinding(CNFG_NS);
+		Map<String, Object> cnfgs = (Map<String, Object>) configNS.get(configSpaceName);
+		return (E) cnfgs.get(configName);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void addConfig(String configSpaceName, String configName, Object configValue) {
+		ensureConfigSpaceExist();
+		Map<String, Object> configNS = (Map<String, Object>) getBinding(CNFG_NS);
+		Map<String, Object> cnfgs = (Map<String, Object>) configNS.get(configSpaceName);
+		if(cnfgs == null){
+			cnfgs = new HashMap<String, Object>();
+			configNS.put(configSpaceName, cnfgs);
 		}
+		cnfgs.put(configName, configValue);
 	}
 
 	public void addBindings(Map<String, Object> valueMap) {
 		getBindings().putAll(valueMap);
+	}
+
+	private void ensureConfigSpaceExist() {
+		try{
+			getBinding(CNFG_NS);
+		} catch(RuntimeException e){
+			addBinding(CNFG_NS, new HashMap<String, Object>());
+		}
+	}
+
+	private void ensureFunctionSpaceExist() {
+		try{
+			getBinding(FNCT_NS);
+		} catch(RuntimeException e){
+			addBinding(FNCT_NS, new HashMap<String, BizlangRule>());
+		}
 	}
 
 }

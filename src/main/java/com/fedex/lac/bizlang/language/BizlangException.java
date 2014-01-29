@@ -15,4 +15,8 @@ public class BizlangException extends Exception {
 	public BizlangException(String message) {
 		super(message);
 	}
+
+	public BizlangException(Exception exception) {
+		super(exception);
+	}
 }

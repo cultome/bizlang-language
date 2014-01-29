@@ -134,6 +134,12 @@ public class InterpreterTest {
 		assertEquals("4", bindings.getBinding("cntArr").toString());
 	}
 	
+	@Test
+	public void testDatabaseAccess() throws Exception {
+		ExecutionFlow flow = getExecutionFlow("src/test/resources/getFromDb.biz");
+		interpreter.execute(flow, bindings);
+	}
+	
 	
 	/* *******************************
 	 * Backup functions and classes  *

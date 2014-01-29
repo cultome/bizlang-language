@@ -21,7 +21,7 @@ public class CallRuleFunction implements JavaFunction {
 	@Override
 	public Object execute(Bindings bindings, BizlangExpression... params) throws BizlangException {
 		Object fnctName = params[0].execute(bindings);
-		BizlangRule bizlangRule = ((Map<String, BizlangRule>) bindings.getBinding(Bindings.FNCT_SPC_NM)).get(fnctName);
+		BizlangRule bizlangRule = ((Map<String, BizlangRule>) bindings.getBinding(Bindings.FNCT_NS)).get(fnctName);
 		return bizlangRule.call(bindings);
 	}
 }

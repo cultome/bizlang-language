@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fedex.lac.bizlang.language.function.CallRuleFunction;
 import com.fedex.lac.bizlang.language.function.CountFunction;
+import com.fedex.lac.bizlang.language.function.GetFromDbFunction;
 import com.fedex.lac.bizlang.language.function.JavaFunction;
 import com.fedex.lac.bizlang.language.function.PrintJavaFunction;
 import com.fedex.lac.bizlang.language.interpreter.Bindings;
@@ -28,6 +29,9 @@ public class BizlangFunction extends BizlangExpression {
 	@Override
 	public Object getValue(Bindings bindings) throws BizlangException {
 		JavaFunction fnct = getJavaImplementation(name, paramList);
+		if(fnct == null){
+			throw new RuntimeException("Function [" + name + "] not implemented yet.");
+		}
 		return fnct.execute(bindings, paramList.toArray(new BizlangExpression[]{}));
 	}
 
@@ -56,6 +60,8 @@ public class BizlangFunction extends BizlangExpression {
 			return new PrintJavaFunction();
 		} else if("callRule".equals(name)){
 			return new CallRuleFunction();
+		} else if("getFromDb".equals(name)){
+			return new GetFromDbFunction();
 		} else if("count".equals(name)){
 			return new CountFunction();
 		}
