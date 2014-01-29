@@ -139,9 +139,8 @@ public class InterpreterTest {
 	
 	@Test
 	public void testDatabaseAccess() throws Exception {
-		Accessor accessor = new Accessor();
-		accessor.addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang-language\\src\\test\\resources\\db.dat", "", "");
-		bindings.addConfig(Bindings.CNFG_NS_DATABASES, GetFromDbFunction.ACCESSOR, accessor);
+		Accessor.getInstance().addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang-language\\src\\test\\resources\\db.dat", "", "");
+		bindings.addConfig(Bindings.CNFG_NS_DATABASES, GetFromDbFunction.ACCESSOR, Accessor.getInstance());
 		
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/getFromDb.biz");
 		interpreter.execute(flow, bindings);
