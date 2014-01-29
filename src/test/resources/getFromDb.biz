@@ -1,1 +1,20 @@
+rs = getFromDb(dbId, "select name from resources")
+for name in rs.rows do
+	print name[0]
+end
+
+rs = getFromDb(dbId, "select age from resources")
+suma = 0
+for age in rs.rows do
+	suma = suma + age
+end
+print suma
+
 rs = getFromDb(dbId, "select * from resources")
+for col in rs.rows do
+	if col[0] == "Carlos Soria" do
+		print col[1]
+	else
+		print "NO"
+	end
+end

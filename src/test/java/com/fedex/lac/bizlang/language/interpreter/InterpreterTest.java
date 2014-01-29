@@ -16,6 +16,8 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.fedex.lac.bizlang.dataaccess.Accessor;
+import com.fedex.lac.bizlang.language.function.GetFromDbFunction;
 import com.fedex.lac.bizlang.language.interpreter.Bindings;
 import com.fedex.lac.bizlang.language.interpreter.ExecutionFlow;
 import com.fedex.lac.bizlang.language.interpreter.ExecutionListener;
@@ -47,6 +49,7 @@ public class InterpreterTest {
 		bindings = new Bindings();
 		bindings.addBinding("idNbr", "880475");
 		bindings.addBinding("myObj", new TestingClass(3, "5.5"));
+		bindings.addBinding("dbId", "sqlite3");
 		
 		buffer = new ByteArrayOutputStream();
 		PrintStream logger = new PrintStream(buffer);
@@ -136,8 +139,14 @@ public class InterpreterTest {
 	
 	@Test
 	public void testDatabaseAccess() throws Exception {
+		Accessor accessor = new Accessor();
+		accessor.addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang-language\\src\\test\\resources\\db.dat", "", "");
+		bindings.addConfig(Bindings.CNFG_NS_DATABASES, GetFromDbFunction.ACCESSOR, accessor);
+		
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/getFromDb.biz");
 		interpreter.execute(flow, bindings);
+		System.out.println(buffer.toString());
+		assertEquals("Carlos Soria" + NL + "Sauana Alvarado" + NL + "Noel Soria" + NL + "64" + NL + "30" + NL + "NO" + NL + "NO" + NL, buffer.toString());
 	}
 	
 	

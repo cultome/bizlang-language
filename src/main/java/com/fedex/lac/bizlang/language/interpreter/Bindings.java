@@ -41,6 +41,8 @@ public class Bindings {
 		if(value == null){
 			if(id.contains(".")){
 				return getNestedProperty(id);
+			} else if(id.contains("[")){
+				return getIndexedProperty(bindings, id);
 			}
 			
 			throw new RuntimeException("Binding dont exist. [" + id + "]");
@@ -69,18 +71,12 @@ public class Bindings {
 
 	private Object getPropertyFromObject(Object obj, String property) {
 			try {
-				if(obj instanceof Map){
+				if(obj instanceof Bindings){
+					return ((Bindings) obj).getBinding(property);
+				} else if(obj instanceof Map){
 					return ((Map<?, ?>) obj).get(property);
 				} else if(property.contains("[")){
-					String[] split = property.split("[\\[\\]]");
-					Object list = getPropertyFromObject(obj, split[0]);
-					int idx = Integer.parseInt(split[1]);
-					
-					if(list instanceof List){
-						return ((List<?>) list).get(idx);
-					} else if(list.getClass().getName().startsWith("[L")){
-						return ((Object[]) list)[idx];
-					}
+					return getIndexedProperty(obj, property);
 				} else {
 					Method getter = getAppropiateGetter(obj, property);
 					return getter.invoke(obj);
@@ -92,9 +88,22 @@ public class Bindings {
 			} catch (InvocationTargetException e) {
 				throw new RuntimeException("Imposible to extract property [" + property + "] from object [" + obj.getClass().getName() + "]. Invocation target.");
 			}
-			return null;
 	}
 	
+	private Object getIndexedProperty(Object obj, String name) {
+		String[] split = name.split("[\\[\\]]");
+		Object list = getPropertyFromObject(obj, split[0]);
+		int idx = Integer.parseInt(split[1]);
+		
+		if(list instanceof List){
+			return ((List<?>) list).get(idx);
+		} else if(list.getClass().getName().startsWith("[L")){
+			return ((Object[]) list)[idx];
+		}
+		
+		return null;
+	}
+
 	private Method getAppropiateGetter(Object obj, String property) {
 		// buscamos la propiedad con los prototipos de getters
 		try {

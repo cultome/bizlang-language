@@ -1,6 +1,7 @@
 package com.fedex.lac.bizlang.language;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,16 @@ public class BizlangMathOperation extends BizlangFunction {
 		// evaluamos los parametros de la funcion
 		List<Object> values = getFinalValues(bindings);
 		// checamos el tipo de parametros para determinar el tipo de operacion
-		int opType = checkOperationType(values);
+		int opType = guessOperationType(values);
+		// buscamos una operacion alterna
+		if(opType == CONCAT_STR_OP){
+			List<Object> altValues = flatten(values);
+			int opType2 = guessOperationType(altValues);
+			if(opType2 != CONCAT_STR_OP){
+				opType = opType2;
+				values = altValues;
+			}
+		}
 
 		switch (opType) {
 		case NUMBERS_OP:
@@ -47,6 +57,23 @@ public class BizlangMathOperation extends BizlangFunction {
 		}
 
 		return null;
+	}
+
+	private List<Object> flatten(List<Object> values) {
+		List<Object> returnValue = new ArrayList<Object>();
+		for (Object obj : values) {
+			if(obj instanceof List<?>){
+				List<?> lst = (List<?>) obj;
+				if(lst.size() == 1){
+					returnValue.add(lst.get(0));
+				} else {
+					returnValue.add(lst);
+				}
+			} else {
+				returnValue.add(obj);
+			}
+		}
+		return returnValue;
 	}
 
 	private BizlangArray rangeOperation(List<BizlangValue> list, BizlangValue object) {
@@ -110,10 +137,10 @@ public class BizlangMathOperation extends BizlangFunction {
 		return b.toString();
 	}
 	
-	private int checkOperationType(List<Object> values) {
-		if(Utils.areAllOfThisTypes(values, "BigDecimal")){
+	private int guessOperationType(List<Object> values) {
+		if(Utils.areAllOfThisTypes(values, "BigDecimal", "Integer")){
 			return NUMBERS_OP;
-		} else if(Utils.areAllOfThisTypes(values, "Date", "BigDecimal") && values.size() == 2){
+		} else if(Utils.areAllOfThisTypes(values, "Date", "BigDecimal", "Integer") && values.size() == 2){
 			return DATE_OP;
 		} else if(Utils.areAllOfThisTypes(values.subList(0, 1), "List")){
 			return RANGE_OP;
