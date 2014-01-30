@@ -16,7 +16,7 @@ import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.fedex.lac.bizlang.dataaccess.Accessor;
+import com.fedex.lac.bizlang.dataaccess.DBReader;
 import com.fedex.lac.bizlang.language.function.GetFromDbFunction;
 import com.fedex.lac.bizlang.language.interpreter.Bindings;
 import com.fedex.lac.bizlang.language.interpreter.ExecutionFlow;
@@ -139,8 +139,8 @@ public class InterpreterTest {
 	
 	@Test
 	public void testDatabaseAccess() throws Exception {
-		Accessor.getInstance().addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang-language\\src\\test\\resources\\db.dat", "", "");
-		bindings.addConfig(Bindings.CNFG_NS_DATABASES, GetFromDbFunction.ACCESSOR, Accessor.getInstance());
+		DBReader.getInstance().addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang-language\\src\\test\\resources\\db.dat", "", "");
+		bindings.addConfig(Bindings.CNFG_NS_DATABASES, GetFromDbFunction.ACCESSOR, DBReader.getInstance());
 		
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/getFromDb.biz");
 		interpreter.execute(flow, bindings);

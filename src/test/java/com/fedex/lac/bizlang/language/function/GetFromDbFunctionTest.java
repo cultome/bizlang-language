@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.fedex.lac.bizlang.dataaccess.Accessor;
+import com.fedex.lac.bizlang.dataaccess.DBReader;
 import com.fedex.lac.bizlang.dataaccess.object.QueryDataSet;
 import com.fedex.lac.bizlang.language.BizlangException;
 import com.fedex.lac.bizlang.language.BizlangValue;
@@ -23,10 +23,10 @@ public class GetFromDbFunctionTest {
 
 	@Test
 	public void testExecute() throws BizlangException {
-		Accessor.getInstance().addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang-language\\src\\test\\resources\\db.dat", "", "");
+		DBReader.getInstance().addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang-language\\src\\test\\resources\\db.dat", "", "");
 		
 		Bindings bindings = new Bindings();
-		bindings.addConfig(Bindings.CNFG_NS_DATABASES, GetFromDbFunction.ACCESSOR, Accessor.getInstance());
+		bindings.addConfig(Bindings.CNFG_NS_DATABASES, GetFromDbFunction.ACCESSOR, DBReader.getInstance());
 		BizlangValue id = new BizlangValue(BizlangLexer.STR, "sqlite3", 1);
 		BizlangValue query = new BizlangValue(BizlangLexer.STR, "select * from resources", 1);
 		
