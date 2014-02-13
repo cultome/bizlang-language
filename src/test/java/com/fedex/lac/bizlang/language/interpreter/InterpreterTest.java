@@ -55,9 +55,16 @@ public class InterpreterTest {
 		PrintStream logger = new PrintStream(buffer);
 		bindings.addBinding("STDOUT", logger);
 	}
+	
+	@Test
+	public void testInterpretSourceCodeFromString() throws Exception {
+		ExecutionFlow flow = interpreter.parseProgram("print 1 + 1");
+		assertNotNull(flow);
+		assertEquals(1, flow.getFlow().size());
+	}
 
 	@Test
-	public void testInterpretSourceCode() throws Exception {
+	public void testInterpretSourceCodeFromFile() throws Exception {
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/basic.biz");
 		assertNotNull(flow);
 		assertEquals(1, flow.getFlow().size());

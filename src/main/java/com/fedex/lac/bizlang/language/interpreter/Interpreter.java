@@ -40,6 +40,10 @@ public class Interpreter {
 		return listener.getExecutionFlow();
 	}
 
+	public ExecutionFlow parseProgram(String code) throws IOException {
+		return parseProgram(new ByteArrayInputStream(code.getBytes()));
+	}
+
 	public void execute(ExecutionFlow flow, Bindings bindings) throws BizlangException {
 		loadRules(flow, bindings);
 		for(BizlangExpression exp : flow.getFlow()){
