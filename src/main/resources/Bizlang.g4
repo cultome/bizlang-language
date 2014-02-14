@@ -74,6 +74,7 @@ CONDOPRT	: 'if'
 FNCTNAME	: 'print'
 			| 'sum'
 			| 'getFromDb'
+			| 'getFromWs'
 			| 'callRule'
 			| 'count'
 			;
