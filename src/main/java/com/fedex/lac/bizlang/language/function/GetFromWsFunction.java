@@ -27,7 +27,8 @@ public class GetFromWsFunction implements JavaFunction {
 //			String query = (String) params[1].execute(bindings);
 //			DBReader accessor = bindings.getConfig(Bindings.CNFG_NS_WEBSERVICES, ACCESSOR, DBReader.class);
 //			QueryDataSet result = accessor.query(wsId, query);
-			return result;
+//			return result;
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new BizlangException(e);
