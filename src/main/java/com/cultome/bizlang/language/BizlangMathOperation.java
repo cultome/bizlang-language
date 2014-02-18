@@ -9,14 +9,6 @@ import java.util.List;
 import com.cultome.bizlang.language.util.Utils;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * MathOperation.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	10/01/2014
- */
 public class BizlangMathOperation extends BizlangFunction {
 
 	private static final int NUMBERS_OP = 1;

@@ -17,14 +17,6 @@ import com.cultome.bizlang.language.parser.BizlangLexer;
 import com.cultome.bizlang.language.parser.BizlangParser;
 import com.cultome.bizlang.language.parser.BizlangParser.ScriptContext;
 
-/* 
- * Interpreter.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	09/01/2014
- */
 public class Interpreter {
 
 	public ExecutionFlow parseProgram(InputStream script) throws IOException {

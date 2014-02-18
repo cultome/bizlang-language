@@ -18,14 +18,6 @@ import com.cultome.bizlang.language.BizlangValue;
 import com.cultomebizlang.language.interpreter.Bindings;
 import com.cultomebizlang.language.interpreter.ExecutionListener;
 
-/* 
- * CodeExtractorListener.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	27/01/2014
- */
 public class CodeExtractorListener extends ExecutionListener {
 
 	private static final String NL = "\n";

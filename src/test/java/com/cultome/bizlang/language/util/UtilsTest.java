@@ -10,14 +10,6 @@ import org.junit.Test;
 
 import com.cultome.bizlang.language.util.Utils;
 
-/* 
- * UtilsTest.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	24/01/2014
- */
 public class UtilsTest {
 
 	@Test

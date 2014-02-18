@@ -2,14 +2,6 @@ package com.cultome.bizlang.language;
 
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangSwitchBlock.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	20/01/2014
- */
 public class BizlangSwitchBlock extends BizlangBlock {
 	
 	private BizlangValue condition;

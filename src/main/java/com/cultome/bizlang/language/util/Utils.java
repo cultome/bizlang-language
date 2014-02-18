@@ -11,14 +11,6 @@ import com.cultome.bizlang.language.BizlangException;
 import com.cultome.bizlang.language.BizlangValue;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * Utils.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	20/01/2014
- */
 public class Utils {
 
 	private static final SimpleDateFormat formatter = new SimpleDateFormat("d/M/yyyy");

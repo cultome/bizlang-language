@@ -10,15 +10,6 @@ import com.cultome.bizlang.language.BizlangValueTest;
 import com.cultome.bizlang.language.interpreter.InterpreterTest;
 import com.cultome.bizlang.language.util.UtilsTest;
 
-
-/* 
- * AllTests.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	13/01/2014
- */
 @RunWith(Suite.class)
 @SuiteClasses({
 	/* Interpreter */

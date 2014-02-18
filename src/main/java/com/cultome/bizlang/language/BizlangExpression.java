@@ -5,14 +5,6 @@ import java.util.logging.Logger;
 import com.cultomebizlang.language.interpreter.Bindings;
 import com.cultomebizlang.language.interpreter.ExecutionListener;
 
-/* 
- * BizlangExpression.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	10/01/2014
- */
 public abstract class BizlangExpression {
 	
 	private static final Logger LOGGER = Logger.getAnonymousLogger();

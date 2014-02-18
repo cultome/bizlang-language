@@ -6,14 +6,6 @@ import com.cultome.bizlang.language.BizlangException;
 import com.cultome.bizlang.language.BizlangExpression;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * GetFromDbFunction.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	29/01/2014
- */
 public class GetFromDbFunction implements JavaFunction {
 
 	public static final String ACCESSOR = "accessor";

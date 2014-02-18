@@ -17,14 +17,6 @@ import com.cultome.bizlang.language.parser.BizlangLexer;
 import com.cultome.bizlang.language.util.Utils;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangRangeTest.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	24/01/2014
- */
 public class BizlangRangeTest {
 	
 	private Bindings bindings;

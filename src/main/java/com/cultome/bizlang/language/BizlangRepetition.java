@@ -4,14 +4,6 @@ import java.util.List;
 
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangRepetition.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	14/01/2014
- */
 public class BizlangRepetition extends BizlangExpression {
 	
 	private BizlangBlock block;

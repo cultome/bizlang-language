@@ -4,14 +4,6 @@ import java.util.List;
 
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangCustomLogicOperation.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	17/01/2014
- */
 public class BizlangCustomLogicOperation extends BizlangLogicOperation {
 
 	public BizlangCustomLogicOperation(String fnctName, int srcLineDefinedAt) {

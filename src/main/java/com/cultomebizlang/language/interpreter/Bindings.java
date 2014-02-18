@@ -9,14 +9,6 @@ import java.util.Map;
 
 import com.cultome.bizlang.language.BizlangRule;
 
-/* 
- * Bindings.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	10/01/2014
- */
 public class Bindings {
 
 	public static final String FNCT_NS = "__functions__";

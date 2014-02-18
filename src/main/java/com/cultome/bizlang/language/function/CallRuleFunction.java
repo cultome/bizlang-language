@@ -7,14 +7,6 @@ import com.cultome.bizlang.language.BizlangExpression;
 import com.cultome.bizlang.language.BizlangRule;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * CallRuleFunction.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	24/01/2014
- */
 public class CallRuleFunction implements JavaFunction {
 
 	@SuppressWarnings("unchecked")

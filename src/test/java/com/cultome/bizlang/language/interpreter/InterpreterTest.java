@@ -25,14 +25,6 @@ import com.cultomebizlang.language.interpreter.ExecutionFlow;
 import com.cultomebizlang.language.interpreter.ExecutionListener;
 import com.cultomebizlang.language.interpreter.Interpreter;
 
-/* 
- * InterpreterTest.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	09/01/2014
- */
 public class InterpreterTest {
 	
 	private final String NL = "\r\n";

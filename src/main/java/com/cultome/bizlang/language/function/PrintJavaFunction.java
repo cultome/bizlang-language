@@ -6,14 +6,6 @@ import com.cultome.bizlang.language.BizlangException;
 import com.cultome.bizlang.language.BizlangExpression;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * PrintJavaFunction.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	10/01/2014
- */
 public class PrintJavaFunction implements JavaFunction {
 
 	@Override

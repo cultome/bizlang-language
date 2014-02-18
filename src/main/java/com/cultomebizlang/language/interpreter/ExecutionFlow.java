@@ -8,14 +8,6 @@ import java.util.Map;
 import com.cultome.bizlang.language.BizlangExpression;
 import com.cultome.bizlang.language.BizlangRule;
 
-/* 
- * ExecutionFlow.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	09/01/2014
- */
 public class ExecutionFlow {
 	
 	private Map<String, BizlangRule> rules;	

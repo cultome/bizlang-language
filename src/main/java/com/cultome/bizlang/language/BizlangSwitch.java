@@ -5,14 +5,6 @@ import java.util.List;
 
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangSwitch.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	20/01/2014
- */
 public class BizlangSwitch extends BizlangExpression {
 	
 	private List<BizlangSwitchBlock> blocks;

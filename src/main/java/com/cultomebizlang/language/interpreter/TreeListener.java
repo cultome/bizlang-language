@@ -41,14 +41,6 @@ import com.cultome.bizlang.language.parser.BizlangParser.RepetitionContext;
 import com.cultome.bizlang.language.parser.BizlangParser.SwtchContext;
 import com.cultome.bizlang.language.parser.BizlangParser.ValueContext;
 
-/* 
- * TreeListener.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	09/01/2014
- */
 public class TreeListener extends BizlangBaseListener {
 
 	public static final int COMPLEX_TYPE_ARRAY = 100;

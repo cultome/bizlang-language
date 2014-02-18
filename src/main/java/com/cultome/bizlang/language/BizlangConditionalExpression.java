@@ -2,14 +2,6 @@ package com.cultome.bizlang.language;
 
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangConditionalExpression.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	13/01/2014
- */
 public class BizlangConditionalExpression extends BizlangExpression {
 	
 	private BizlangLogicOperation condition;

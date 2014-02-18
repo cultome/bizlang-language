@@ -5,14 +5,6 @@ import java.util.Date;
 
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangLogicOperation.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	13/01/2014
- */
 public class BizlangLogicOperation extends BizlangExpression {
 	
 	private BizlangValue leftValue;

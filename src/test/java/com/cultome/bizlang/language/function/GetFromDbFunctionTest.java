@@ -12,14 +12,6 @@ import com.cultome.bizlang.language.function.GetFromDbFunction;
 import com.cultome.bizlang.language.parser.BizlangLexer;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * GetFromDbFunctionTest.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	29/01/2014
- */
 public class GetFromDbFunctionTest {
 
 	@Test

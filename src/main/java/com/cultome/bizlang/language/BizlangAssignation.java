@@ -2,14 +2,6 @@ package com.cultome.bizlang.language;
 
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangAssignation.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	10/01/2014
- */
 public class BizlangAssignation extends BizlangExpression {
 	
 	private BizlangExpression rValue;

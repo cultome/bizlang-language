@@ -7,14 +7,6 @@ import com.cultome.bizlang.language.BizlangException;
 import com.cultome.bizlang.language.BizlangExpression;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * CountFunction.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	28/01/2014
- */
 public class CountFunction implements JavaFunction {
 
 	@Override

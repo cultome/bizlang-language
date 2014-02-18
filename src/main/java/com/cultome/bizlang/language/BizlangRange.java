@@ -10,14 +10,6 @@ import com.cultome.bizlang.language.parser.BizlangLexer;
 import com.cultome.bizlang.language.util.Utils;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangRange.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	17/01/2014
- */
 public class BizlangRange extends BizlangValue {
 	
 	private BizlangValue lowerLimit;

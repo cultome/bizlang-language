@@ -6,14 +6,6 @@ import com.cultome.bizlang.language.BizlangException;
 import com.cultome.bizlang.language.BizlangExpression;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * GetFromWsFunction.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	14/02/2014
- */
 public class GetFromWsFunction implements JavaFunction {
 
 	@Override

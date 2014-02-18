@@ -17,14 +17,6 @@ import com.cultome.bizlang.language.BizlangValue;
 import com.cultome.bizlang.language.parser.BizlangLexer;
 import com.cultomebizlang.language.interpreter.Bindings;
 
-/* 
- * BizlangMathOperationTest.java
- *
- * Copyright (c) 2014 FedEx, All rights reserved.
- *
- * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	10/01/2014
- */
 public class BizlangMathOperationTest {
 
 	@Test
