@@ -1,3 +1,1 @@
-cd C:\workspace\bizlang-language\src\main\resources
-java -cp C:\Users\880475\.m2\repository\org\antlr\antlr4\4.1\antlr4-4.1.jar;C:\Users\880475\.m2\repository\org\antlr\antlr4-runtime\4.1\antlr4-runtime-4.1.jar;C:\Users\880475\.m2\repository\org\antlr\antlr-runtime\3.5\antlr-runtime-3.5.jar;C:\Users\880475\.m2\repository\org\antlr\ST4\4.0.7\ST4-4.0.7.jar org.antlr.v4.Tool Bizlang.g4 -o ..\java\com\fedex\lac\bizlang\language\parser -package com.fedex.lac.bizlang.language.parser
-cd C:\workspace\bizlang-language\
+java -cp C:\Users\880475\.m2\repository\org\antlr\antlr4\4.1\antlr4-4.1.jar;C:\Users\880475\.m2\repository\org\antlr\antlr4-runtime\4.1\antlr4-runtime-4.1.jar;C:\Users\880475\.m2\repository\org\antlr\antlr-runtime\3.5\antlr-runtime-3.5.jar;C:\Users\880475\.m2\repository\org\antlr\ST4\4.0.7\ST4-4.0.7.jar org.antlr.v4.Tool Bizlang.g4 -o ..\java\com\cultome\bizlang\language\parser -package com.cultome.bizlang.language.parser
