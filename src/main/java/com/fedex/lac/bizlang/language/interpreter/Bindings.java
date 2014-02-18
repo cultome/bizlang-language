@@ -22,6 +22,7 @@ public class Bindings {
 	public static final String FNCT_NS = "__functions__";
 	public static final String CNFG_NS = "__configs__";
 	public static final String CNFG_NS_DATABASES = "databases";
+	public static final String CNFG_NS_WEBSERVICES = "webservices";
 
 	private Map<String, Object> bindings;
 

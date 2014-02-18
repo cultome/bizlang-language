@@ -7,28 +7,26 @@ import com.fedex.lac.bizlang.language.BizlangExpression;
 import com.fedex.lac.bizlang.language.interpreter.Bindings;
 
 /* 
- * GetFromDbFunction.java
+ * GetFromWsFunction.java
  *
  * Copyright (c) 2014 FedEx, All rights reserved.
  *
  * @author		Carlos Soria <carlos.soria.osv@fedex.com>
- * @creation	29/01/2014
+ * @creation	14/02/2014
  */
-public class GetFromDbFunction implements JavaFunction {
+public class GetFromWsFunction implements JavaFunction {
 
-	public static final String ACCESSOR = "accessor";
-	
 	@Override
 	public Object execute(Bindings bindings, BizlangExpression... params) throws BizlangException {
 		try {
-			if(params.length != 2){
-				throw new RuntimeException("getFromDb function requires 2 parameters: connectionId and query.");
+			if(params.length < 1){
+				throw new RuntimeException("getFromWs function requires at least one parameter: web service id.");
 			}
 			
-			String dbId = (String) params[0].execute(bindings);
-			String query = (String) params[1].execute(bindings);
-			DBReader accessor = bindings.getConfig(Bindings.CNFG_NS_DATABASES, ACCESSOR, DBReader.class);
-			QueryDataSet result = accessor.query(dbId, query);
+			String wsId = (String) params[0].execute(bindings);
+//			String query = (String) params[1].execute(bindings);
+//			DBReader accessor = bindings.getConfig(Bindings.CNFG_NS_WEBSERVICES, ACCESSOR, DBReader.class);
+//			QueryDataSet result = accessor.query(wsId, query);
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
