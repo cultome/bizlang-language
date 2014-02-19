@@ -16,7 +16,7 @@ public class GetFromDbFunctionTest {
 
 	@Test
 	public void testExecute() throws BizlangException {
-		DBReader.getInstance().addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang-language\\src\\test\\resources\\db.dat", "", "");
+		DBReader.getInstance().addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang\\bizlang-language\\src\\test\\resources\\db-language.dat", "", "");
 		
 		Bindings bindings = new Bindings();
 		bindings.addConfig(Bindings.CNFG_NS_DATABASES, GetFromDbFunction.ACCESSOR, DBReader.getInstance());

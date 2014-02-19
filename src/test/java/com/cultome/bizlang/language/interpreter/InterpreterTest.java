@@ -4,14 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -25,12 +19,10 @@ import com.cultomebizlang.language.interpreter.ExecutionFlow;
 import com.cultomebizlang.language.interpreter.ExecutionListener;
 import com.cultomebizlang.language.interpreter.Interpreter;
 
-public class InterpreterTest {
+public class InterpreterTest extends InterpreterBaseTest {
 	
 	private final String NL = "\r\n";
 	
-	private Interpreter interpreter;
-	private Bindings bindings;
 	private ByteArrayOutputStream buffer;
 	
 	@Before
@@ -138,7 +130,7 @@ public class InterpreterTest {
 	
 	@Test
 	public void testDatabaseAccess() throws Exception {
-		DBReader.getInstance().addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang-language\\src\\test\\resources\\db.dat", "", "");
+		DBReader.getInstance().addConnection("sqlite3", "jdbc:sqlite:C:\\workspace\\bizlang\\bizlang-language\\src\\test\\resources\\db-language.dat", "", "");
 		bindings.addConfig(Bindings.CNFG_NS_DATABASES, GetFromDbFunction.ACCESSOR, DBReader.getInstance());
 		
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/getFromDb.biz");
@@ -147,62 +139,6 @@ public class InterpreterTest {
 		assertEquals("Carlos Soria" + NL + "Sauana Alvarado" + NL + "Noel Soria" + NL + "64" + NL + "30" + NL + "NO" + NL + "NO" + NL, buffer.toString());
 	}
 	
-	
-	/* *******************************
-	 * Backup functions and classes  *
-	 *********************************/
-	private ExecutionFlow getExecutionFlow(String filepath) throws Exception{
-		InputStream input = new FileInputStream(filepath);
-		return interpreter.parseProgram(input);
-	}
-
-	private class TestingClass {
-		private int valueOne;
-		private Map<String, String> valueTwo;
-		private Collection<String> valueThree;
-		private String[] valueFour;
-		private Date valueFive;
-		
-		public TestingClass(int one, String two) {
-			valueTwo = new HashMap<String, String>();
-			valueOne = one;
-			valueTwo.put("entero", two);
-			valueThree = new ArrayList<String>();
-			valueThree.add("primero");
-			valueThree.add("segundo");
-			valueFour = new String[]{"a", "b", "c"};
-			valueFive = new Date();
-		}
-		
-		@SuppressWarnings("unused")
-		public int getValueOne() {
-			return valueOne;
-		}
-		@SuppressWarnings("unused")
-		public Map<String, String> getValueTwo() {
-			return valueTwo;
-		}
-		
-		@Override
-		public String toString() {
-			return "TestingClass [valueOne=" + valueOne + ", valueTwo=" + valueTwo + "]";
-		}
-
-		@SuppressWarnings("unused")
-		public Collection<String> getValueThree() {
-			return valueThree;
-		}
-
-		@SuppressWarnings("unused")
-		public String[] getValueFour() {
-			return valueFour;
-		}
-
-		@SuppressWarnings("unused")
-		public Date getValueFive() {
-			return valueFive;
-		}
-	}
 }
 
 

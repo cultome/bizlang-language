@@ -1,0 +1,19 @@
+rule "calculatePercentageIVAFrontier" do
+	invoiceType = myObj.shipment.invoice.type
+	amount = myObj.shipment.invoice.totalAmount
+	invoiceDate = myObj.shipment.invoice.invDate
+	percentageFrontier=0.04
+	
+	if invoiceDate > 12/31/2013 do
+		percentageFrontier = 0.16
+	end
+	
+	percentageFrontier = case invoiceType
+		when "CASH" then 0.10
+		when "CREDIT" then 0.11
+	end
+	
+	amount * percentageFrontier
+end
+
+callRule("calculatePercentageIVAFrontier")

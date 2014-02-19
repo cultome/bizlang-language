@@ -1,13 +1,10 @@
 package com.cultomebizlang.language.interpreter;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.cultome.bizlang.language.BizlangRule;
+import com.cultome.bizlang.language.util.Utils;
 
 public class Bindings {
 
@@ -32,82 +29,13 @@ public class Bindings {
 	public Object getBinding(String id) {
 		Object value = bindings.get(id);
 		if(value == null){
-			if(id.contains(".")){
-				return getNestedProperty(id);
-			} else if(id.contains("[")){
-				return getIndexedProperty(bindings, id);
+			Object property = Utils.getPropertyFrom(bindings, id);
+			if(property == null){
+				throw new RuntimeException("Binding dont exist. [" + id + "]");
 			}
-			
-			throw new RuntimeException("Binding dont exist. [" + id + "]");
+			return property;
 		}
 		return value;
-	}
-
-	private Object getNestedProperty(String id) {
-		String[] split = id.split("\\.");
-		Object rootObj = bindings.get(split[0]);
-		if(rootObj == null){
-			throw new RuntimeException("Binding dont exist. [" + id + "]");
-		}
-
-		Object currentObj = rootObj;
-		for(int i = 1; i < split.length; i++){
-			currentObj = getPropertyFromObject(currentObj, split[i]);
-		}
-		
-		if(currentObj.toString().matches("^[\\d]*(.[\\d]+)?$")){
-			return new BigDecimal(currentObj.toString());
-		}
-		
-		return currentObj;
-	}
-
-	private Object getPropertyFromObject(Object obj, String property) {
-			try {
-				if(obj instanceof Bindings){
-					return ((Bindings) obj).getBinding(property);
-				} else if(obj instanceof Map){
-					return ((Map<?, ?>) obj).get(property);
-				} else if(property.contains("[")){
-					return getIndexedProperty(obj, property);
-				} else {
-					Method getter = getAppropiateGetter(obj, property);
-					return getter.invoke(obj);
-				}
-			} catch (IllegalArgumentException e) {
-				throw new RuntimeException("Imposible to extract property [" + property + "] from object [" + obj.getClass().getName() + "]. Invalid arguments.");
-			} catch (IllegalAccessException e) {
-				throw new RuntimeException("Imposible to extract property [" + property + "] from object [" + obj.getClass().getName() + "]. Illegal access.");
-			} catch (InvocationTargetException e) {
-				throw new RuntimeException("Imposible to extract property [" + property + "] from object [" + obj.getClass().getName() + "]. Invocation target.");
-			}
-	}
-	
-	private Object getIndexedProperty(Object obj, String name) {
-		String[] split = name.split("[\\[\\]]");
-		Object list = getPropertyFromObject(obj, split[0]);
-		int idx = Integer.parseInt(split[1]);
-		
-		if(list instanceof List){
-			return ((List<?>) list).get(idx);
-		} else if(list.getClass().getName().startsWith("[L")){
-			return ((Object[]) list)[idx];
-		}
-		
-		return null;
-	}
-
-	private Method getAppropiateGetter(Object obj, String property) {
-		// buscamos la propiedad con los prototipos de getters
-		try {
-			return obj.getClass().getMethod(property);
-		} catch (Exception e) {}
-		
-		try {
-			return obj.getClass().getMethod("get" + property.substring(0, 1).toUpperCase() + property.substring(1));
-		} catch (Exception e) {}
-		
-		throw new RuntimeException("There is no getter method for property [" + property + "] in class [" + obj.getClass().getName() + "].");
 	}
 
 	@SuppressWarnings("unchecked")
