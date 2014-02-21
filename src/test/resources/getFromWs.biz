@@ -1,0 +1,5 @@
+myTokens = getFromWs("myWs")
+
+for token in myTokens.tokens.token do
+	print token.id
+end

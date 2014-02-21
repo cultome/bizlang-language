@@ -1,9 +1,12 @@
 package com.cultome.bizlang.language.function;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
 
@@ -29,6 +32,12 @@ public class GetFromWsFunction implements JavaFunction {
 	public static final String CONTENT_PROPERTY = "content";
 	public static final String HEADERS_PROPERTY = "headers";
 	private static final String XML_MIME_TYPE = "application/xml";
+	
+	private XMLInputFactory inputFactory;
+	
+	public GetFromWsFunction() {
+		inputFactory = XMLInputFactory.newInstance();
+	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -75,11 +84,53 @@ public class GetFromWsFunction implements JavaFunction {
 	}
 
 	protected Map<String, Object> parseXml(String contentBody) {
+		final Map<String, Object> returnValue = new HashMap<String, Object>();
+		final List<String> expandedRoutes = new ArrayList<String>();
+		DataNodeListener router = new DataNodeListener() {
+			@Override public void onData(String route, String data) {
+				expandedRoutes.add(route);
+			}
+		};
+		searchForDataNodes(contentBody, router);
+		final Map<String, String> routesDic = parseNestedRoutes(expandedRoutes);
+		//tokens.token.requestor.display_name=tokens.token[].requestor.display_name
+		//tokens.token.requestor.username    =tokens.token[].requestor.username
+		//tokens.token.requestor.password    =tokens.token[].requestor.password
+		//tokens.token.requestor.id          =tokens.token.requestor[].id
+		DataNodeListener walker = new DataNodeListener() {
+			protected int idx = 0;
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			@Override public void onData(String route, String data) {
+				String actualRoute = routesDic.get(route);
+				if(actualRoute.contains("[]")){
+					String subTreeRoute = actualRoute.substring(0, actualRoute.indexOf("["));
+					String leafRoute = actualRoute.substring(actualRoute.indexOf("[") + 3);
+					Object subTree = Utils.getSubTree(returnValue, subTreeRoute);
+					Map lastMapInserted = null;
+					if(subTree instanceof Map){
+						lastMapInserted = (Map) subTree;
+					} else if(subTree instanceof List){
+						List l = ((List) subTree);
+						lastMapInserted = (Map) l.get(l.size() - 1);
+					}
+					
+					if(lastMapInserted != null && Utils.getSubTree(lastMapInserted, leafRoute) == null){
+						Utils.addToTree(lastMapInserted, leafRoute, data);
+					} else {
+						actualRoute = actualRoute.replaceFirst("\\[\\]", "[" + idx++ + "]");
+						Utils.addToTree(returnValue, actualRoute, data);
+					}
+				}
+			}
+		};
+		searchForDataNodes(contentBody, walker);
+		return returnValue;
+	}
+	
+	private void searchForDataNodes(String contentBody, DataNodeListener listener){
 		Stack<String> paramTree = new Stack<String>();
-		Map<String, Object> returnValue = new HashMap<String, Object>();
 		
 		try {
-			XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 			XMLEventReader eventReader = inputFactory.createXMLEventReader(new ByteArrayInputStream(contentBody.getBytes()));
 			while (eventReader.hasNext()) {
 				XMLEvent event = eventReader.nextEvent();
@@ -92,7 +143,7 @@ public class GetFromWsFunction implements JavaFunction {
 					String data = chars.getData();
 					if(!data.matches("^[\\s]+$")){
 						String route = getTreeRoute(paramTree);
-						Utils.addToTree(returnValue, route, data);
+						listener.onData(route, data);
 					}
 				} else if (event.isEndElement()) {
 					if(!paramTree.isEmpty()){
@@ -103,11 +154,107 @@ public class GetFromWsFunction implements JavaFunction {
 		} catch(Exception e){
 			e.printStackTrace();
 		}
-
-		return returnValue;
 	}
 	
-	// TODO REUSED
+	/*
+	uno.dos.tres   => uno.dos.tres
+	uno.dos.cuatro => uno.dos.cuatro
+	uno.tres       => uno.tres
+	---------
+	uno.dos.tres   => uno.dos.tres[]
+	uno.dos.cuatro => uno.dos.cuatro[]
+	uno.tres       => uno.tres
+	---------
+	uno.dos.tres   => uno.dos[].tres
+	uno.dos.cuatro => uno.dos[].cuatro
+	uno.tres       => uno.tres
+	*/
+	
+	protected Map<String, String> parseNestedRoutes(List<String> expandedRoutes){
+		Map<String, String> routesDic = new HashMap<String, String>();
+		// 1) detectamos las rutas que se repiten
+		for (String route : expandedRoutes) {
+			String existingRoute = routesDic.get(route);
+			if(existingRoute == null){
+				routesDic.put(route, route);
+			} else if(!existingRoute.endsWith("[]")) {
+				routesDic.put(route, existingRoute + "[]");
+			}
+		}
+		// 2) intentamos agrupar por el nivel mas profundo
+		for(Entry<String, String> entry : routesDic.entrySet()){
+			if(entry.getValue().endsWith("[]")){
+				int depth = countLevels(entry.getValue());
+				if(depth > 0){
+					for(String nestedRoute : routesDic.values()){
+						if(!nestedRoute.equals(entry.getValue())){
+							if(countLevels(nestedRoute) == depth){
+								for(int i = depth-1; i > 0; i--){
+									String levelName = getLevelName(entry.getValue(), i);
+									String nestedLevelName = getLevelName(nestedRoute, i);
+									if(nestedLevelName.equals(levelName) || nestedLevelName.equals(levelName + "[]")){
+										// agrupamos
+										String newNestedRoute = insertNestedLevel(entry.getValue(), i);
+										// eliminamos la anidacion del final
+										newNestedRoute = removeLastNestIndication(newNestedRoute);
+										routesDic.put(entry.getKey(), newNestedRoute);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return routesDic;
+	}
+	
+	protected String removeLastNestIndication(String doubleNestedRoute) {
+		int idx = doubleNestedRoute.lastIndexOf("[");
+		return doubleNestedRoute.substring(0, idx) + doubleNestedRoute.substring(idx + 2);
+	}
+
+	protected String insertNestedLevel(String route, int level) {
+		StringBuilder b = new StringBuilder();
+		String[] split = route.split("\\.");
+		boolean first = true;
+		for(int i = 0; i < split.length; i++){
+			// ponemos el punto?
+			if(first){
+				first = false;
+			} else {
+				b.append(".");
+			}
+			// el pedazo de ruta
+			b.append(split[i]);
+			
+			// la indicacion de anidado
+			if(i == level){
+				b.append("[]");
+			}
+		}
+		return b.toString();
+	}
+
+	// uno.dos.cuatro
+	protected String getLevelName(String route, int level) {
+		String[] split = route.split("\\.");
+		if(level >= split.length){
+			return null;
+		}
+		return split[level];
+	}
+
+	protected int countLevels(String value) {
+		int idx = 0;
+		int count = 0;
+		while((idx = value.indexOf(".", idx+1)) > 0){
+			count++;
+		}
+		return count;
+	}
+
 	private String getTreeRoute(Stack<String> paramTree) {
 		StringBuilder b = new StringBuilder();
 		boolean first = true;
@@ -120,6 +267,10 @@ public class GetFromWsFunction implements JavaFunction {
 			}
 		}
 		return b.toString();
+	}
+	
+	interface DataNodeListener {
+		void onData(String route, String data);
 	}
 
 }

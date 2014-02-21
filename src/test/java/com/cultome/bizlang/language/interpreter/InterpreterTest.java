@@ -1,17 +1,20 @@
 package com.cultome.bizlang.language.interpreter;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import com.cultome.bizlang.dataaccess.DBReader;
+import com.cultome.bizlang.dataaccess.WSReader;
 import com.cultome.bizlang.language.function.GetFromDbFunction;
+import com.cultome.bizlang.language.function.GetFromWsFunction;
 import com.cultome.bizlang.language.listener.CodeExtractorListener;
 import com.cultome.bizlang.language.util.Utils;
 import com.cultomebizlang.language.interpreter.Bindings;
@@ -135,8 +138,29 @@ public class InterpreterTest extends InterpreterBaseTest {
 		
 		ExecutionFlow flow = getExecutionFlow("src/test/resources/getFromDb.biz");
 		interpreter.execute(flow, bindings);
-		System.out.println(buffer.toString());
 		assertEquals("Carlos Soria" + NL + "Sauana Alvarado" + NL + "Noel Soria" + NL + "64" + NL + "30" + NL + "NO" + NL + "NO" + NL, buffer.toString());
+	}
+	
+	@Test
+	public void testWebserviceAccess() throws Exception {
+		bindings.addBinding("resourceName", "token");
+		bindings.addBinding("token", "mytoken");
+		
+		Map<String, Object> wsConfig = new HashMap<String, Object>();
+		HashMap<String, String> headers = new HashMap<String, String>();
+		headers.put("BIZLANG_TOKEN", "{token}");
+		
+		wsConfig.put(GetFromWsFunction.ENDPOINT_PROPERTY, "http://localhost:8080/bizlang-ws/{resourceName}s");
+		wsConfig.put(GetFromWsFunction.HTTP_METHOD_PROPERTY, "gEt");
+//		wsConfig.put(GetFromWsFunction.CONTENT_PROPERTY, null);
+		wsConfig.put(GetFromWsFunction.HEADERS_PROPERTY, headers);
+		
+		bindings.addConfig(Bindings.CNFG_NS_WEBSERVICES, GetFromWsFunction.ACCESSOR, WSReader.getInstance());
+		bindings.addConfig(Bindings.CNFG_NS_WEBSERVICES, "myWs", wsConfig);
+		
+		ExecutionFlow flow = getExecutionFlow("src/test/resources/getFromWs.biz");
+		interpreter.execute(flow, bindings);
+		assertTrue(buffer.toString().matches("^[\\d\\s]+$"));
 	}
 	
 }

@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -138,37 +139,115 @@ public class Utils {
 		// name: uno.dos.tres         value: "algo"
 		int dotIdx = name.lastIndexOf(".");
 		if (dotIdx < 0) {
-			if(tree.get(name) == null){
-				tree.put(name, value);
-				return tree;
-			} else {
-				Object existingValue = tree.get(name);
-				if(existingValue != value){
-					if(existingValue instanceof List<?>){
-						((List) existingValue).add(value);
-					} else {
-						ArrayList<Object> multivalue = new ArrayList<Object>();
-						multivalue.add(existingValue);
-						multivalue.add(value);
-						tree.put(name, multivalue);
+			if(name.matches(".*\\[[\\d]+\\].*")){
+				String arrayLeafName = name.substring(0, name.indexOf("["));
+				String idxStr = name.replaceFirst(arrayLeafName, "").replaceAll("[\\[\\]]", "");
+				int idx = Integer.parseInt(idxStr);
+				List array = (List) tree.get(arrayLeafName);
+				if(array == null){
+					array = new ArrayList<Object>();
+				}
+				// array = [{uno: 1, dos: 2}, {uno: 1, dos: 2}]
+				if(array.size() <= idx){
+					while(array.size() < idx){
+						array.add(null);
+					}
+					
+					// idx = 4, array = [{uno: 1, dos: 2}, {uno: 1, dos: 2}, null, null]
+					array.add(value);
+					// idx = 4, array = [{uno: 1, dos: 2}, {uno: 1, dos: 2}, null, null, {uno: 1}]
+				} else {
+					Object mapOrList = array.get(idx);
+					if(mapOrList instanceof List){
+						((List) mapOrList).add(value);
+					} else if(mapOrList instanceof Map){
+						merge(mapOrList, value);
 					}
 				}
-				return tree;
+				
+				tree.put(arrayLeafName, array);
+			} else if(tree.get(name) != null){
+				Object existingValue = tree.get(name);
+				if(existingValue instanceof List){
+					((List) existingValue).add(value);
+				} else if(existingValue != value){
+					ArrayList<Object> newList = new ArrayList<Object>();
+					newList.add(existingValue);
+					newList.add(value);
+					tree.put(name, newList);
+				}
+			} else {
+				tree.put(name, value);
 			}
+			
+			return tree;
 		} else {
 			String rootName = name.substring(0, dotIdx);
 			String leafName = name.substring(dotIdx + 1);
-			Map<String, Object> subTree = getSubTree(tree, rootName);
+			Object subTree = getSubTree(tree, rootName);
 			if (subTree == null) {
 				subTree = new HashMap<String, Object>();
 			}
-			Map<String, Object> leaf = addToTree(subTree, leafName, value);
+			
+			Map<String, Object> leaf = null;
+			if(subTree instanceof Map){
+				leaf = addToTree((Map) subTree, leafName, value);
+			} else if(subTree instanceof List){
+				List l = ((List) subTree);
+				Map lastMapInList = (Map) l.get(l.size()-1);
+				leaf = addToTree(lastMapInList, leafName, value);
+			}
 			Map<String, Object> newTree = addToTree(tree, rootName, leaf);
+			
 			return newTree;
 		}
 	}
+
+	@SuppressWarnings("rawtypes")
+	private static void merge(Object original, Object merger) {
+		if(original instanceof List && merger instanceof List){
+			merge((List) original, (List) merger);
+		} else if(original instanceof Map && merger instanceof Map){
+			merge((Map) original, (Map) merger);
+		} else if(merger == null){
+			// no-op
+		} else {
+			throw new RuntimeException("Unrecognized combination");
+		}
+	}
 	
-	//----------------------------
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static void merge(Map original, Map merger) {
+		Set originalKS = original.keySet();
+		Set mergerKS = merger.keySet();
+		
+		// {tres=[{cuatro=1}]} => {tres=[{cinco=2}]}
+		for (Object key : originalKS) {
+			if(mergerKS.contains(key)){
+				merge(original.get(key), merger.get(key));
+			}
+		}
+		
+		for (Object key : mergerKS) {
+			if(!originalKS.contains(key)){
+				original.put(key, merger.get(key));
+			}
+		}
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private static void merge(List original, List merger) {
+		int i;
+		for(i = 0; i < original.size() && i < merger.size(); i++){
+			merge(original.get(i), merger.get(i));
+		}
+		
+		if(merger.size() > original.size()){
+			for(; i < merger.size(); i++)
+			original.add(merger.get(i));
+		}
+	}
+
 	public static Object getPropertyFrom(Map<String, Object> map, String id) {
 		Object currentObj = map;
 		String[] split = id.split("\\.");
@@ -239,9 +318,8 @@ public class Utils {
 		
 		throw new RuntimeException("There is no getter method for property [" + property + "] in class [" + obj.getClass().getName() + "].");
 	}
-	//----------------------------
-	@SuppressWarnings("unchecked")
-	private static Map<String, Object> getSubTree(Object obj, String rootName) {
+	
+	public static Object getSubTree(Object obj, String rootName) {
 		if(rootName == null || obj == null){
 			return null;
 		}
@@ -255,7 +333,8 @@ public class Utils {
 			int firstLevelIdx = rootName.indexOf(".");
 				return getSubTree(tree.get(rootName.substring(0, firstLevelIdx)), rootName.substring(firstLevelIdx+1));
 		} else {
-			return (Map<String, Object>) tree.get(rootName);
+			Object x = tree.get(rootName);
+			return x;
 		}
 	}
 

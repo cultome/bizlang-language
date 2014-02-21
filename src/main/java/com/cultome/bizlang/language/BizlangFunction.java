@@ -6,6 +6,7 @@ import java.util.List;
 import com.cultome.bizlang.language.function.CallRuleFunction;
 import com.cultome.bizlang.language.function.CountFunction;
 import com.cultome.bizlang.language.function.GetFromDbFunction;
+import com.cultome.bizlang.language.function.GetFromWsFunction;
 import com.cultome.bizlang.language.function.JavaFunction;
 import com.cultome.bizlang.language.function.PrintJavaFunction;
 import com.cultomebizlang.language.interpreter.Bindings;
@@ -54,6 +55,8 @@ public class BizlangFunction extends BizlangExpression {
 			return new CallRuleFunction();
 		} else if("getFromDb".equals(name)){
 			return new GetFromDbFunction();
+		} else if("getFromWs".equals(name)){
+			return new GetFromWsFunction();
 		} else if("count".equals(name)){
 			return new CountFunction();
 		}

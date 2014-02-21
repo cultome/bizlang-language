@@ -1,6 +1,10 @@
 package com.cultome.bizlang.language.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -10,7 +14,6 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.cultome.bizlang.language.util.Utils;
 import com.cultomebizlang.language.interpreter.Bindings;
 
 public class UtilsTest {
@@ -112,6 +115,76 @@ public class UtilsTest {
 		assertEquals("5", map2.get("cuatro"));
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Test
+	public void testAddToTreeDeclaredArray() {
+		Map<String, Object> tree = new HashMap<String, Object>();
+		Utils.addToTree(tree, "uno.dos[0].tres", "1");
+		Utils.addToTree(tree, "uno.dos[0].cuatro", "2");
+		Utils.addToTree(tree, "uno.dos[1].tres", "3");
+		Utils.addToTree(tree, "uno.dos[1].cuatro", "4");
+		Utils.addToTree(tree, "uno.dos[4].cuatro", "5");
+		
+		List<Map<?, ?>> cuatros = (List<Map<?, ?>>) Utils.getPropertyFrom(tree, "uno.dos");
+		assertEquals(5, cuatros.size());
+		assertEquals("1", ((Map) cuatros.get(0)).get("tres") );
+		assertEquals("2", ((Map) cuatros.get(0)).get("cuatro") );
+		assertEquals("3", ((Map) cuatros.get(1)).get("tres") );
+		assertEquals("4", ((Map) cuatros.get(1)).get("cuatro") );
+		assertEquals("5", ((Map) cuatros.get(4)).get("cuatro") );
+		assertNull(cuatros.get(2));
+		assertNull(cuatros.get(3));
+	}
+	
+	@SuppressWarnings("rawtypes" )
+	@Test
+	public void testAddToTreeMultipleDeclaredArray() {
+		Map<String, Object> tree = new HashMap<String, Object>();
+		Utils.addToTree(tree, "uno.dos[0].tres[0].cuatro", "1");
+		Utils.addToTree(tree, "uno.dos[0].tres[0].cinco", "2");
+		
+		Utils.addToTree(tree, "uno.dos[1].tres[0].cinco", "3");
+		
+		Utils.addToTree(tree, "uno.dos[2].cuatro.cinco[0].seis", "4");
+		Utils.addToTree(tree, "uno.dos[2].cuatro.cinco[0].siete", "5");
+		
+		Utils.addToTree(tree, "uno.dos[2].cuatro.cinco[1].ocho", "6");
+		
+		Utils.addToTree(tree, "dos[0].tres", "7");
+		Utils.addToTree(tree, "dos[0].cuatro", "8");
+		
+		//{
+		//	uno={
+		//		dos=[
+		//		     {tres=[{cuatro=1, cinco=2}]}, 
+		//		     {tres=[{cinco=3}]}, 
+		//		     {cuatro={
+		//				cinco=[
+		//				       {seis=4, siente=5}, 
+		//					   {ocho=6}
+		//				]}
+		//			 }
+		//		 ]
+		//	}, 
+		//	dos=[
+		//	     {cuatro=8, tres=7}
+		//	]
+		//}
+		
+		List doces = (List) Utils.getPropertyFrom(tree, "uno.dos");
+		assertEquals(3, doces.size());
+		List treces = (List) ((Map) doces.get(0)).get("tres");
+		List trecesDos = (List) ((Map) doces.get(1)).get("tres");
+		List cincos = (List) ((Map) ((Map) doces.get(2)).get("cuatro")).get("cinco");
+		
+		assertEquals("1",  ((Map) treces.get(0)).get("cuatro"));
+		assertEquals("2",  ((Map) treces.get(0)).get("cinco"));
+		assertEquals("3",  ((Map) trecesDos.get(0)).get("cinco"));
+		assertEquals("4",  ((Map) cincos.get(0)).get("seis"));
+		assertEquals("5",  ((Map) cincos.get(0)).get("siete"));
+		assertEquals("6",  ((Map) cincos.get(1)).get("ocho"));
+	}
+	
 	@Test
 	public void testAddToTreeThreeLevels() {
 		Map<String, Object> tree = new HashMap<String, Object>();
@@ -158,6 +231,7 @@ public class UtilsTest {
 		Utils.addToTree(tree, "uno.dos.cuatro", "5");
 		Utils.addToTree(tree, "dos", "6");
 		Utils.addToTree(tree, "dos", "7");
+		
 		BigDecimal valueBd = (BigDecimal) Utils.getPropertyFrom(tree, "uno.dos.tres[2]");
 		assertEquals(new BigDecimal(4), valueBd);
 		String valueStr = (String) Utils.getPropertyFrom(tree, "uno.dos.tres[3]");
