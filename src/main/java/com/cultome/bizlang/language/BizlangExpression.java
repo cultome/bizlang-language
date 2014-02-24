@@ -7,7 +7,7 @@ import com.cultomebizlang.language.interpreter.ExecutionListener;
 
 public abstract class BizlangExpression {
 	
-	private static final Logger LOGGER = Logger.getAnonymousLogger();
+	protected static final Logger LOGGER = Logger.getAnonymousLogger();
 	
 	protected String name;
 	protected int definedAt;
@@ -20,13 +20,13 @@ public abstract class BizlangExpression {
 	public abstract Object getValue(Bindings bindings) throws BizlangException;
 	
 	public Object execute(Bindings bindings) throws BizlangException {
-		LOGGER.info("[ENTER]" + getClass().getSimpleName());
+		LOGGER.info("[ENTER] " + getClass().getSimpleName());
 		
 		ExecutionListener.enterExpression(this, bindings);
 		Object returnValue = getValue(bindings);
 		ExecutionListener.leaveExpression(this, returnValue);
 		
-		LOGGER.info("[EXIT]" + getClass().getSimpleName());
+		LOGGER.info("[EXIT] " + getClass().getSimpleName());
 		return returnValue;
 	}
 

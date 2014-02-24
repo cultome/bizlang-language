@@ -224,6 +224,8 @@ public abstract class ExecutionListener {
 	public void enterAssignation(BizlangAssignation expression, Bindings bindings) {}
 
 	public void enterArray(BizlangArray expression, Bindings bindings) {}
+
+	public void executeRule(BizlangRule bizlangRule, Bindings bindings) {}
 	
 	/*
 	 * LEAVE
@@ -256,5 +258,7 @@ public abstract class ExecutionListener {
 	public void leaveAssignation(BizlangAssignation expression, Object returnValue) {}
 
 	public void leaveArray(BizlangArray expression, Object returnValue) {}
+	
+	public void returnRule(BizlangRule expression, Object returnValue) {}
 
 }

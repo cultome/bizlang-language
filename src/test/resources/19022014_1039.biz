@@ -1,5 +1,5 @@
-myTokens = getFromWs("tokens")
+countries = getFromWs("countries")
 
-for token in myTokens.tokens.token do
-	print token.id
+for country in countries.getCountryListResponse.return do
+	print country.countryName
 end

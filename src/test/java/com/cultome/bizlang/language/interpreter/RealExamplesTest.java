@@ -37,9 +37,12 @@ public class RealExamplesTest extends InterpreterBaseTest {
 		
 		interpreter = new Interpreter();
 		bindings = new Bindings();
+		
 		buffer = new ByteArrayOutputStream();
 		PrintStream logger = new PrintStream(buffer);
 		bindings.addBinding("STDOUT", logger);
+		
+		bindings.addConfig(Bindings.CNFG_NS_WEBSERVICES, GetFromWsFunction.ACCESSOR, WSReader.getInstance());
 		/*
 		 * test18022014_1457
 		 */
@@ -52,21 +55,31 @@ public class RealExamplesTest extends InterpreterBaseTest {
 		/*
 		 * test19022014_1039
 		 */
-
 		bindings.addBinding("resourceName", "token");
 		bindings.addBinding("token", "mytoken");
 		
-		Map<String, Object> wsConfig = new HashMap<String, Object>();
-		HashMap<String, String> headers = new HashMap<String, String>();
-		headers.put("BIZLANG_TOKEN", "{token}");
+		Map<String, Object> tokensWsConfig = new HashMap<String, Object>();
+		HashMap<String, String> tokensHeaders = new HashMap<String, String>();
+		tokensHeaders.put("BIZLANG_TOKEN", "{token}");
+		tokensWsConfig.put(GetFromWsFunction.HEADERS_PROPERTY, tokensHeaders);
 		
-		wsConfig.put(GetFromWsFunction.ENDPOINT_PROPERTY, "http://localhost:8080/bizlang-ws/{resourceName}s");
-		wsConfig.put(GetFromWsFunction.HTTP_METHOD_PROPERTY, "gEt");
+		tokensWsConfig.put(GetFromWsFunction.ENDPOINT_PROPERTY, "http://localhost:8080/bizlang-ws/{resourceName}s");
+		tokensWsConfig.put(GetFromWsFunction.HTTP_METHOD_PROPERTY, "gEt");
 //		wsConfig.put(GetFromWsFunction.CONTENT_PROPERTY, null);
-		wsConfig.put(GetFromWsFunction.HEADERS_PROPERTY, headers);
+		bindings.addConfig(Bindings.CNFG_NS_WEBSERVICES, "tokens", tokensWsConfig);
 		
-		bindings.addConfig(Bindings.CNFG_NS_WEBSERVICES, GetFromWsFunction.ACCESSOR, WSReader.getInstance());
-		bindings.addConfig(Bindings.CNFG_NS_WEBSERVICES, "tokens", wsConfig);
+		/*
+		 * test19022014_1039
+		 */
+		Map<String, Object> incasWsConfig = new HashMap<String, Object>();
+		HashMap<String, String> incasHeaders = new HashMap<String, String>();
+		incasWsConfig.put(GetFromWsFunction.HEADERS_PROPERTY, incasHeaders);
+		
+		incasWsConfig.put(GetFromWsFunction.ENDPOINT_PROPERTY, "http://idlas058.rmtc.fedex.com:7701/CCPEngineWS30/CCPEngineWS30");
+		incasWsConfig.put(GetFromWsFunction.HTTP_METHOD_PROPERTY, "POST");
+		incasWsConfig.put(GetFromWsFunction.CONTENT_PROPERTY, "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ws=\"http://ws.gcp.international.fedex.com/\"><soapenv:Header/><soapenv:Body><ws:getCountryList/></soapenv:Body></soapenv:Envelope>");
+		
+		bindings.addConfig(Bindings.CNFG_NS_WEBSERVICES, "countries", incasWsConfig);
 		
 	}
 
