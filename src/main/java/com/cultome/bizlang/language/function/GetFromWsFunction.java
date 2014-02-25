@@ -141,20 +141,9 @@ public class GetFromWsFunction implements JavaFunction {
 			}
 
 			private String setIndexes(String route) {
-				//licensePortList[].action
-				// 1) contamos los indices a sustituir
-//				int idx = 0;
-//				int count = 0;
-//				while((idx = route.indexOf("[", idx)) > 0){
-//					count++;
-//					idx += 2;
-//				}
-				
-				// 2) reemplazamos el ultimo indice
 				int lastIdx = route.lastIndexOf("[");
 				String replaced = route.substring(0, lastIdx) + "[" + idxs.get(route) + "]" + route.substring(lastIdx + 2);
 				idxs.put(route, idxs.get(route) + 1);
-				
 				return replaced;
 			}
 		});
@@ -224,57 +213,6 @@ public class GetFromWsFunction implements JavaFunction {
 		return routes;
 	}
 	
-	private void searchForDataNodes(String contentBody, DataNodeListener listener){
-		Stack<String> paramTree = new Stack<String>();
-		
-		try {
-			XMLEventReader eventReader = inputFactory.createXMLEventReader(new ByteArrayInputStream(contentBody.getBytes()));
-			while (eventReader.hasNext()) {
-				XMLEvent event = eventReader.nextEvent();
-				
-				if (event.isStartElement()) {
-					StartElement startElement = event.asStartElement();
-					paramTree.push(startElement.getName().getLocalPart());
-				} else if (event.isCharacters()) {
-					Characters chars = event.asCharacters();
-					String data = chars.getData();
-					if(!data.matches("^[\\s]+$")){
-						String route = getTreeRoute(paramTree);
-						listener.onData(route, data);
-					}
-				} else if (event.isEndElement()) {
-					if(!paramTree.isEmpty()){
-						paramTree.pop();
-					}
-				}
-			}
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-	}
-	
-//	protected Map<String, String> parseNestedRoutes(List<String> expandedRoutes){
-//	}
-//	
-//	private String getLevelAfterFirstCollection(String route) {
-//		int collectionIdx = route.indexOf("[");
-//		int idx = route.indexOf(".", collectionIdx + 3);
-//		if(idx > 0){
-//			return route.substring(0, idx);
-//		}
-//		return route;
-//	}
-//
-//	protected String removeFirstNestIndication(String doubleNestedRoute) {
-//		int idx = doubleNestedRoute.indexOf("[");
-//		return doubleNestedRoute.substring(0, idx) + doubleNestedRoute.substring(idx + 2);
-//	}
-//	
-//	protected String removeLastNestIndication(String doubleNestedRoute) {
-//		int idx = doubleNestedRoute.lastIndexOf("[");
-//		return doubleNestedRoute.substring(0, idx) + doubleNestedRoute.substring(idx + 2);
-//	}
-
 	protected String insertNestedLevel(String route, int level) {
 		StringBuilder b = new StringBuilder();
 		String[] split = route.split("\\.");
@@ -327,6 +265,35 @@ public class GetFromWsFunction implements JavaFunction {
 			}
 		}
 		return b.toString();
+	}
+	
+	private void searchForDataNodes(String contentBody, DataNodeListener listener){
+		Stack<String> paramTree = new Stack<String>();
+		
+		try {
+			XMLEventReader eventReader = inputFactory.createXMLEventReader(new ByteArrayInputStream(contentBody.getBytes()));
+			while (eventReader.hasNext()) {
+				XMLEvent event = eventReader.nextEvent();
+				
+				if (event.isStartElement()) {
+					StartElement startElement = event.asStartElement();
+					paramTree.push(startElement.getName().getLocalPart());
+				} else if (event.isCharacters()) {
+					Characters chars = event.asCharacters();
+					String data = chars.getData();
+					if(!data.matches("^[\\s]+$")){
+						String route = getTreeRoute(paramTree);
+						listener.onData(route, data);
+					}
+				} else if (event.isEndElement()) {
+					if(!paramTree.isEmpty()){
+						paramTree.pop();
+					}
+				}
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	
 	interface DataNodeListener {
