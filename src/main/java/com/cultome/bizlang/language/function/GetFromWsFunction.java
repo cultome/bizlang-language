@@ -1,13 +1,10 @@
 package com.cultome.bizlang.language.function;
 
 import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
 
@@ -86,24 +83,19 @@ public class GetFromWsFunction implements JavaFunction {
 	}
 
 	protected Map<String, Object> parseXml(String contentBody) {
+		Map<String, String> detectCollections = detectCollections(contentBody);
+		return fillMap(detectCollections, contentBody);
+	}
+
+	protected Map<String, Object> fillMap(final Map<String, String> routes, String contentBody) {
 		final Map<String, Object> returnValue = new HashMap<String, Object>();
-		final List<String> expandedRoutes = new ArrayList<String>();
-		DataNodeListener router = new DataNodeListener() {
-			@Override public void onData(String route, String data) {
-				expandedRoutes.add(route);
-			}
-		};
-		searchForDataNodes(contentBody, router);
-		final Map<String, String> routesDic = parseNestedRoutes(expandedRoutes);
-		//tokens.token.requestor.display_name=tokens.token[].requestor.display_name
-		//tokens.token.requestor.username    =tokens.token[].requestor.username
-		//tokens.token.requestor.password    =tokens.token[].requestor.password
-		//tokens.token.requestor.id          =tokens.token.requestor[].id
-		DataNodeListener walker = new DataNodeListener() {
-			protected int idx = 0;
+		
+		searchForDataNodes(contentBody, new DataNodeListener() {
+			protected Map<String, Integer> idxs = new HashMap<String, Integer>();
+			
 			@SuppressWarnings({ "unchecked", "rawtypes" })
 			@Override public void onData(String route, String data) {
-				String actualRoute = routesDic.get(route);
+				String actualRoute = routes.get(route);
 				if(actualRoute.contains("[]")){
 					String subTreeRoute = actualRoute.substring(0, actualRoute.indexOf("["));
 					String leafRoute = actualRoute.substring(actualRoute.indexOf("[") + 3);
@@ -117,16 +109,119 @@ public class GetFromWsFunction implements JavaFunction {
 					}
 					// agregamos a un mapa existente o es un nuevo nodo?
 					if(lastMapInserted != null && Utils.getSubTree(lastMapInserted, leafRoute) == null){
-						Utils.addToTree(lastMapInserted, leafRoute, data);
+						if(leafRoute.contains("[]")){
+							if(idxs.get(leafRoute) == null){
+								idxs.put(leafRoute, 0);
+							}
+							
+							String actualLeafRoute = setIndexes(leafRoute);
+							Utils.addToTree(lastMapInserted, actualLeafRoute, data);
+						} else {
+							Utils.addToTree(lastMapInserted, leafRoute, data);
+						}
 					} else {
-						actualRoute = actualRoute.replaceFirst("\\[\\]", "[" + idx++ + "]");
+						if(idxs.get(subTreeRoute) == null){
+							idxs.put(subTreeRoute, 0);
+						}
+						
+						actualRoute = actualRoute.replaceFirst("\\[\\]", "[" + idxs.get(subTreeRoute) + "]");
+						int newIdx = idxs.get(subTreeRoute) + 1;
+						// reseteamos los indices
+						for(String key : idxs.keySet()){
+							idxs.put(key, 0);
+						}
+						// restauramos el indice principal
+						idxs.put(subTreeRoute, newIdx);
+						
 						Utils.addToTree(returnValue, actualRoute, data);
+					}
+				} else {
+					Utils.addToTree(returnValue, actualRoute, data);
+				}
+			}
+
+			private String setIndexes(String route) {
+				//licensePortList[].action
+				// 1) contamos los indices a sustituir
+//				int idx = 0;
+//				int count = 0;
+//				while((idx = route.indexOf("[", idx)) > 0){
+//					count++;
+//					idx += 2;
+//				}
+				
+				// 2) reemplazamos el ultimo indice
+				int lastIdx = route.lastIndexOf("[");
+				String replaced = route.substring(0, lastIdx) + "[" + idxs.get(route) + "]" + route.substring(lastIdx + 2);
+				idxs.put(route, idxs.get(route) + 1);
+				
+				return replaced;
+			}
+		});
+		
+		return returnValue;
+	}
+
+	protected Map<String, String> detectCollections(String contentBody) {
+		final Map<String, String> routes = new HashMap<String, String>();
+		
+		searchForDataNodes(contentBody, new DataNodeListener() {
+			boolean isParsingFirstNode = true;
+			boolean isFirstDataNode = true;
+			String firstElementRoute = "";
+
+			@Override
+			public void onData(String route, String data) {
+				if (isFirstDataNode) {
+					firstElementRoute = route;
+					isFirstDataNode = false;
+				} else {
+					if (isParsingFirstNode && route.equals(firstElementRoute)) {
+						isParsingFirstNode = false;
+					}
+				}
+
+				if (isParsingFirstNode) {
+					if (routes.get(route) == null) {
+						routes.put(route, route);
+					} else {
+						routes.put(route, insertNestedLevel(route, countLevels(route) - 1));
+					}
+
+				} else {
+					String detectedRoute = routes.get(route);
+					if (detectedRoute == null) {
+						throw new RuntimeException("Invalid format in response document.");
+					}
+
+					int lvl = countLevels(detectedRoute) - 1;
+					String parentLvlName = getLevelName(detectedRoute, lvl);
+					if (!parentLvlName.endsWith("[]")) {
+						for (String key : routes.keySet()) {
+							String routeValue = routes.get(key);
+							int routeValueLvl = countLevels(routeValue) - 1;
+							if (routeValueLvl >= lvl) {
+								// uno.dos.tres   uno.dos
+								String refParentLvlName = getLevelName(detectedRoute, lvl);
+								String existingParentLvlName = getLevelName(routeValue, lvl);
+								if (refParentLvlName.equals(existingParentLvlName)) {
+									int idxBeforeChange = routeValue.indexOf("[");
+									String newNestedLevel = insertNestedLevel(routeValue, lvl);
+									int idxAfterChange = newNestedLevel.indexOf("[");
+
+									if ((idxBeforeChange < 0 && idxAfterChange > 0) || (idxBeforeChange > 0 && idxAfterChange > 0 && idxBeforeChange != idxAfterChange)) {
+										routes.put(key, newNestedLevel);
+									}
+								}
+
+							}
+						}
 					}
 				}
 			}
-		};
-		searchForDataNodes(contentBody, walker);
-		return returnValue;
+		});
+
+		return routes;
 	}
 	
 	private void searchForDataNodes(String contentBody, DataNodeListener listener){
@@ -158,121 +253,27 @@ public class GetFromWsFunction implements JavaFunction {
 		}
 	}
 	
-	/*
-	uno.dos.tres   => uno.dos.tres
-	uno.dos.cuatro => uno.dos.cuatro
-	uno.tres       => uno.tres
-	---------
-	uno.dos.tres   => uno.dos.tres[]
-	uno.dos.cuatro => uno.dos.cuatro[]
-	uno.tres       => uno.tres
-	---------
-	uno.dos.tres   => uno.dos[].tres
-	uno.dos.cuatro => uno.dos[].cuatro
-	uno.tres       => uno.tres
-	*/
-	
-	protected Map<String, String> parseNestedRoutes(List<String> expandedRoutes){
-		Map<String, String> routesDic = new HashMap<String, String>();
-		// 1) detectamos las rutas que se repiten
-		for (String route : expandedRoutes) {
-			String existingRoute = routesDic.get(route);
-			if(existingRoute == null){
-				routesDic.put(route, route);
-			} else if(!existingRoute.endsWith("[]")) {
-				routesDic.put(route, existingRoute + "[]");
-			}
-		}
-//		{
-//			Envelope.Body.getCountryListResponse.return.action=Envelope.Body.getCountryListResponse.return.action[], 
-//			Envelope.Body.getCountryListResponse.return.countryCode=Envelope.Body.getCountryListResponse.return.countryCode[], 
-//			Envelope.Body.getCountryListResponse.return.countryName=Envelope.Body.getCountryListResponse.return.countryName[]
+//	protected Map<String, String> parseNestedRoutes(List<String> expandedRoutes){
+//	}
+//	
+//	private String getLevelAfterFirstCollection(String route) {
+//		int collectionIdx = route.indexOf("[");
+//		int idx = route.indexOf(".", collectionIdx + 3);
+//		if(idx > 0){
+//			return route.substring(0, idx);
 //		}
-		// 2) intentamos agrupar por el nivel mas profundo
-		for(Entry<String, String> entry : routesDic.entrySet()){
-			if(entry.getValue().endsWith("[]")){
-				int depth = countLevels(entry.getValue());
-				if(depth > 0){
-					for(String nestedRoute : routesDic.values()){
-						if(!nestedRoute.equals(entry.getValue())){
-							if(countLevels(nestedRoute) == depth){
-								for(int i = depth-1; i > 0; i--){
-									String levelName = getLevelName(entry.getValue(), i);
-									String nestedLevelName = getLevelName(nestedRoute, i);
-									if(nestedLevelName.equals(levelName) || nestedLevelName.equals(levelName + "[]")){
-										// agrupamos
-										String newNestedRoute = insertNestedLevel(entry.getValue(), i);
-										// eliminamos la anidacion del final
-										newNestedRoute = removeLastNestIndication(newNestedRoute);
-										routesDic.put(entry.getKey(), newNestedRoute);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-//		{
-//			Envelope.Body.getCountryListResponse.return.action=Envelope.Body[].getCountryListResponse.return.action, 
-//			Envelope.Body.getCountryListResponse.return.countryCode=Envelope.Body[].getCountryListResponse.return.countryCode, 
-//			Envelope.Body.getCountryListResponse.return.countryName=Envelope.Body[].getCountryListResponse.return.countryName
-//		}
-		// 3) Buscamos elementos raiz en reversa
-		Collection<String> groupedRoutes = routesDic.values();
-		if(groupedRoutes.size() > 1){
-			boolean isCommonToAll = true;
-			
-			do{
-				String reference = "";
-				String subRoute;
-				boolean first = true;
-				for (String route : groupedRoutes) {
-					if(first){
-						reference = getLevelAfterFirstCollection(route);
-						first = false;
-					} else {
-						subRoute = getLevelAfterFirstCollection(route);
-						if(!subRoute.equals(reference)){
-							isCommonToAll = false;
-							break;
-						}
-					}
-				}
-				
-				if(isCommonToAll){
-					int actualLevel = countLevels(reference);
-					for(String key : routesDic.keySet()){
-						String actualValue = routesDic.get(key);
-						String twoLevels = insertNestedLevel(actualValue, actualLevel + 1);
-						String newLevel = removeFirstNestIndication(twoLevels);
-						routesDic.put(key, newLevel);
-					}
-				}
-			} while(isCommonToAll);
-		}
-		
-		return routesDic;
-	}
-	
-	private String getLevelAfterFirstCollection(String route) {
-		int collectionIdx = route.indexOf("[");
-		int idx = route.indexOf(".", collectionIdx + 3);
-		if(idx > 0){
-			return route.substring(0, idx);
-		}
-		return route;
-	}
-
-	protected String removeFirstNestIndication(String doubleNestedRoute) {
-		int idx = doubleNestedRoute.indexOf("[");
-		return doubleNestedRoute.substring(0, idx) + doubleNestedRoute.substring(idx + 2);
-	}
-	
-	protected String removeLastNestIndication(String doubleNestedRoute) {
-		int idx = doubleNestedRoute.lastIndexOf("[");
-		return doubleNestedRoute.substring(0, idx) + doubleNestedRoute.substring(idx + 2);
-	}
+//		return route;
+//	}
+//
+//	protected String removeFirstNestIndication(String doubleNestedRoute) {
+//		int idx = doubleNestedRoute.indexOf("[");
+//		return doubleNestedRoute.substring(0, idx) + doubleNestedRoute.substring(idx + 2);
+//	}
+//	
+//	protected String removeLastNestIndication(String doubleNestedRoute) {
+//		int idx = doubleNestedRoute.lastIndexOf("[");
+//		return doubleNestedRoute.substring(0, idx) + doubleNestedRoute.substring(idx + 2);
+//	}
 
 	protected String insertNestedLevel(String route, int level) {
 		StringBuilder b = new StringBuilder();
