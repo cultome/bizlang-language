@@ -2,6 +2,7 @@ package com.cultome.bizlang.language.function;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,7 +32,8 @@ public class GetFromWsFunction implements JavaFunction {
 	public static final String HTTP_METHOD_PROPERTY = "httpMethod";
 	public static final String CONTENT_PROPERTY = "content";
 	public static final String HEADERS_PROPERTY = "headers";
-	private static final String XML_MIME_TYPE = "application/xml";
+	private static final String APPLICATION_XML_MIME_TYPE = "application/xml";
+	private static final String TEXT_XML_MIME_TYPE = "text/xml";
 	
 	private XMLInputFactory inputFactory;
 	
@@ -77,7 +79,7 @@ public class GetFromWsFunction implements JavaFunction {
 	}
 
 	protected Map<String, Object> flattenResponse(WsResponse response) {
-		if(XML_MIME_TYPE.equals(response.getContentType())){
+		if(APPLICATION_XML_MIME_TYPE.equals(response.getContentType()) || TEXT_XML_MIME_TYPE.equals(response.getContentType())){
 			return parseXml(response.getContentBody());
 		}
 		return null;
@@ -113,7 +115,7 @@ public class GetFromWsFunction implements JavaFunction {
 						List l = ((List) subTree);
 						lastMapInserted = (Map) l.get(l.size() - 1);
 					}
-					
+					// agregamos a un mapa existente o es un nuevo nodo?
 					if(lastMapInserted != null && Utils.getSubTree(lastMapInserted, leafRoute) == null){
 						Utils.addToTree(lastMapInserted, leafRoute, data);
 					} else {
@@ -181,6 +183,11 @@ public class GetFromWsFunction implements JavaFunction {
 				routesDic.put(route, existingRoute + "[]");
 			}
 		}
+//		{
+//			Envelope.Body.getCountryListResponse.return.action=Envelope.Body.getCountryListResponse.return.action[], 
+//			Envelope.Body.getCountryListResponse.return.countryCode=Envelope.Body.getCountryListResponse.return.countryCode[], 
+//			Envelope.Body.getCountryListResponse.return.countryName=Envelope.Body.getCountryListResponse.return.countryName[]
+//		}
 		// 2) intentamos agrupar por el nivel mas profundo
 		for(Entry<String, String> entry : routesDic.entrySet()){
 			if(entry.getValue().endsWith("[]")){
@@ -206,8 +213,60 @@ public class GetFromWsFunction implements JavaFunction {
 				}
 			}
 		}
+//		{
+//			Envelope.Body.getCountryListResponse.return.action=Envelope.Body[].getCountryListResponse.return.action, 
+//			Envelope.Body.getCountryListResponse.return.countryCode=Envelope.Body[].getCountryListResponse.return.countryCode, 
+//			Envelope.Body.getCountryListResponse.return.countryName=Envelope.Body[].getCountryListResponse.return.countryName
+//		}
+		// 3) Buscamos elementos raiz en reversa
+		Collection<String> groupedRoutes = routesDic.values();
+		if(groupedRoutes.size() > 1){
+			boolean isCommonToAll = true;
+			
+			do{
+				String reference = "";
+				String subRoute;
+				boolean first = true;
+				for (String route : groupedRoutes) {
+					if(first){
+						reference = getLevelAfterFirstCollection(route);
+						first = false;
+					} else {
+						subRoute = getLevelAfterFirstCollection(route);
+						if(!subRoute.equals(reference)){
+							isCommonToAll = false;
+							break;
+						}
+					}
+				}
+				
+				if(isCommonToAll){
+					int actualLevel = countLevels(reference);
+					for(String key : routesDic.keySet()){
+						String actualValue = routesDic.get(key);
+						String twoLevels = insertNestedLevel(actualValue, actualLevel + 1);
+						String newLevel = removeFirstNestIndication(twoLevels);
+						routesDic.put(key, newLevel);
+					}
+				}
+			} while(isCommonToAll);
+		}
 		
 		return routesDic;
+	}
+	
+	private String getLevelAfterFirstCollection(String route) {
+		int collectionIdx = route.indexOf("[");
+		int idx = route.indexOf(".", collectionIdx + 3);
+		if(idx > 0){
+			return route.substring(0, idx);
+		}
+		return route;
+	}
+
+	protected String removeFirstNestIndication(String doubleNestedRoute) {
+		int idx = doubleNestedRoute.indexOf("[");
+		return doubleNestedRoute.substring(0, idx) + doubleNestedRoute.substring(idx + 2);
 	}
 	
 	protected String removeLastNestIndication(String doubleNestedRoute) {

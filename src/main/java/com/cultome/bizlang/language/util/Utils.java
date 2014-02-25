@@ -316,7 +316,7 @@ public class Utils {
 			return obj.getClass().getMethod("get" + property.substring(0, 1).toUpperCase() + property.substring(1));
 		} catch (Exception e) {}
 		
-		throw new RuntimeException("There is no getter method for property [" + property + "] in class [" + obj.getClass().getName() + "].");
+		throw new RuntimeException(getErrorMessage(obj, property));
 	}
 	
 	public static Object getSubTree(Object obj, String rootName) {
@@ -342,5 +342,15 @@ public class Utils {
 		BigDecimal bd1 = new BigDecimal(nbr1).setScale(precision);
 		BigDecimal bd2 = new BigDecimal(nbr2).setScale(precision);
 		return bd1.equals(bd2);
+	}
+
+	private static String getErrorMessage(Object obj, String property) {
+		String errorMsg = "There is no getter method for property [" + property + "] in ";
+		if(obj != null){
+			errorMsg += "class [" + obj.getClass().getName() + "].";
+		} else {
+			errorMsg += "null object"; 
+		}
+		return errorMsg;
 	}
 }

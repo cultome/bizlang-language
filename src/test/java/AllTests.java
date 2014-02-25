@@ -34,5 +34,4 @@ import com.cultome.bizlang.language.util.UtilsTest;
 	UtilsTest.class,
 	})
 public class AllTests {
-
 }

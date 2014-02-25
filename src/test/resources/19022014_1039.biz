@@ -1,5 +1,6 @@
+tagname = "getCountryList"
 countries = getFromWs("countries")
 
-for country in countries.getCountryListResponse.return do
+for country in countries.Envelope.Body.getCountryListResponse.return do
 	print country.countryName
 end

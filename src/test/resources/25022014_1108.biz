@@ -1,0 +1,5 @@
+license = getFromWs("license")
+
+for lic in license.Envelope.Body.getLicenseByCountryCdResponse.return do
+	print lic.licenseOwnerNm
+end
